@@ -1,0 +1,3 @@
+[submodule "BBHNet"]
+	path = BBHNet
+	url = https://github.com/ML4GW/BBHNet

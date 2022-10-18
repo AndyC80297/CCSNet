@@ -1,0 +1,456 @@
+JOB 2a5fd63b265638180b0afdc7b7275e43 /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/omicron.sub
+RETRY 2a5fd63b265638180b0afdc7b7275e43 2
+VARS 2a5fd63b265638180b0afdc7b7275e43 macroargument0="1263588388" macroargument1="1263588992" macroargument2="/home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt"
+CATEGORY 2a5fd63b265638180b0afdc7b7275e43 omicron
+## Job 2a5fd63b265638180b0afdc7b7275e43 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588390-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588450-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588510-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588570-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588630-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588690-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588750-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588810-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588870-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588930-60.root
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588390-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588450-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588510-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588570-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588630-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588690-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588750-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588810-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588870-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588930-60.xml
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588390-60.h5
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588450-60.h5
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588510-60.h5
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588570-60.h5
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588630-60.h5
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588690-60.h5
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588750-60.h5
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588810-60.h5
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588870-60.h5
+## Job 2a5fd63b265638180b0afdc7b7275e43 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588930-60.h5
+JOB c534e0e5002117f597c161df49d23c84 /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/omicron.sub
+RETRY c534e0e5002117f597c161df49d23c84 2
+VARS c534e0e5002117f597c161df49d23c84 macroargument0="1263588988" macroargument1="1263589592" macroargument2="/home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt"
+CATEGORY c534e0e5002117f597c161df49d23c84 omicron
+## Job c534e0e5002117f597c161df49d23c84 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588990-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589050-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589110-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589170-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589230-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589290-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589350-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589410-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589470-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589530-60.root
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588990-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589050-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589110-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589170-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589230-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589290-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589350-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589410-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589470-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589530-60.xml
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588990-60.h5
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589050-60.h5
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589110-60.h5
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589170-60.h5
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589230-60.h5
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589290-60.h5
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589350-60.h5
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589410-60.h5
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589470-60.h5
+## Job c534e0e5002117f597c161df49d23c84 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589530-60.h5
+JOB 606619c0c92d4d999c779ed9a4bc782b /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/omicron.sub
+RETRY 606619c0c92d4d999c779ed9a4bc782b 2
+VARS 606619c0c92d4d999c779ed9a4bc782b macroargument0="1263589588" macroargument1="1263590192" macroargument2="/home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt"
+CATEGORY 606619c0c92d4d999c779ed9a4bc782b omicron
+## Job 606619c0c92d4d999c779ed9a4bc782b requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589590-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589650-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589710-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589770-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589830-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589890-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589950-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590010-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590070-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590130-60.root
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589590-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589650-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589710-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589770-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589830-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589890-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589950-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590010-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590070-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590130-60.xml
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589590-60.h5
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589650-60.h5
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589710-60.h5
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589770-60.h5
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589830-60.h5
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589890-60.h5
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589950-60.h5
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590010-60.h5
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590070-60.h5
+## Job 606619c0c92d4d999c779ed9a4bc782b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590130-60.h5
+JOB 34a686739c2b06815d1fc3912110d35b /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/omicron.sub
+RETRY 34a686739c2b06815d1fc3912110d35b 2
+VARS 34a686739c2b06815d1fc3912110d35b macroargument0="1263590188" macroargument1="1263590792" macroargument2="/home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt"
+CATEGORY 34a686739c2b06815d1fc3912110d35b omicron
+## Job 34a686739c2b06815d1fc3912110d35b requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590190-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590250-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590310-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590370-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590430-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590490-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590550-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590610-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590670-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590730-60.root
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590190-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590250-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590310-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590370-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590430-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590490-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590550-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590610-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590670-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590730-60.xml
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590190-60.h5
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590250-60.h5
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590310-60.h5
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590370-60.h5
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590430-60.h5
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590490-60.h5
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590550-60.h5
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590610-60.h5
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590670-60.h5
+## Job 34a686739c2b06815d1fc3912110d35b generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590730-60.h5
+JOB f56b62cffbff9da728ccc905880c1d24 /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/omicron.sub
+RETRY f56b62cffbff9da728ccc905880c1d24 2
+VARS f56b62cffbff9da728ccc905880c1d24 macroargument0="1263590788" macroargument1="1263591392" macroargument2="/home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt"
+CATEGORY f56b62cffbff9da728ccc905880c1d24 omicron
+## Job f56b62cffbff9da728ccc905880c1d24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590790-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590850-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590910-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590970-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591030-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591090-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591150-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591210-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591270-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591330-60.root
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590790-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590850-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590910-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590970-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591030-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591090-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591150-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591210-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591270-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591330-60.xml
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590790-60.h5
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590850-60.h5
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590910-60.h5
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590970-60.h5
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591030-60.h5
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591090-60.h5
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591150-60.h5
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591210-60.h5
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591270-60.h5
+## Job f56b62cffbff9da728ccc905880c1d24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591330-60.h5
+JOB c77a9671d5270e3186908c442755cb3d /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/omicron.sub
+RETRY c77a9671d5270e3186908c442755cb3d 2
+VARS c77a9671d5270e3186908c442755cb3d macroargument0="1263591388" macroargument1="1263591992" macroargument2="/home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt"
+CATEGORY c77a9671d5270e3186908c442755cb3d omicron
+## Job c77a9671d5270e3186908c442755cb3d requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591390-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591450-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591510-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591570-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591630-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591690-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591750-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591810-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591870-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591930-60.root
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591390-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591450-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591510-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591570-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591630-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591690-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591750-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591810-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591870-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591930-60.xml
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591390-60.h5
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591450-60.h5
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591510-60.h5
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591570-60.h5
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591630-60.h5
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591690-60.h5
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591750-60.h5
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591810-60.h5
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591870-60.h5
+## Job c77a9671d5270e3186908c442755cb3d generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591930-60.h5
+JOB 061e73cabe9bde47e351ef54aa5bd6ae /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/omicron.sub
+RETRY 061e73cabe9bde47e351ef54aa5bd6ae 2
+VARS 061e73cabe9bde47e351ef54aa5bd6ae macroargument0="1263591988" macroargument1="1263592392" macroargument2="/home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt"
+CATEGORY 061e73cabe9bde47e351ef54aa5bd6ae omicron
+## Job 061e73cabe9bde47e351ef54aa5bd6ae requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/parameters/parameters-0.txt
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591990-60.root
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592050-60.root
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592110-60.root
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592170-60.root
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592230-60.root
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592290-60.root
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592350-40.root
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591990-60.xml
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592050-60.xml
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592110-60.xml
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592170-60.xml
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592230-60.xml
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592290-60.xml
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592350-40.xml
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591990-60.h5
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592050-60.h5
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592110-60.h5
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592170-60.h5
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592230-60.h5
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592290-60.h5
+## Job 061e73cabe9bde47e351ef54aa5bd6ae generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592350-40.h5
+JOB e31d0a1e644c7f62a45b0a7c2ca01f24 /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/post-processing.sub
+RETRY e31d0a1e644c7f62a45b0a7c2ca01f24 2
+VARS e31d0a1e644c7f62a45b0a7c2ca01f24 macroargument0="/home/hongyin.chen/Full_Dev/CCSNet/L1/condor/post-process-0-1263588388-1263592392.sh"
+CATEGORY e31d0a1e644c7f62a45b0a7c2ca01f24 postprocessing
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588390-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588450-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588510-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588570-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588630-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588690-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588750-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588810-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588870-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588930-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588990-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589050-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589110-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589170-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589230-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589290-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589350-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589410-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589470-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589530-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589590-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589650-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589710-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589770-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589830-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589890-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589950-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590010-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590070-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590130-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590190-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590250-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590310-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590370-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590430-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590490-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590550-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590610-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590670-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590730-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590790-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590850-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590910-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590970-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591030-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591090-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591150-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591210-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591270-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591330-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591390-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591450-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591510-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591570-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591630-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591690-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591750-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591810-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591870-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591930-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591990-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592050-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592110-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592170-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592230-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592290-60.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592350-40.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588390-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588450-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588510-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588570-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588630-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588690-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588750-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588810-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588870-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588930-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588990-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589050-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589110-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589170-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589230-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589290-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589350-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589410-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589470-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589530-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589590-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589650-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589710-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589770-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589830-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589890-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589950-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590010-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590070-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590130-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590190-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590250-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590310-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590370-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590430-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590490-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590550-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590610-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590670-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590730-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590790-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590850-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590910-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590970-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591030-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591090-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591150-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591210-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591270-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591330-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591390-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591450-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591510-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591570-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591630-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591690-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591750-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591810-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591870-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591930-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591990-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592050-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592110-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592170-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592230-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592290-60.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592350-40.h5
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588390-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588450-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588510-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588570-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588630-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588690-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588750-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588810-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588870-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588930-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588990-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589050-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589110-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589170-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589230-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589290-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589350-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589410-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589470-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589530-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589590-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589650-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589710-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589770-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589830-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589890-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263589950-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590010-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590070-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590130-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590190-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590250-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590310-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590370-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590430-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590490-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590550-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590610-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590670-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590730-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590790-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590850-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590910-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263590970-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591030-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591090-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591150-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591210-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591270-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591330-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591390-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591450-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591510-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591570-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591630-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591690-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591750-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591810-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591870-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591930-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263591990-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592050-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592110-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592170-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592230-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592290-60.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 requires input file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263592350-40.xml
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588390-4000.root
+## Job e31d0a1e644c7f62a45b0a7c2ca01f24 generates output file /home/hongyin.chen/Full_Dev/CCSNet/L1/triggers/L1:DCS-CALIB_STRAIN_CLEAN_C01/L1-DCS_CALIB_STRAIN_CLEAN_C01_OMICRON-1263588390-4000.h5
+JOB 15666e8a1bb11c5bf77bb0cbed652a94 /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/post-processing-rm.sub
+RETRY 15666e8a1bb11c5bf77bb0cbed652a94 0
+
+CATEGORY 15666e8a1bb11c5bf77bb0cbed652a94 postprocessing
+PARENT 2a5fd63b265638180b0afdc7b7275e43 CHILD e31d0a1e644c7f62a45b0a7c2ca01f24
+PARENT c534e0e5002117f597c161df49d23c84 CHILD e31d0a1e644c7f62a45b0a7c2ca01f24
+PARENT 606619c0c92d4d999c779ed9a4bc782b CHILD e31d0a1e644c7f62a45b0a7c2ca01f24
+PARENT 34a686739c2b06815d1fc3912110d35b CHILD e31d0a1e644c7f62a45b0a7c2ca01f24
+PARENT f56b62cffbff9da728ccc905880c1d24 CHILD e31d0a1e644c7f62a45b0a7c2ca01f24
+PARENT c77a9671d5270e3186908c442755cb3d CHILD e31d0a1e644c7f62a45b0a7c2ca01f24
+PARENT 061e73cabe9bde47e351ef54aa5bd6ae CHILD e31d0a1e644c7f62a45b0a7c2ca01f24
+PARENT e31d0a1e644c7f62a45b0a7c2ca01f24 CHILD 15666e8a1bb11c5bf77bb0cbed652a94
+DOT /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/omicron.dot

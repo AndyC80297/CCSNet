@@ -1,0 +1,5 @@
+Omicron::ReadOptions: No output products (OUTPUT/STYLE)  --> set default: GWOLLUM
+Omicron::ReadOptions: No trigger buffer (PARAMETER/TRIGGERBUFFERSIZE)
+Omicron::ReadOptions: No map vertical scale option (PARAMETER/MAPLOGSCALE)  --> set default: 1
+Omicron::ReadOptions: No map vertical range option (PARAMETER/MAPVRANGE)  --> set default: 1-30
+Otile::NewChunk: end of segments

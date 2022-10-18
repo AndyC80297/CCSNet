@@ -1,0 +1,13 @@
+universe = vanilla
+executable = /usr/bin/bash
+arguments = " -e $(macroargument0) "
+accounting_group = ligo.dev.o1.detchar.transient.omicron
+accounting_group_user = hongyin.chen
+request_disk = 100
+getenv = True
++OmicronPostProcess = "GW"
+log = /home/hongyin.chen/Full_Dev/CCSNet/L1/logs/omicron.log
+error = /home/hongyin.chen/Full_Dev/CCSNet/L1/logs/post-processing-$(cluster)-$(process).err
+output = /home/hongyin.chen/Full_Dev/CCSNet/L1/logs/post-processing-$(cluster)-$(process).out
+notification = never
+queue 1

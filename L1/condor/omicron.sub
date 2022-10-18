@@ -1,0 +1,14 @@
+universe = vanilla
+executable = /home/hongyin.chen/miniconda3/envs/bbhnet-generate_glitches/bin/omicron
+arguments = " $(macroargument0) $(macroargument1) $(macroargument2) strict "
+accounting_group = ligo.dev.o1.detchar.transient.omicron
+accounting_group_user = hongyin.chen
+request_disk = 100
+getenv = True
+request_memory = 1000
++OmicronProcess = "GW"
+log = /home/hongyin.chen/Full_Dev/CCSNet/L1/logs/omicron.log
+error = /home/hongyin.chen/Full_Dev/CCSNet/L1/logs/omicron-$(cluster)-$(process).err
+output = /home/hongyin.chen/Full_Dev/CCSNet/L1/logs/omicron-$(cluster)-$(process).out
+notification = never
+queue 1

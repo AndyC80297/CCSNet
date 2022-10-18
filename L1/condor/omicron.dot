@@ -1,0 +1,22 @@
+digraph DAG {
+    label="DAGMan Job status at Fri Oct 14 12:01:35 2022";
+
+    "2a5fd63b265638180b0afdc7b7275e43" [shape=ellipse label="2a5fd63b265638180b0afdc7b7275e43 (I)"];
+    "c534e0e5002117f597c161df49d23c84" [shape=ellipse label="c534e0e5002117f597c161df49d23c84 (I)"];
+    "606619c0c92d4d999c779ed9a4bc782b" [shape=ellipse label="606619c0c92d4d999c779ed9a4bc782b (I)"];
+    "34a686739c2b06815d1fc3912110d35b" [shape=ellipse label="34a686739c2b06815d1fc3912110d35b (I)"];
+    "f56b62cffbff9da728ccc905880c1d24" [shape=ellipse label="f56b62cffbff9da728ccc905880c1d24 (I)"];
+    "c77a9671d5270e3186908c442755cb3d" [shape=ellipse label="c77a9671d5270e3186908c442755cb3d (I)"];
+    "061e73cabe9bde47e351ef54aa5bd6ae" [shape=ellipse label="061e73cabe9bde47e351ef54aa5bd6ae (I)"];
+    "e31d0a1e644c7f62a45b0a7c2ca01f24" [shape=ellipse label="e31d0a1e644c7f62a45b0a7c2ca01f24 (I)"];
+    "15666e8a1bb11c5bf77bb0cbed652a94" [shape=ellipse label="15666e8a1bb11c5bf77bb0cbed652a94 (I)"];
+
+    "2a5fd63b265638180b0afdc7b7275e43" -> "e31d0a1e644c7f62a45b0a7c2ca01f24";
+    "c534e0e5002117f597c161df49d23c84" -> "e31d0a1e644c7f62a45b0a7c2ca01f24";
+    "606619c0c92d4d999c779ed9a4bc782b" -> "e31d0a1e644c7f62a45b0a7c2ca01f24";
+    "34a686739c2b06815d1fc3912110d35b" -> "e31d0a1e644c7f62a45b0a7c2ca01f24";
+    "f56b62cffbff9da728ccc905880c1d24" -> "e31d0a1e644c7f62a45b0a7c2ca01f24";
+    "c77a9671d5270e3186908c442755cb3d" -> "e31d0a1e644c7f62a45b0a7c2ca01f24";
+    "061e73cabe9bde47e351ef54aa5bd6ae" -> "e31d0a1e644c7f62a45b0a7c2ca01f24";
+    "e31d0a1e644c7f62a45b0a7c2ca01f24" -> "15666e8a1bb11c5bf77bb0cbed652a94";
+}

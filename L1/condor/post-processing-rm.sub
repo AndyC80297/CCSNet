@@ -1,0 +1,12 @@
+universe = vanilla
+executable = /home/hongyin.chen/Full_Dev/CCSNet/L1/condor/post-process-rm.sh
+accounting_group = ligo.dev.o1.detchar.transient.omicron
+accounting_group_user = hongyin.chen
+request_disk = 100
+getenv = True
++OmicronPostProcess = "GW"
+log = /home/hongyin.chen/Full_Dev/CCSNet/L1/logs/omicron.log
+error = /home/hongyin.chen/Full_Dev/CCSNet/L1/logs/post-processing-rm-$(cluster)-$(process).err
+output = /home/hongyin.chen/Full_Dev/CCSNet/L1/logs/post-processing-rm-$(cluster)-$(process).out
+notification = never
+queue 1

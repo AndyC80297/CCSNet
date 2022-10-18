@@ -1,0 +1,128 @@
+<?xml version='1.0' encoding='utf-8'?>
+<LIGO_LW>
+	<Table Name="process:table">
+		<Column Type="lstring" Name="process:comment"/>
+		<Column Type="lstring" Name="process:node"/>
+		<Column Type="lstring" Name="process:domain"/>
+		<Column Type="int_4s" Name="process:unix_procid"/>
+		<Column Type="int_4s" Name="process:start_time"/>
+		<Column Type="ilwd:char" Name="process:process_id"/>
+		<Column Type="int_4s" Name="process:is_online"/>
+		<Column Type="lstring" Name="process:ifos"/>
+		<Column Type="int_4s" Name="process:jobid"/>
+		<Column Type="lstring" Name="process:username"/>
+		<Column Type="lstring" Name="process:program"/>
+		<Column Type="int_4s" Name="process:end_time"/>
+		<Column Type="lstring" Name="process:version"/>
+		<Column Type="lstring" Name="process:cvs_repository"/>
+		<Column Type="int_4s" Name="process:cvs_entry_time"/>
+		<Stream Delimiter="," Type="Local" Name="process:table">
+			,,,,,"process:process_id:0",,"H1",,"hongyin.chen","OMICRON",,"2.4.2",,
+		</Stream>
+	</Table>
+	<Table Name="process_params:table">
+		<Column Type="ilwd:char" Name="process_params:process_id"/>
+		<Column Type="lstring" Name="process_params:program"/>
+		<Column Type="lstring" Name="process_params:type"/>
+		<Column Type="lstring" Name="process_params:value"/>
+		<Column Type="lstring" Name="process_params:param"/>
+		<Stream Delimiter="," Type="Local" Name="process_params:table">
+			"process:process_id:0","OMICRON","lstring","omicron_DATA_FFLFILE","/home/hongyin.chen/Full_Dev/CCSNet/H1/cache/frames.lcf",
+			"process:process_id:0","OMICRON","lstring","omicron_DATA_CHANNEL","H1:DCS-CALIB_STRAIN_CLEAN_C01",
+			"process:process_id:0","OMICRON","int_8s","omicron_DATA_SAMPLEFREQUENCY","1024",
+			"process:process_id:0","OMICRON","lstring","omicron_INJECTION_FFL","none",
+			"process:process_id:0","OMICRON","lstring","omicron_INJECTION_CHANNEL","none",
+			"process:process_id:0","OMICRON","real_8","omicron_INJECTION_FACTOR","0",
+			"process:process_id:0","OMICRON","lstring","omicron_INJECTION_FILENAME","none",
+			"process:process_id:0","OMICRON","int_8s","omicron_INJECTION_SG","0",
+			"process:process_id:0","OMICRON","real_8","omicron_INJECTION_SGTIMEMIN","0",
+			"process:process_id:0","OMICRON","real_8","omicron_INJECTION_SGTIMEMAX","0",
+			"process:process_id:0","OMICRON","real_8","omicron_INJECTION_SGFREQUENCYMIN","32",
+			"process:process_id:0","OMICRON","real_8","omicron_INJECTION_SGFREQUENCYMAX","2048",
+			"process:process_id:0","OMICRON","real_8","omicron_INJECTION_SGQMIN","4",
+			"process:process_id:0","OMICRON","real_8","omicron_INJECTION_SGQMAX","100",
+			"process:process_id:0","OMICRON","real_8","omicron_INJECTION_SGAMPMIN","1e-21",
+			"process:process_id:0","OMICRON","real_8","omicron_INJECTION_SGAMPMAX","1e-21",
+			"process:process_id:0","OMICRON","real_8","omicron_PARAMETER_FMIN","32",
+			"process:process_id:0","OMICRON","real_8","omicron_PARAMETER_FMAX","490.65",
+			"process:process_id:0","OMICRON","real_8","omicron_PARAMETER_QMIN","4.6986",
+			"process:process_id:0","OMICRON","real_8","omicron_PARAMETER_QMAX","76.234",
+			"process:process_id:0","OMICRON","int_8s","omicron_PARAMETER_CHUNKDURATION","64",
+			"process:process_id:0","OMICRON","int_8s","omicron_PARAMETER_OVERLAPDURATION","4",
+			"process:process_id:0","OMICRON","real_8","omicron_PARAMETER_MISMATCHMAX","0.2",
+			"process:process_id:0","OMICRON","real_8","omicron_PARAMETER_SNRTHRESHOLD","8",
+			"process:process_id:0","OMICRON","int_8s","omicron_PARAMETER_PSDLENGTH","124",
+			"process:process_id:0","OMICRON","real_8","omicron_PARAMETER_HIGHPASS","0",
+			"process:process_id:0","OMICRON","lstring","omicron_PARAMETER_CLUSTERING","TIME",
+			"process:process_id:0","OMICRON","real_8","omicron_PARAMETER_CLUSTERDT","0.5",
+			"process:process_id:0","OMICRON","lstring","omicron_PARAMETER_FFTPLAN","FFTW_ESTIMATE",
+			"process:process_id:0","OMICRON","real_8","omicron_PARAMETER_TRIGGERRATEMAX","1e+05",
+			"process:process_id:0","OMICRON","int_8s","omicron_PARAMETER_TRIGGERBUFFERSIZE","0",
+			"process:process_id:0","OMICRON","lstring","omicron_OUTPUT_DIRECTORY","/home/hongyin.chen/Full_Dev/CCSNet/H1/triggers",
+			"process:process_id:0","OMICRON","int_8s","omicron_OUTPUT_VERBOSITY","1",
+			"process:process_id:0","OMICRON","lstring","omicron_OUTPUT_FORMAT","root xml hdf5",
+			"process:process_id:0","OMICRON","int_8s","omicron_OUTPUT_PLOTWIDTH","746",
+			"process:process_id:0","OMICRON","int_8s","omicron_OUTPUT_PLOTHEIGHT","472",
+			"process:process_id:0","OMICRON","lstring","omicron_OUTPUT_PRODUCTS","GWOLLUM",
+			"process:process_id:0","OMICRON","lstring","omicron_OUTPUT_STYLE","none"
+		</Stream>
+	</Table>
+	<Table Name="sngl_burst:table">
+		<Column Type="lstring" Name="sngl_burst:ifo"/>
+		<Column Type="int_4s" Name="sngl_burst:peak_time"/>
+		<Column Type="int_4s" Name="sngl_burst:peak_time_ns"/>
+		<Column Type="int_4s" Name="sngl_burst:start_time"/>
+		<Column Type="int_4s" Name="sngl_burst:start_time_ns"/>
+		<Column Type="real_4" Name="sngl_burst:duration"/>
+		<Column Type="lstring" Name="sngl_burst:search"/>
+		<Column Type="ilwd:char" Name="sngl_burst:process_id"/>
+		<Column Type="ilwd:char" Name="sngl_burst:event_id"/>
+		<Column Type="real_4" Name="sngl_burst:peak_frequency"/>
+		<Column Type="real_4" Name="sngl_burst:central_freq"/>
+		<Column Type="real_4" Name="sngl_burst:bandwidth"/>
+		<Column Type="lstring" Name="sngl_burst:channel"/>
+		<Column Type="real_4" Name="sngl_burst:amplitude"/>
+		<Column Type="real_4" Name="sngl_burst:snr"/>
+		<Column Type="real_4" Name="sngl_burst:confidence"/>
+		<Column Type="real_8" Name="sngl_burst:chisq"/>
+		<Column Type="real_8" Name="sngl_burst:chisq_dof"/>
+		<Column Type="lstring" Name="sngl_burst:param_one_name"/>
+		<Column Type="real_8" Name="sngl_burst:param_one_value"/>
+		<Stream Name="sngl_burst:table" Type="Local" Delimiter=",">
+		</Stream>
+	</Table>
+	<Table Name="segment_definer:table">
+		<Column Type="ilwd:char" Name="segment_definer:process_id"/>
+		<Column Type="ilwd:char" Name="segment_definer:segment_def_id"/>
+		<Column Type="lstring" Name="segment_definer:ifos"/>
+		<Column Type="lstring" Name="segment_definer:name"/>
+		<Column Type="lstring" Name="segment_definer:comment"/>
+		<Stream Delimiter="," Type="Local" Name="segment_definer:table">
+			"process:process_id:0","segment_definer:segment_def_id:0","H1","OMICRON-segments","OMICRON processed segments"
+		</Stream>
+	</Table>
+	<Table Name="segment_summary:table">
+		<Column Type="ilwd:char" Name="segment_summary:process_id"/>
+		<Column Type="int_4s" Name="segment_summary:start_time"/>
+		<Column Type="int_4s" Name="segment_summary:start_time_ns"/>
+		<Column Type="int_4s" Name="segment_summary:end_time"/>
+		<Column Type="int_4s" Name="segment_summary:end_time_ns"/>
+		<Column Type="ilwd:char" Name="segment_summary:segment_def_id"/>
+		<Column Type="lstring" Name="segment_summary:comment"/>
+		<Stream Delimiter="," Type="Local" Name="segment_summary:table">
+			"process:process_id:0",1263589890,0,1263589950,0,"segment_summary:segment_def_id:0","OMICRON processed time interval"
+		</Stream>
+	</Table>
+	<Table Name="segment:table">
+		<Column Type="ilwd:char" Name="segment:process_id"/>
+		<Column Type="ilwd:char" Name="segment:segment_id"/>
+		<Column Type="int_4s" Name="segment:start_time"/>
+		<Column Type="int_4s" Name="segment:start_time_ns"/>
+		<Column Type="int_4s" Name="segment:end_time"/>
+		<Column Type="int_4s" Name="segment:end_time_ns"/>
+		<Column Type="ilwd:char" Name="segment:segment_def_id"/>
+		<Stream Name="segment:table" Type="Local" Delimiter=",">
+			"process:process_id:0","segment:segment_id:0",1263589890,0,1263589950,0,"segment_definer:segment_def_id:0"
+		</Stream>
+	</Table>
+</LIGO_LW>

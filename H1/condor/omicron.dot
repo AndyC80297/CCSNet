@@ -1,0 +1,18 @@
+digraph DAG {
+    label="DAGMan Job status at Fri Oct 14 11:57:22 2022";
+
+    "015d0b274ac59c03b0fa5af4dcfbcc6d" [shape=ellipse label="015d0b274ac59c03b0fa5af4dcfbcc6d (I)"];
+    "976f827aae542ab3aa1093e01ce5e7b3" [shape=ellipse label="976f827aae542ab3aa1093e01ce5e7b3 (I)"];
+    "e580e82b786d3da67205ae23d19f8286" [shape=ellipse label="e580e82b786d3da67205ae23d19f8286 (I)"];
+    "85a296703df940c9378cf859967482ed" [shape=ellipse label="85a296703df940c9378cf859967482ed (I)"];
+    "a8fe155f7409812679db59b25267b682" [shape=ellipse label="a8fe155f7409812679db59b25267b682 (I)"];
+    "0d9e5c0599bf9fc2f4e58149ed7f0d4f" [shape=ellipse label="0d9e5c0599bf9fc2f4e58149ed7f0d4f (I)"];
+    "8016a08a4793d302a3f93b3019aecb0c" [shape=ellipse label="8016a08a4793d302a3f93b3019aecb0c (I)"];
+
+    "015d0b274ac59c03b0fa5af4dcfbcc6d" -> "0d9e5c0599bf9fc2f4e58149ed7f0d4f";
+    "976f827aae542ab3aa1093e01ce5e7b3" -> "0d9e5c0599bf9fc2f4e58149ed7f0d4f";
+    "e580e82b786d3da67205ae23d19f8286" -> "0d9e5c0599bf9fc2f4e58149ed7f0d4f";
+    "85a296703df940c9378cf859967482ed" -> "0d9e5c0599bf9fc2f4e58149ed7f0d4f";
+    "a8fe155f7409812679db59b25267b682" -> "0d9e5c0599bf9fc2f4e58149ed7f0d4f";
+    "0d9e5c0599bf9fc2f4e58149ed7f0d4f" -> "8016a08a4793d302a3f93b3019aecb0c";
+}
