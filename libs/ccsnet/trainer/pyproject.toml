@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ccsnet.trainer"
+version = "0.0.1"
+description = "A library to train CCSNet"
+license = "MIT"
+packages = [
+    {include = "ccsnet"}
+]
+authors = [
+    "Andy Chen <andy.80297@gmail.com>"
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+
+numpy = "^1.16.0"
+# torch deps
+torch = "^1.10"
+torchtyping = "^0.1"
+
+[build-system]
+requires = ["poetry>=1.2"]
+build-backend = "poetry.masonry.api"
