@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "ccsnetrainer"
+version = "0.1.0"
+description = "Training CCSNet"
+authors = ["Andy Chen <andy.c.80297@gmail.com>"]
+license = "MIT"
+# readme = "README.md"
+packages = [{include = "../train"}]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+gwpy = "3.0.5"
+
+ml4gw = {path = "../../ml4gw", develop = true}
+# ccsnet = {path = "../../libs", develop = true}
+# ccsnet.architectures = {path = "../../libs/architectures", develop = true}
+# bokeh = "^3.3.2"
+
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
