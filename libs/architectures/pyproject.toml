@@ -4,7 +4,7 @@ version = "0.0.1"
 description = "A library for ccsnet data sampling, training, and inference"
 license = "MIT"
 packages = [
-    {include = "ccsnet"},
+    {include = "ccsnet", from = "architectures"},
 ]
 authors = [
     "Andy Chen <andy.80297@gmail.com>"

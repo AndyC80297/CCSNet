@@ -68,42 +68,6 @@ docs = ["pytest"]
 test = ["hypothesis", "pytest", "pytest-remotedata"]
 
 [[package]]
-name = "ccsnet-architectures"
-version = "0.0.1"
-description = "A library for ccsnet data sampling, training, and inference"
-optional = false
-python-versions = "^3.8"
-files = []
-develop = true
-
-[package.dependencies]
-numpy = "^1.16.0"
-torch = "^1.10"
-torchtyping = "^0.1"
-
-[package.source]
-type = "directory"
-url = "../../libs/architectures"
-
-[[package]]
-name = "ccsnet-trainer"
-version = "0.0.1"
-description = "A library to train CCSNet"
-optional = false
-python-versions = "^3.8"
-files = []
-develop = true
-
-[package.dependencies]
-numpy = "^1.16.0"
-torch = "^1.10"
-torchtyping = "^0.1"
-
-[package.source]
-type = "directory"
-url = "../../libs/trainer"
-
-[[package]]
 name = "certifi"
 version = "2023.11.17"
 description = "Python package for providing Mozilla's CA Bundle."
@@ -1505,4 +1469,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "3bb966b0220684b2a1ec66b4e62d4da0e9d80837b479df54b1cc6671561a90b8"
+content-hash = "ff74c6ae40b7e151a02c99bc9a321e98b548106d46f977df8ba99a030609663c"
