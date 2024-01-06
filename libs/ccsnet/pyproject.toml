@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "ccsnet.architectures"
+name = "libs"
 version = "0.0.1"
-description = "A library for ccsnet data sampling, training, and inference"
+description = "A library to train CCSNet"
 license = "MIT"
 packages = [
-    {include = "ccsnet", from = "architectures"},
+    {include = "ccsnet"}
 ]
 authors = [
     "Andy Chen <andy.80297@gmail.com>"
@@ -13,7 +13,7 @@ authors = [
 [tool.poetry.dependencies]
 python = "^3.8"
 
-numpy = "^1.16.0"
+# numpy = "^1.16.0"
 # torch deps
 torch = "^1.10"
 torchtyping = "^0.1"
