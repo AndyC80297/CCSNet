@@ -1,0 +1,37 @@
+# This part majorly serves for datagen
+start = 1262254622
+end = 1262686622
+sample_rate = 4096
+ifos = ["H1", "L1"]
+frame_type = ["HOFT_C01", "HOFT_C01"]
+state_flag = ["DCS-ANALYSIS_READY_C01:1", "DCS-ANALYSIS_READY_C01:1"]
+channels = ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"]
+
+# A. Should includes in with the active segements time
+# B. Try to pass envioment variable to read file 
+backgrounds = "/home/hongyin.chen/Data/CCSNet/pseudo_data/background.h5" 
+# All family mixed, consider use another config file to sample signals
+signals = "/home/hongyin.chen/Data/CCSNet/pseudo_data/signals.h5" 
+glitch_info = "" # Consider combine this into background file
+psd_files = "" # Consider combine this into background file
+
+# backgrounds = "${BASE_DIR}/background.h5"
+# signals = "${BASE_DIR}/signals.h5"
+# glitch_info = "${BASE_DIR}/glitch_info.h5"
+# psd_files = "${BASE_DIR}/psds.h5"
+
+
+
+# Training phase
+sample_kernel = 2
+model_parameter = {c_depth = 8, n_chann = 64, l1 = 1024, l2 = 128}
+batch_size = 32
+batches_per_epoch = 25
+max_iteration = 10
+max_lr = 4e-3
+lr_ramp_epochs = 75 
+weight_decay = 1e-5
+highpass = 32
+# pretrained_model = None
+learning_rate = 0.01
+output_dir = "/home/hongyin.chen/Outputs/CCSNet_Out_dir/pseudo_output"
