@@ -23,4 +23,24 @@ class Validator:
     def __call__(self):
         
         pass
+
+
+
+# Read CCSN h5 files
+# Label each CCSN them by name
+
+# Sample BG, Glitch, CCSN
+# Injection rescalling
+# Whiten, Cropping
+
+####################
+### Model Stream ###
+####################
+
+# This function should interact with validation scheme
+### The validation scheme should includes 
+# (1). Recall at var(??)% of glitch exclusion
+# (2). 
+# def forward ...
+#   return valdation result
         

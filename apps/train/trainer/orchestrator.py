@@ -5,11 +5,7 @@ import numpy as np
 from ccsnet.arch import WaveNet
 from ml4gw.transforms import SnrRescaler
 
-# ARGUMENTS_FILE = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
 
-# ccsnet_arguments = toml.load(ARGUMENTS_FILE)
-
-# Consider Combining BackGroundDisplay and Injector
 class BackGroundDisplay:
     
     def __init__(

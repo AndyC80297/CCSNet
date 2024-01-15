@@ -9,7 +9,8 @@ channels = ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"]
 
 # A. Should includes in with the active segements time
 # B. Try to pass envioment variable to read file 
-backgrounds = "/home/hongyin.chen/Data/CCSNet/pseudo_data/background.h5" 
+# backgrounds = "/home/hongyin.chen/Data/CCSNet/pseudo_data/background.h5" 
+backgrounds = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/background.h5"
 # All family mixed, consider use another config file to sample signals
 signals = "/home/hongyin.chen/Data/CCSNet/pseudo_data/signals.h5" 
 glitch_info = "" # Consider combine this into background file

@@ -2,6 +2,7 @@ import toml
 import torch
 import logging
 
+from torch.profiler import schedule, tensorboard_trace_handler
 from tqdm import tqdm
 from pathlib import Path
 from typing import Callable, Iterable, Optional, Tuple
@@ -107,10 +108,8 @@ def Tachyon(
     for iteration in range(max_iteration):
         if iteration == 0 and enhancer["profile"]:
             profiler = torch.profiler.profile(
-                schedule=torch.profiler.schedule(wait=0, warmup=1, active=10),
-                on_trace_ready=torch.profiler.tensorboard_trace_handler(
-                    outdir / "profile"
-                ),
+                schedule=schedule(wait=0, warmup=1, active=10),
+                on_trace_ready=tensorboard_trace_handler(outdir / "profile")
             )
             profiler.start()
         else:
