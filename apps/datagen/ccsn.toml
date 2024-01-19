@@ -1,0 +1,12 @@
+Andresen_2016 = [ "s11", "s20s", "s27", "s20",]
+Andresen_2019 = [ "s15fr", "s15sr", "s15nr",]
+OConnor_2018 = [ "mesa20_v_LR", "mesa20_pert", "mesa20_LR", "mesa20", "mesa20_pert_LR",]
+
+Pan_2021 = [ "FR", "SR", "NR",]
+Powell_2020 = [ "s18", "m39", "y20",]
+Radice_2019 = [ "s09", "s10", "s11", "s12", "s13", "s14", "s15", "s16", "s17", "s18", "s19", "s20", "s60",]
+
+# Powell_2021 = [ "z85_sfhx", "z100_sfho", "z85",]
+# Mezzacappa_2020 = [ "C15-3D",]
+# Powell_2018 = [ "s3_pns",]
+# Powell_2023 = [ "m39_b10", "m39_b12",]
