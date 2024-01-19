@@ -54,6 +54,12 @@ class WaveNet(nn.Module):
         
         
         # self.L1 = nn.Linear(8192-2**c_depth, l1)
+        
+        # Consider replacing other batch normalizatoin layers with other nor method
+        # Because batch norm are baised by the population of the CCSN rate in one batch 
+        # This may produce overfitting model and will not be able to found at test phase
+        # Question: Will we be able to figure out the side effect at infereceing phase?
+        
         self.L1_norm = nn.BatchNorm1d(4096-2**c_depth)
         self.L1 = nn.Linear(4096-2**c_depth, l1)
         self.L2_norm = nn.BatchNorm1d(l1)

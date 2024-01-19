@@ -15,6 +15,12 @@ ml4gw = {path = "../../ml4gw", develop = true}
 # ccsnet = {path = "../../libs", develop = true}
 # ccsnet.architectures = {path = "../../libs/architectures", develop = true}
 # bokeh = "^3.3.2"
+toml = "^0.10.2"
+h5py = "^3.10.0"
+pathlib = "^1.0.1"
+ipykernel = "^6.28.0"
+logging = "^0.4.9.6"
+tqdm = "^4.66.1"
 
 
 
