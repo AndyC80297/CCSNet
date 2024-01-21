@@ -3,6 +3,7 @@ import torch
 
 import numpy as np
 from ccsnet.arch import WaveNet
+from ccsnet.sampling import strain_samplin, glitch_sampler
 from ml4gw.transforms import SnrRescaler
 
 

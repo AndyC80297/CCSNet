@@ -10,7 +10,6 @@ from ccsnet.utils import h5_thang
 from gwpy.timeseries import TimeSeries
 
 
-
 def get_hp_hc_from_q2ij( 
     q2ij, 
     theta: np.ndarray, 
@@ -40,110 +39,74 @@ def get_hp_hc_from_q2ij(
     return hp, hc
 
 
-def load_h5_as_dict(ccsn_dict):
+def load_h5_as_dict(
+    selected_ccsn: dict,
+    source_file: Path
+)-> dict:
+    """Open up a buffer to load in different CCSN wavefroms.
 
-    grand_dict = {}
-    # ccsn_data_base = Path.home() / 'anti_gravity/CCSNet/libs/data_base/'
-    ccsn_data_base = Path.home() / 'Data/3DCCSN_PREMIERE/Resampled'
+    Args:
+        selected_ccsn (dict): Name of each wavefrom given by a toml file
+        source_file (Path): The path that contains reasmpled raw waveform
+
+    Returns:
+        dict: Time and DDW of Each waveform
+    """
     
-    for family in ccsn_dict.keys():
+    grand_dict = {}
+    ccsn_list = []
+    
+    for key in selected_ccsn.keys():
+        
+        for name in selected_ccsn[key]:
+            ccsn_list.append(f"{key}/{name}")
 
-        data_dict = {}
-        for signal in ccsn_dict[family]:
+    for name in ccsn_list:
+        
+        with h5py.File(source_file/ f'{name}.h5', 'r', locking=False) as h:
 
-            with h5py.File(ccsn_data_base/ f'{family}/{signal}.h5', 'r', locking=False) as h1:
-
-                time = np.array(h1['time'][:])
-                quad_moment = h1['quad_moment'][:]
-
-            data_dict[signal] = [time, quad_moment]
-
-        grand_dict[family] = data_dict
-
+            time = np.array(h['time'][:])
+            quad_moment = h['quad_moment'][:] 
+            
+        grand_dict[name] =  [time, quad_moment]
+    
     return grand_dict
 
 
-def pol_from_sim(grand_dict, family, signal, sqrtnum):
+def on_grid_pol_to_sim(time, quad_moment, sqrtnum):
 
-    time = grand_dict[family][signal][0]
-    quad_moment = grand_dict[family][signal][1]
-
-    # theta = np.random.uniform(0, np.pi, 1)
-    # phi = np.random.uniform(0, 2*np.pi, 1)
-
-    phi = np.linspace(0, 2*np.pi, sqrtnum)
     CosTheta = np.linspace(-1, 1, sqrtnum)
     theta = np.arccos(CosTheta)
+    phi = np.linspace(0, 2*np.pi, sqrtnum)
 
     hp, hc = get_hp_hc_from_q2ij(quad_moment, theta, phi)
 
     return time, hp, hc, theta, phi
 
 
+# To do add masking window to the function
 def padding(
-    signal,
     time,
-    dur=8,
-    time_shift=-0.15, # shift zero to distination time
-    sample_rate=4096
+    hp,
+    hc,
+    distance,
+    sample_kernel = 3,
+    sample_rate = 4096,
+    time_shift = -0.15, # shift zero to distination time
 ):
-
-    data = TimeSeries(
-        signal,
-        sample_rate=sample_rate,
-        t0=int((time[0] + time_shift)*sample_rate)/sample_rate
-    )
-
-    blank = TimeSeries(
-        np.zeros(dur*sample_rate),
-        sample_rate=sample_rate,
-        t0=-dur/2
-    )
-
-    return blank.inject(data)
-
-
-def padding_2(
-    signal,
-    time,
-    dur=8,
-    time_shift=-0.15, # shift zero to distination time
-    sample_rate=4096
-):
-
-    data = TimeSeries(
-        signal,
-        sample_rate=sample_rate,
-        t0=int((time[0] + time_shift)*sample_rate)/sample_rate
-    )
-
-    blank = TimeSeries(
-        np.zeros(dur*sample_rate),
-        sample_rate=sample_rate,
-        t0=-dur/2
-    )
     
-    the_ones = TimeSeries(
-        np.ones(16588),
-        sample_rate=4096,
-        t0=-int(.05*sample_rate)/sample_rate
-    )
+    # Two polarization
+    signal = np.zeros([hp.shape[0], 2, sample_kernel * sample_rate])
 
-    the_ones = TimeSeries(
-        np.ones(dur*sample_rate),
-        sample_rate=sample_rate,
-        t0=-dur/2
-    )
+    half_kernel_idx = int(sample_kernel * sample_rate/2)
+    time_shift_idx = int(time_shift * sample_rate)
+    t0_idx = int(time[0] * sample_rate)
 
-    augmentator = np.append(np.ones(16999), np.zeros(15769))
+    start = half_kernel_idx + t0_idx + time_shift_idx
+    end = half_kernel_idx + t0_idx + time.shape[0] + time_shift_idx
+
+    signal[:, 0, start:end] = hp * distance.reshape(-1, 1)
+    signal[:, 1, start:end] = hc * distance.reshape(-1, 1)
     
-    augmentator = TimeSeries(
-        augmentator,
-        sample_rate=4096,
-        t0=-dur/2
-    )
-    
-    data = blank.inject(data)
-    # augmentator = blank.inject(the_ones)
-    
-    return data*augmentator
+    return signal
+

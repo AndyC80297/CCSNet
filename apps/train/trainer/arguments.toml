@@ -27,10 +27,10 @@ glitch_info = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/glitch_i
 
 psd_files = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/psds.h5" # Consider combine this into background file
 
-# backgrounds = "${BASE_DIR}/background.h5"
-# signals = "${BASE_DIR}/signals.h5"
-# glitch_info = "${BASE_DIR}/glitch_info.h5"
-# psd_files = "${BASE_DIR}/psds.h5"
+# backgrounds = "${DATA_PATH}/background.h5"
+# psd_files = "${DATA_PATH}/psds.h5"
+# glitch_info = "${DATA_PATH}/glitch_info.h5"
+# signals = "${DATA_PATH}/CCSNe/Resampled"
 
 
 
