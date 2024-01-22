@@ -7,9 +7,9 @@ def masking(
     glitch_info: dict,
     segment_duration: float,
     segment_start_time: float=0,
-    sample_width: float = 3,
+    shift_range: float = 3, 
     pad_width: float = 1.5, # Make this default to half of the kernel width
-    sample_rate: int=4096,
+    sample_rate: int=4096, 
     merge_edges: bool=True
 )->dict:
     
@@ -33,16 +33,17 @@ def masking(
     """
     
     mask_kernel = {}
-    if pad_width < sample_width/2:
-        raise AttributeError(f"pad_width {pad_width} is shorter than half of the kernel_width {sample_width/2}")
+    if pad_width < shift_range/2:
+        raise AttributeError(f"pad_width {pad_width} is shorter than half of the kernel_width {shift_range/2}")
     
-    half_window = int(sample_width*sample_rate/2)
+    half_window = int(shift_range*sample_rate/2)
     seg_idx_count = segment_duration*sample_rate
     
 
     
     for ifo, glitch_time in glitch_info.items():
-        
+
+        ifo = ifo[:2]
         # Initialing the first digits in the active segments aline to t0 = 0_sec
         glitch_time -= segment_start_time
         
@@ -64,7 +65,7 @@ def masking(
         mask_kernel[ifo][1:-1, 0] = (glitch_idx - half_window)
         mask_kernel[ifo][1:-1, 1] = (glitch_idx + half_window)
         
-    
+
     if merge_edges:
         
         for ifo, mask in mask_kernel.items():
@@ -135,7 +136,7 @@ def strain_sampling(
 
     half_kernel_width_idx = int(kernel_width * sample_rate / 2)
     
-    sampled_strain = torch.zeros([sample_counts, len(mask), sample_rate*kernel_width])
+    sampled_strain = torch.zeros([sample_counts, sample_rate*kernel_width])
 
     # Cosider remove this part out of the function
     sampling_idx = filtering_idxs(
@@ -146,7 +147,7 @@ def strain_sampling(
     for _ , idxs in sampling_idx.items():
         for i, idx in enumerate(idxs):
 
-            sampled_strain[i,:,:] = strain[:, idx-half_kernel_width_idx:idx+half_kernel_width_idx]
+            sampled_strain[i, :] = strain[idx-half_kernel_width_idx:idx+half_kernel_width_idx]
         
     return sampled_strain
 
@@ -159,25 +160,25 @@ def glitch_sampler(
     ifos,
     sample_counts,
     sample_rate = 4096,
-    sample_width = 0.9,
+    shift_range = 0.9,
     kernel_width = 3,
 ):
     
     half_kernel_width_idx = int(kernel_width * sample_rate / 2)
     
-    sampled_strain = torch.zeros([sample_counts, len(ifos), sample_rate*kernel_width])
-    
+    sampled_strain = torch.zeros([sample_counts, sample_rate*kernel_width])
+
     mask_dict = masking(
         gltich_info,
         segment_duration=segment_duration,
         segment_start_time=segment_start_time,
-        sample_width=sample_width,
-        pad_width=kernel_width/2,
+        shift_range=shift_range,
+        pad_width=kernel_width,
         sample_rate=sample_rate, 
         merge_edges = False
     )
     
-    for i, ifo in enumerate(ifos):
+    for _, ifo in enumerate(ifos):
         
         # Remove the padding mask
         mask_dict[ifo] = mask_dict[ifo][1:-1]
@@ -194,7 +195,7 @@ def glitch_sampler(
             
             start_idx = sample_center[j] - half_kernel_width_idx 
             end_idx = sample_center[j] + half_kernel_width_idx
-            
-            sampled_strain[j, i, :] = strain[i, start_idx: end_idx]
+
+            sampled_strain[j, :] = strain[start_idx: end_idx]
 
     return sampled_strain

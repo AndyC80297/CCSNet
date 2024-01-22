@@ -40,18 +40,20 @@ def get_hp_hc_from_q2ij(
 
 
 def load_h5_as_dict(
-    selected_ccsn: dict,
+    chosen_signals: Path,
     source_file: Path
 )-> dict:
     """Open up a buffer to load in different CCSN wavefroms.
 
     Args:
-        selected_ccsn (dict): Name of each wavefrom given by a toml file
+        chosen_signals (dict): Name of each wavefrom given by a toml file
         source_file (Path): The path that contains reasmpled raw waveform
 
     Returns:
         dict: Time and DDW of Each waveform
     """
+    selected_ccsn = toml.load(chosen_signals)
+    source_file = Path(source_file)
     
     grand_dict = {}
     ccsn_list = []
