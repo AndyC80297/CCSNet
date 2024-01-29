@@ -13,7 +13,28 @@ class h5_thang():
     ):
 
         self.file = file
+
+
+    def h5_attrs(
+        self,
+    )->dict:
         
+
+        attrs_dict = {}
+
+        with h5py.File(self.file , "r", locking=False) as h1:
+            
+            keys = list(h1.keys()) 
+
+            for key in keys:
+                
+                for attr in h1[key].attrs.keys():
+                    
+                    attrs_dict[f"{key}/{attr}"] = h1[key].attrs[attr]
+        
+        return attrs_dict
+    
+    
     def h5_keys(
         self, 
         verbose=False
@@ -38,6 +59,7 @@ class h5_thang():
             for item in items:
                 print(item)
         return items
+    
     
     def h5_data(
         self,

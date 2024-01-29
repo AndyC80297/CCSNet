@@ -21,6 +21,7 @@ pathlib = "^1.0.1"
 ipykernel = "^6.28.0"
 logging = "^0.4.9.6"
 tqdm = "^4.66.1"
+matplotlib = "3.7.0"
 
 
 

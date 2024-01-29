@@ -13,40 +13,60 @@ from orchestrator import BackGroundDisplay, Injector, forged_dataloader
 from ccsnet import train
 from ccsnet.arch import WaveNet
 from ccsnet.utils import h5_thang
-from ccsnet import sampling
+from ccsnet.waveform import load_h5_as_dict
 from ccsnet.train.train import Tachyon
+
+from ml4gw.transforms import Whiten
+from ml4gw.transforms.transform import FittableSpectralTransform
 
 ARGUMENTS_FILE = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
 
 ccsnet_arguments = toml.load(ARGUMENTS_FILE)
 
-bg_file_dict = h5_thang(ccsnet_arguments["backgrounds"]).h5_data(['H1', 'L1'])
-signals_dict = h5_thang(ccsnet_arguments["signals"]).h5_data(["signals"]) # This data is in shape (500, 2, 16384)
- 
+logging.basicConfig(level=logging.NOTSET)
+
+
+bg_file_dict = h5_thang(ccsnet_arguments["backgrounds"]).h5_data()
+psd = h5_thang(ccsnet_arguments["psd_files"]).h5_data()["psd"]
+# signals_dict = h5_thang(ccsnet_arguments["signals"]).h5_data(["signals"]) # This data is in shape (500, 2, 16384)
+signals_dict = load_h5_as_dict(
+    ccsnet_arguments["chosen_signals"],
+    ccsnet_arguments["signals"]
+)
 
 # Pass in arguments
 # Function starts at here 
 def main(
-    background = np.stack((bg_file_dict["H1"], bg_file_dict["L1"])),
-    signals = signals_dict["signals"],
-    max_iteration = ccsnet_arguments["max_iteration"],
-    batch_size = ccsnet_arguments["batch_size"],
-    sample_rate = ccsnet_arguments["sample_rate"],
-    sample_kernel = ccsnet_arguments["sample_kernel"],
-    num_ifos = len(ccsnet_arguments["ifos"]),
-    highpass = ccsnet_arguments["highpass"],
-    model=WaveNet,
-    pretrained_model = None,
-    weight_decay = ccsnet_arguments["weight_decay"],
-    learning_rate = ccsnet_arguments["learning_rate"],
-    outdir: Path = Path(ccsnet_arguments["output_dir"]),
-    device: str = "cuda",
+    background_file = ccsnet_arguments["backgrounds"], 
+    signals_dict = signals_dict, 
+    init_distance = ccsnet_arguments["init_distance"],
+    glitch_info = ccsnet_arguments["glitch_info"], 
+    max_iteration = ccsnet_arguments["max_iteration"], 
+    batch_size = ccsnet_arguments["batch_size"], 
+    steps_per_epoch = ccsnet_arguments["steps_per_epoch"], 
+    sample_rate = ccsnet_arguments["sample_rate"], 
+    sample_duration = ccsnet_arguments["sample_duration"], 
+    ifos = ccsnet_arguments["ifos"], 
+    fftlength = ccsnet_arguments["fftlength"], 
+    psd = psd, 
+    highpass = ccsnet_arguments["highpass"], 
+    model=WaveNet, 
+    pretrained_model = None, 
+    weight_decay = ccsnet_arguments["weight_decay"], 
+    learning_rate = ccsnet_arguments["learning_rate"], 
+    outdir: Path = Path(ccsnet_arguments["output_dir"]), 
+    # val_batch_size = ccsnet_arguments["val_batch_size"],
+    val_sqrtnum = ccsnet_arguments["val_sqrtnum"],
+    device: str = "cuda", 
 ):
     """
     Basically this founction server as an interface of how the data steams
     to the model. It acts like a placeholder that aranges its arguments to
     different functions for calling, iterate, or excution. 
     """
+    
+    
+    num_ifos = len(ifos)
     ### Consider to add a wapper to control the input type and output behavior
 
     # Load data to memory
@@ -55,48 +75,61 @@ def main(
     ### Buffer setting 
     ### Try reading mutlipule ccsn hdf file at once 
     ### By providing names and index
+    
     background_sampler = BackGroundDisplay(
-        background=background,
-        max_iteration = max_iteration, 
-        batch_size = batch_size,
+        ifos,
+        background_file = background_file,
+        glitch_info = glitch_info,
         sample_rate = sample_rate,
-        sample_duration = sample_kernel,
-        num_ifos = num_ifos
-    )
-    signal_sampler = Injector(
-        background=background, 
-        signals=signals,
-        max_iteration = max_iteration, 
-        batch_size = batch_size,
-        sample_rate = sample_rate,
-        sample_duration = sample_kernel,
-        num_ifos = num_ifos,
-        highpass = highpass
+        sample_duration = sample_duration,
     )
     
-    sampled_background, noise_label = background_sampler.foward()
-    sampled_signal, signal_label = signal_sampler.foward()
-    # Training and Validation arangement
-    training_loader = forged_dataloader(
-        inputs = [sampled_background, sampled_signal],
-        targets = [noise_label, signal_label],
-        batch_size=batch_size
+    max_distance = {}
+
+    for name in signals_dict.keys():
+        max_distance[name] = init_distance
+
+    
+    signal_sampler = Injector(
+        ifos=ifos,
+        # background=injection_siganl, 
+        signals_dict=signals_dict,
+        sample_rate = sample_rate,
+        sample_duration = sample_duration
     )
 
-    ### Consider to add a wapper pull the validaton_type & metric_method argumnets as a parameter
-    ### to paralle stream data to the model 
-    
-    validation_loader = forged_dataloader(
-        inputs = [sampled_background, sampled_signal],
-        targets = [noise_label, signal_label],
-        batch_size=batch_size
+
+    whiten_model = Whiten(
+        fftlength,
+        sample_rate,
+        highpass
+    ).to("cuda")
+
+
+    validation_scheme = Validator(
+        ifos=ifos,
+        signals_dict=signals_dict,
+        # batch_size=val_batch_size,
+        sample_rate=sample_rate, 
+        sqrtnum=val_sqrtnum,
+        sample_duration=sample_duration, 
+        output_dir=outdir
     )
-    
+
+    psds = torch.cuda.FloatTensor(psd)
+
     Tachyon(
         architecture=model, 
-        train_data=training_loader, 
-        validation_scheme=validation_loader,
+        background_sampler=background_sampler, 
+        signal_sampler=signal_sampler,
+        max_distance=max_distance,
+        noise_glitch_dist = [0, 0.25, 0.25, 0.5],
+        signal_glitch_dist = [0.7247, 0.09, 0.17, 0.0153],
+        validation_scheme=validation_scheme,
+        whiten_model=whiten_model,
+        psds = psds,
         batch_size = batch_size,
+        steps_per_epoch = steps_per_epoch,
         max_iteration = max_iteration,
         num_ifo = num_ifos,
         pretrained_model = pretrained_model,
@@ -106,13 +139,13 @@ def main(
         outdir= outdir
     )
 
-
+    
     # Remeber to pass the training and validation method to one function loop s
     # Make sure that we can pass the training and validation function to the training loop 
     # While in the training loop create a "cache" that saves the current training iterations and steps 
     # Also make sure that this variables can be acess by any file in order to make on training loop variable checks
 
 if __name__ == "__main__":
-    main()
+    data = main()
     
 

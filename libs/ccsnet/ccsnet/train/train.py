@@ -8,29 +8,42 @@ from pathlib import Path
 from typing import Callable, Iterable, Optional, Tuple
 
 from ccsnet.arch import WaveNet
+from ccsnet.train import train_time_sampling
 from ml4gw.transforms import SnrRescaler
 
-ARGUMENTS_FILE = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
+# ARGUMENTS_FILE = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
 
-ccsnet_arguments = toml.load(ARGUMENTS_FILE)
+# ccsnet_arguments = toml.load(ARGUMENTS_FILE)
 
 def one_loop_training(
+    background_sampler,
     train_data,
     validation_scheme,
+    max_distance,
+    whiten_model,
+    psds,
     model,
     criterion,
     opt,
     lr_scheduler,
     iteration,
+    batch_size,
+    steps_per_epoch,
+    outdir,
     device
 ):
     
     t_cost = 0
+    # psds.to(device)
     
-    for j, (x, y) in enumerate(tqdm(train_data)):
-    # for j, (x, y) in enumerate(train_data):
-        x = x[:, :, :4096].to(device)
-        y = y.to(device)
+    # print(psds.get_device())
+    # print(x.get_device())
+    for j, (x, y) in enumerate(train_data):
+
+        x = whiten_model(
+            x, 
+            psds
+        )
 
         p_value = model(x)
 
@@ -40,22 +53,56 @@ def one_loop_training(
         cost.backward()
         opt.step()
         
-        # print(cost.item())
+        t_cost += cost.item()
+        
+    average_cost = t_cost/(batch_size*steps_per_epoch)
+    logging.info("")
+    logging.info(f"    ============================")
+    logging.info(f"    === Training cost {average_cost:.4f} ===")
+    logging.info(f"    ============================")
+    logging.info("")
+    
+    ###### Need to update distance
+    distance = validation_scheme(
+        back_ground_display=background_sampler,
+        # batch_size,
+        model=model,
+        whiten_model=whiten_model,
+        psds=psds,
+        iteration=iteration,
+        max_distance=max_distance,
+        # outdir=outdir,
+        device=device
+    )
 
+
+    if iteration % 5 ==0:
+
+        torch.save(model.state_dict(), outdir/f"models/Iter{iteration:03d}")
+
+
+    return distance
 
 def Tachyon(
     architecture: Callable,
     # Plz provide in memeory control for the data
-    train_data,  # Processed data
-    validation_scheme,  # Stream in diffent validation method process data when called
-    batch_size = ccsnet_arguments["batch_size"],
-    max_iteration = ccsnet_arguments["max_iteration"],
-    num_ifo = len(ccsnet_arguments["ifos"]),
+    background_sampler, 
+    signal_sampler,
+    max_distance,
+    noise_glitch_dist,
+    signal_glitch_dist,
+    validation_scheme,
+    whiten_model,
+    psds,
+    batch_size,
+    steps_per_epoch,
+    max_iteration,
+    num_ifo,
     pretrained_model = None,
     weight_decay = 1e-5,
     learning_rate = 0.01,
-    device: str = "cuda",
-    outdir: Path = Path("/home/hongyin.chen/Outputs/CCSNet_Out_dir/pseudo_output"),
+    device: str = "cpu",
+    outdir: Path = None,
     softmax_output_layer:bool = False,
     enhancer = {
         "vram": True,
@@ -66,6 +113,8 @@ def Tachyon(
 ):
     
     device = device or "cpu"
+    model_dir = outdir / f"models"
+    model_dir.mkdir(parents=True, exist_ok=True)
     
     model = architecture(num_ifo)
     model.to(device)
@@ -90,7 +139,7 @@ def Tachyon(
         opt,
         max_lr=learning_rate, # max_lr
         epochs=max_iteration,
-        steps_per_epoch=len(train_data),
+        steps_per_epoch=steps_per_epoch,
         anneal_strategy="cos",
     )
     
@@ -106,6 +155,22 @@ def Tachyon(
     logging.info("=========================================")
     
     for iteration in range(max_iteration):
+        
+        
+        train_data = train_time_sampling(
+            background_sampler,
+            signal_sampler,
+            max_distance,
+            batch_size,
+            steps_per_epoch,
+            sample_factor=1/2,
+            noise_glitch_dist = noise_glitch_dist,
+            signal_glitch_dist = signal_glitch_dist,
+            choice_mask = [0, 1, 2, 3],
+            glitch_offset = 0.9
+        )
+        
+        
         if iteration == 0 and enhancer["profile"]:
             profiler = torch.profiler.profile(
                 schedule=schedule(wait=0, warmup=1, active=10),
@@ -118,18 +183,25 @@ def Tachyon(
             
         logging.info(f"=== Epoch {iteration + 1}/{max_iteration} ===")
         # Add iteration caching
-        early_stopping = one_loop_training(
+        distance = one_loop_training(
+            background_sampler,
             train_data,
             validation_scheme,
+            max_distance,
+            whiten_model,
+            psds,
             model,
             criterion,
             opt,
             lr_scheduler,
             iteration,
+            batch_size,
+            steps_per_epoch,
+            outdir,
             device
         )
         
-        if early_stopping:
+        # if early_stopping:
             
-            break
+        #     break
         
