@@ -68,6 +68,7 @@ def background_collector(
         strain = np.stack(strain)
         
         # Fix enviroment problem to support PSD pre calculation 
+        background_path.parent.mkdir(parents=True, exist_ok=True)
         with h5py.File(background_path, 'a') as g:
             
             g1 = g.create_group(f"segments{idx:02d}")
@@ -86,5 +87,5 @@ if __name__ == "__main__":
         state_flag = ccsnet_arguments["state_flag"], # ["DCS-ANALYSIS_READY_C01", "DCS-ANALYSIS_READY_C01"],
         frame_type = ccsnet_arguments["frame_type"], # ["HOFT_C01", "HOFT_C01"],
         channels = ccsnet_arguments["channels"], # ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"],
-        background_path = ccsnet_arguments["backgrounds"] # "/home/hongyin.chen/Data/CCSNet/production/five_day_run/background.h5"
+        background_path = Path(ccsnet_arguments["backgrounds"]) # "/home/hongyin.chen/Data/CCSNet/production/five_day_run/background.h5"
     )

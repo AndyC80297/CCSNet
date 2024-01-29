@@ -75,15 +75,18 @@ def load_h5_as_dict(
     return grand_dict
 
 
-def on_grid_pol_to_sim(time, quad_moment, sqrtnum):
+def on_grid_pol_to_sim(quad_moment, sqrtnum):
 
     CosTheta = np.linspace(-1, 1, sqrtnum)
     theta = np.arccos(CosTheta)
     phi = np.linspace(0, 2*np.pi, sqrtnum)
 
+    theta = theta.repeat(sqrtnum)
+    phi = np.tile(phi, sqrtnum)
+
     hp, hc = get_hp_hc_from_q2ij(quad_moment, theta, phi)
 
-    return time, hp, hc, theta, phi
+    return hp, hc, theta, phi
 
 
 # To do add masking window to the function
