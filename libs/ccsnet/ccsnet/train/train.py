@@ -18,7 +18,8 @@ from ml4gw.transforms import SnrRescaler
 def one_loop_training(
     background_sampler,
     train_data,
-    # validation_scheme,
+    validation_scheme,
+    max_distance,
     whiten_model,
     psds,
     model,
@@ -28,6 +29,7 @@ def one_loop_training(
     iteration,
     batch_size,
     steps_per_epoch,
+    outdir,
     device
 ):
     
@@ -37,13 +39,11 @@ def one_loop_training(
     # print(psds.get_device())
     # print(x.get_device())
     for j, (x, y) in enumerate(train_data):
-        # print(x.get_device())
+
         x = whiten_model(
             x, 
             psds
         )
-        # x = x.to(device)
-        # y = y.to(device)
 
         p_value = model(x)
 
@@ -63,11 +63,25 @@ def one_loop_training(
     logging.info("")
     
     ###### Need to update distance
-    # with torch.no_grad():
-    #     naxxramas, early_stopping = validator()
-    
-    #     return naxxramas, early_stopping
+    distance = validation_scheme(
+        back_ground_display=background_sampler,
+        # batch_size,
+        model=model,
+        whiten_model=whiten_model,
+        psds=psds,
+        iteration=iteration,
+        max_distance=max_distance,
+        # outdir=outdir,
+        device=device
+    )
 
+
+    if iteration % 5 ==0:
+
+        torch.save(model.state_dict(), outdir/f"models/Iter{iteration:03d}")
+
+
+    return distance
 
 def Tachyon(
     architecture: Callable,
@@ -77,7 +91,7 @@ def Tachyon(
     max_distance,
     noise_glitch_dist,
     signal_glitch_dist,
-    # validation_scheme,  # Stream in diffent validation method process data when called
+    validation_scheme,
     whiten_model,
     psds,
     batch_size,
@@ -99,6 +113,8 @@ def Tachyon(
 ):
     
     device = device or "cpu"
+    model_dir = outdir / f"models"
+    model_dir.mkdir(parents=True, exist_ok=True)
     
     model = architecture(num_ifo)
     model.to(device)
@@ -167,10 +183,11 @@ def Tachyon(
             
         logging.info(f"=== Epoch {iteration + 1}/{max_iteration} ===")
         # Add iteration caching
-        early_stopping = one_loop_training(
+        distance = one_loop_training(
             background_sampler,
             train_data,
-            # validation_scheme,
+            validation_scheme,
+            max_distance,
             whiten_model,
             psds,
             model,
@@ -180,10 +197,11 @@ def Tachyon(
             iteration,
             batch_size,
             steps_per_epoch,
+            outdir,
             device
         )
         
-        if early_stopping:
+        # if early_stopping:
             
-            break
+        #     break
         

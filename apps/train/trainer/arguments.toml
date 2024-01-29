@@ -45,14 +45,13 @@ init_distance = 10
 sample_duration = 3
 model_parameter = {c_depth = 8, n_chann = 64, l1 = 1024, l2 = 128}
 batch_size = 32
-steps_per_epoch = 50
-max_iteration = 20
+steps_per_epoch = 10
+max_iteration = 5
 max_lr = 4e-3
 lr_ramp_epochs = 75 
 weight_decay = 1e-5
 highpass = 32
 # pretrained_model = None
 learning_rate = 0.01
-output_dir = "/home/hongyin.chen/Outputs/CCSNet_Out_dir/pseudo_output"
-val_batch_size = 16
+output_dir = "/home/hongyin.chen/Outputs/CCSNet_Out_dir/pseudo_output_05"
 val_sqrtnum = 4

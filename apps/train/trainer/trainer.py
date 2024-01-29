@@ -55,7 +55,7 @@ def main(
     weight_decay = ccsnet_arguments["weight_decay"], 
     learning_rate = ccsnet_arguments["learning_rate"], 
     outdir: Path = Path(ccsnet_arguments["output_dir"]), 
-    val_batch_size = ccsnet_arguments["val_batch_size"],
+    # val_batch_size = ccsnet_arguments["val_batch_size"],
     val_sqrtnum = ccsnet_arguments["val_sqrtnum"],
     device: str = "cuda", 
 ):
@@ -84,27 +84,6 @@ def main(
         sample_duration = sample_duration,
     )
     
-                                    # # Move this part in to training loop
-                                    # glitch_signal, glitch_target = background_sampler(
-                                    #     batch_size = batch_size,
-                                    #     steps_per_epoch = steps_per_epoch,
-                                    #     sample_factor = 1/2,
-                                    #     glitch_dist = [0, 0.25, 0.25, 0.5],
-                                    #     choice_mask = [0, 1, 2, 3],
-                                    #     glitch_offset = 0.9,
-                                    #     target_value = 0
-                                    # )
-
-                                    # injection_siganl, injection_target = background_sampler(
-                                    #     batch_size = batch_size,
-                                    #     steps_per_epoch = steps_per_epoch,
-                                    #     sample_factor = 1/2,
-                                    #     glitch_dist = [0.7247, 0.09, 0.17, 0.0153],
-                                    #     choice_mask = [0, 1, 2, 3],
-                                    #     glitch_offset = 0.9,
-                                    #     target_value = 1
-                                    # )
-
     max_distance = {}
 
     for name in signals_dict.keys():
@@ -119,10 +98,6 @@ def main(
         sample_duration = sample_duration
     )
 
-                                    # injected_siganl = signal_sampler(
-                                    #     background=injection_siganl,
-                                    #     max_distance=max_distance
-                                    # )
 
     whiten_model = Whiten(
         fftlength,
@@ -130,20 +105,15 @@ def main(
         highpass
     ).to("cuda")
 
-                                    # training_loader = forged_dataloader(
-                                    #     inputs = [glitch_signal, injected_siganl],
-                                    #     targets = [glitch_target, injection_target],
-                                    #     batch_size = batch_size
-                                    # )
 
-
-    valdation_scheme = Validator(
+    validation_scheme = Validator(
         ifos=ifos,
         signals_dict=signals_dict,
-        batch_size=val_batch_size,
+        # batch_size=val_batch_size,
         sample_rate=sample_rate, 
         sqrtnum=val_sqrtnum,
         sample_duration=sample_duration, 
+        output_dir=outdir
     )
 
     psds = torch.cuda.FloatTensor(psd)
@@ -155,7 +125,7 @@ def main(
         max_distance=max_distance,
         noise_glitch_dist = [0, 0.25, 0.25, 0.5],
         signal_glitch_dist = [0.7247, 0.09, 0.17, 0.0153],
-        # validator=validator,
+        validation_scheme=validation_scheme,
         whiten_model=whiten_model,
         psds = psds,
         batch_size = batch_size,

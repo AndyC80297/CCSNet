@@ -200,7 +200,7 @@ class Injector:
             detector_tensors=self.tensors,
             detector_vertices=self.vertices,
             sample_rate=self.sample_rate,
-            plus=X[:,1,:],
+            plus=X[:,0,:],
             cross=X[:,1,:]
         )
         
