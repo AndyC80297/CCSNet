@@ -24,49 +24,80 @@ def one_loop_training(
     psds,
     model,
     criterion,
-    opt,
+    optimizer,
     lr_scheduler,
+    scaler,
+    profiler,
     iteration,
     batch_size,
     steps_per_epoch,
     outdir,
     device
 ):
-    
+    model.train()
     t_cost = 0
+    samples_seen = 0
     # psds.to(device)
     
     # print(psds.get_device())
     # print(x.get_device())
-    for j, (x, y) in enumerate(train_data):
-
+    for j, (x, y) in enumerate(tqdm(train_data)):
+        
+        optimizer.zero_grad(
+            # set_to_none=True
+        )
+        
         x = whiten_model(
             x, 
             psds
         )
 
-        p_value = model(x)
+        # p_value = model(x)
 
-        # cost = criterion(p_value, torch.argmax(y, dim = 1))
-        cost = criterion(p_value, y)
-        opt.zero_grad()
-        cost.backward()
-        opt.step()
+        # # cost = criterion(p_value, torch.argmax(y, dim = 1))
+        # cost = criterion(p_value, y)
+
+        # cost.backward()
+        # opt.step()
+
+        with torch.autocast("cuda", enabled=scaler is not None):
+            predictions = model(x)
+            loss = criterion(predictions, y)
+        t_cost += loss.item()
+        samples_seen += len(x)
+
+        if scaler is not None:
+            scaler.scale(loss).backward()
+            scaler.step(optimizer)
+            scaler.update()
+        else:
+            loss.backward()
+            optimizer.step()
+
+        if profiler is not None:
+            profiler.step()
+        if lr_scheduler is not None:
+            lr_scheduler.step()
+
+        t_cost += loss.item()
         
-        t_cost += cost.item()
-        
-    average_cost = t_cost/(batch_size*steps_per_epoch)
+    # average_cost = t_cost/(steps_per_epoch)
+    average_cost = t_cost/(j+1)
     logging.info("")
     logging.info(f"    ============================")
     logging.info(f"    === Training cost {average_cost:.4f} ===")
+    logging.info(f"    === Training cost {loss.item():.4f} ===")
     logging.info(f"    ============================")
     logging.info("")
     
     ###### Need to update distance
+    model.eval()
     distance = validation_scheme(
+        loss=average_cost,
         back_ground_display=background_sampler,
         # batch_size,
         model=model,
+        criterion=criterion,
         whiten_model=whiten_model,
         psds=psds,
         iteration=iteration,
@@ -163,6 +194,7 @@ def Tachyon(
             max_distance,
             batch_size,
             steps_per_epoch,
+            iteration = iteration, 
             sample_factor=1/2,
             noise_glitch_dist = noise_glitch_dist,
             signal_glitch_dist = signal_glitch_dist,
@@ -183,7 +215,7 @@ def Tachyon(
             
         logging.info(f"=== Epoch {iteration + 1}/{max_iteration} ===")
         # Add iteration caching
-        distance = one_loop_training(
+        max_distance = one_loop_training(
             background_sampler,
             train_data,
             validation_scheme,
@@ -194,6 +226,8 @@ def Tachyon(
             criterion,
             opt,
             lr_scheduler,
+            scaler,
+            profiler,
             iteration,
             batch_size,
             steps_per_epoch,

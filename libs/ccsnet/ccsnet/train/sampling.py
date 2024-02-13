@@ -22,7 +22,8 @@ def train_time_sampling(
     max_distance,
     batch_size,
     steps_per_epoch,
-    noise_glitch_dist ,
+    iteration,
+    noise_glitch_dist,
     signal_glitch_dist,
     sample_factor=1/2,
     choice_mask = [0, 1, 2, 3],
@@ -35,6 +36,8 @@ def train_time_sampling(
         steps_per_epoch = steps_per_epoch,
         sample_factor = sample_factor,
         glitch_dist = noise_glitch_dist,
+        iteration=iteration,
+        mode="background",
         choice_mask = choice_mask,
         glitch_offset = glitch_offset,
         target_value = 0
@@ -45,6 +48,8 @@ def train_time_sampling(
         steps_per_epoch = steps_per_epoch,
         sample_factor = sample_factor,
         glitch_dist = signal_glitch_dist,
+        iteration=iteration,
+        mode="glitch",
         choice_mask = choice_mask,
         glitch_offset = glitch_offset,
         target_value = 1
@@ -53,6 +58,7 @@ def train_time_sampling(
 
     injected_siganl = signal_sampler(
         background=injection_siganl,
+        iteration=iteration,
         max_distance=max_distance
     )
 

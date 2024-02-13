@@ -7,6 +7,7 @@ import numpy as np
 from pathlib import Path
 
 from ml4gw import gw
+from ml4gw.transforms import SnrRescaler
 from ml4gw.distributions import PowerLaw, Cosine, Uniform
 
 from orchestrator import forged_dataloader
@@ -23,6 +24,9 @@ class Validator:
         # validation_fraction,
         # injection_control, # Distance, SNR, time_shift ### We might need another function here (ML4GW)
         # batch_size: int,
+        psds,
+        fftlength,
+        overlap,
         sample_rate: int, 
         sqrtnum: int,
         sample_duration, 
@@ -49,8 +53,8 @@ class Validator:
         self.kernel_length = sample_rate * sample_duration
         self.output_dir = output_dir
         # self.sample_data = int(batch_size * steps_per_epoch * sample_factor)
-
-        dist_distro = Uniform(1, 1)
+        self.snr_distro = PowerLaw(12, 100, 3)
+        dist_distro = Uniform(1, 1) # Just for scaling keep this to one preserve the distance to 10kpc
         
         distance = 0.1*dist_distro(self.sqrtnum ** 4)
 
@@ -64,19 +68,16 @@ class Validator:
                 quad_moment,
                 sqrtnum ** 2
             )
-
+            
             hp_hc = padding(
                 time,
                 hp,
                 hc,
                 distance.numpy(),
-                sample_kernel = self.sample_duration,
-                sample_rate = self.sample_rate,
-                time_shift = -0.15, # Core-bounce will be at here
+                sample_kernel = self.sample_duration, 
             )
             
-            hp_hc = torch.Tensor(hp_hc)
-            
+            ### This step would have to be fixed and it be sampled outside of the loop
             dec_distro = Cosine()
             psi_distro = Uniform(0, np.pi)
             phi_distro = Uniform(0, 2 * np.pi)
@@ -92,16 +93,37 @@ class Validator:
                 detector_tensors=self.tensors,
                 detector_vertices=self.vertices,
                 sample_rate=self.sample_rate,
-                plus=hp_hc[:,0,:],
-                cross=hp_hc[:,1,:]
+                plus=torch.Tensor(hp_hc[:,0,:]),
+                cross=torch.Tensor(hp_hc[:,1,:])
             )
 
-
+            # rescaler = SnrRescaler(
+            #     num_channels=len(ifos), 
+            #     sample_rate = sample_rate,
+            #     waveform_duration = self.sample_duration,
+            #     highpass = 32,
+            # )
+            
+            # rescaler.fit(
+            #     psds[0, :],
+            #     psds[1, :],
+            #     fftlength=fftlength,
+            #     overlap=overlap,
+            #     use_pre_cauculated_psd=True
+            # )
+            
+            # ht, target_snrs, rescale_factor = rescaler.forward(
+            #     ht,
+            #     target_snrs = self.snr_distro(sqrtnum ** 4)
+            # )
+            
             self.val_signal[name] = ht
-    
+            
+        
     def recorder(
         self,
         iteration,
+        
         model,
         mode,
         name,
@@ -114,19 +136,31 @@ class Validator:
     
     def summarizer(
         self,
+        iteration,
+        tpr_dict,
         max_distance,
-        output_dir
+        output_dir,
+        noise_mode = "noise"
         
     ):
         
-        for name, distance in max_distance.items():
+        
+        
+        if iteration >= 0:
             
-            # if tprs[1] >= tprs[1]:
-            
-            max_distance[name] += 1
+            for name, distance in max_distance.items():
+                
+                # read_item = [f"Itera{iteration:03d}/{noise_mode}/{name}"]
+                
+                # dist = h5_thang.h5_data(read_item)[read_item[0]]
+                
+                if tpr_dict[name][1] >= 0.5:
+                
+                    max_distance[name] += 5
         
         
         return max_distance
+    
     # @torch.no_grad
     def prediction(
         self,
@@ -134,10 +168,13 @@ class Validator:
         targets,
         # batch_size,
         model,
+        criterion,
         whiten_model,
         psds,
     ):  
+        
         with torch.no_grad():
+            
             preds = []
             
             dataset = torch.utils.data.TensorDataset(
@@ -147,27 +184,32 @@ class Validator:
             
             data_loader = torch.utils.data.DataLoader(
                 dataset, 
-                batch_size=self.sqrtnum, 
+                batch_size=self.sqrtnum**4, 
                 shuffle=False
             )
-            
-            for X, _ in data_loader:
+            # print(__file__, "Type of the psd", type(psds.to("cuda")))
+            for x, y in data_loader:
                 
-                X = whiten_model(
-                    X, 
+                x = whiten_model(
+                    x, 
                     psds
                 )
                 
-                output = model(X)
+                output = model(x)
+                loss = criterion(output, y)
                 preds.append(output)
-            
+                
+            # print(loss.item())
             return torch.cat(preds)
             
-         
+        
+
     def __call__(
         self, 
-        back_ground_display, # From BackGroundDisplay.__call__()
+        loss,
+        back_ground_display, 
         model, 
+        criterion,
         whiten_model, 
         psds, 
         iteration, 
@@ -176,6 +218,13 @@ class Validator:
         device="cuda"
     ):
         
+        
+        with h5py.File(self.output_dir/ "loss.h5", "a") as g:
+            
+            h = g.create_group(f"Itera{iteration:03d}/")
+            
+            h.create_dataset(f"loss", data=np.array([loss]))
+            
         print(max_distance)
         noise_setting = {
             "noise": [1, 0, 0, 0],
@@ -183,23 +232,29 @@ class Validator:
             "h1_glitch": [0, 0, 1, 0],
             "simultaneous_glitch": [0, 0, 0, 1]
         }
-        
+        print()
         for mode, noise_protion in noise_setting.items():
             
             noise, targets = back_ground_display(
-                batch_size = self.sqrtnum ** 2,
-                steps_per_epoch = self.sqrtnum ** 2,
+                batch_size = self.sqrtnum ** 4,
+                steps_per_epoch = 1,
                 glitch_dist = noise_protion,
                 choice_mask = [0, 1, 2, 3],
                 glitch_offset = 0.9,
-                sample_factor = 1
-                # target_value = 0
+                sample_factor = 1,
+                iteration=iteration,
+                mode=f"validation_{mode}",
+                target_value = 0
             )
-
+            
+            print(f"Mode: {mode.upper()}:")
+            # print("It's just some noise", noise)
+            # print()
             noise_prediction = self.prediction(
                 noise, 
                 targets,
                 model,
+                criterion,
                 whiten_model,
                 psds,
             )
@@ -209,36 +264,45 @@ class Validator:
                 h = g.create_group(f"Itera{iteration:03d}/{mode}")
                 
                 h.create_dataset(f"{mode}", data=noise_prediction.detach().cpu().numpy().reshape(-1))
-
+                
             thereshold = torch.quantile(
                 noise_prediction,
-                torch.tensor([0.1, 0.75, 0.99]).to(device)
+                torch.tensor([0.50, 0.95, 0.99]).to(device)
             )
-
+            
+            tpr_dict = {}
             for name in self.ccsn_list:
                 # print(name)
                 signal = noise + self.val_signal[name] / max_distance[name]
+                
+                # if mode == "noise":
+                #     with h5py.File(self.output_dir/"val_signal.h5", "a") as g:
+                
+                #         h = g.create_group(f"Itera{iteration:03d}/{name}")
+                
+                #         h.create_dataset(f"Signal", data=self.val_signal[name].numpy())
                 
                 injection_prediction = self.prediction(
                     signal, 
                     torch.ones_like(targets),
                     model,
+                    criterion,
                     whiten_model,
                     psds,
                 )
-
-                # tprs = (injection_prediction > thereshold).sum(0)/len(injection_prediction)
-                # print(name, "TPR:", tprs.detach().cpu().numpy())
                 
+                tprs = (injection_prediction >= thereshold).sum(0)/len(injection_prediction)
+                print("    ", name, "TPR:", tprs.detach().cpu().numpy())
+                tpr_dict[name] = tprs.detach().cpu().numpy()
                 with h5py.File(self.output_dir/"history.h5", "a") as g:
                     
                     h = g[f"Itera{iteration:03d}/{mode}"]
                     
                     h.create_dataset(f"{name}", data=injection_prediction.detach().cpu().numpy().reshape(-1))
+            print()    
                 
                 
-                
-        return self.summarizer(max_distance, self.output_dir)
+        return self.summarizer(iteration, tpr_dict, max_distance, self.output_dir)
     
         # return early_stopping, max_distance
 # Read CCSN h5 files

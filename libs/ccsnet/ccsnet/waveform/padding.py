@@ -110,8 +110,8 @@ def padding(
     start = half_kernel_idx + t0_idx + time_shift_idx
     end = half_kernel_idx + t0_idx + time.shape[0] + time_shift_idx
 
-    signal[:, 0, start:end] = hp * distance.reshape(-1, 1)
-    signal[:, 1, start:end] = hc * distance.reshape(-1, 1)
+    signal[:, 0, start:end] = hp / distance.reshape(-1, 1)
+    signal[:, 1, start:end] = hc / distance.reshape(-1, 1)
     
     return signal
 

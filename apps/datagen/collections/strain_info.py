@@ -24,9 +24,9 @@ background_info = h5_thang(ccsnet_arguments["backgrounds"])
 
 psd_estimiater(
     ifos=ccsnet_arguments["ifos"],
-    strains=torch.Tensor(background_info.h5_data()["segments16/strain"]),  # This part need to modify to segments-wise operation
+    strains=torch.tensor(background_info.h5_data()["segments00/strain"]).double(),  # This part need to modify to segments-wise operation
     sample_rate=ccsnet_arguments["sample_rate"],
-    kernel_width=ccsnet_arguments["sample_kernel"],
+    kernel_width=ccsnet_arguments["sample_duration"],
     fftlength=ccsnet_arguments["fftlength"],
     overlap=ccsnet_arguments["overlap"],
     psd_path=Path(ccsnet_arguments["psd_files"])

@@ -48,6 +48,7 @@ def main(
     sample_duration = ccsnet_arguments["sample_duration"], 
     ifos = ccsnet_arguments["ifos"], 
     fftlength = ccsnet_arguments["fftlength"], 
+    overlap = ccsnet_arguments["overlap"],
     psd = psd, 
     highpass = ccsnet_arguments["highpass"], 
     model=WaveNet, 
@@ -82,6 +83,7 @@ def main(
         glitch_info = glitch_info,
         sample_rate = sample_rate,
         sample_duration = sample_duration,
+        outdir=outdir
     )
     
     max_distance = {}
@@ -89,13 +91,21 @@ def main(
     for name in signals_dict.keys():
         max_distance[name] = init_distance
 
+    psds = torch.cuda.DoubleTensor(psd)
     
     signal_sampler = Injector(
         ifos=ifos,
         # background=injection_siganl, 
-        signals_dict=signals_dict,
+        signals_dict = signals_dict,
+        init_distance = init_distance,
         sample_rate = sample_rate,
-        sample_duration = sample_duration
+        sample_duration = sample_duration,
+        psds=psds,
+        fftlength=fftlength,
+        overlap=overlap,
+        outdir = outdir,
+        batch_size = batch_size,
+        steps_per_epoch = steps_per_epoch,
     )
 
 
@@ -109,6 +119,9 @@ def main(
     validation_scheme = Validator(
         ifos=ifos,
         signals_dict=signals_dict,
+        psds=psds,
+        fftlength=fftlength,
+        overlap=overlap,
         # batch_size=val_batch_size,
         sample_rate=sample_rate, 
         sqrtnum=val_sqrtnum,
@@ -116,14 +129,16 @@ def main(
         output_dir=outdir
     )
 
-    psds = torch.cuda.FloatTensor(psd)
+    # psds = torch.cuda.FloatTensor(psd)
+
+    # psds = (torch.rand((2, 6145)) * 1e-32).to("cuda")
 
     Tachyon(
         architecture=model, 
         background_sampler=background_sampler, 
         signal_sampler=signal_sampler,
         max_distance=max_distance,
-        noise_glitch_dist = [0, 0.25, 0.25, 0.5],
+        noise_glitch_dist = [0, 0.375, 0.375, 0.25],
         signal_glitch_dist = [0.7247, 0.09, 0.17, 0.0153],
         validation_scheme=validation_scheme,
         whiten_model=whiten_model,

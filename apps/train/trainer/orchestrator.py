@@ -1,5 +1,7 @@
+import h5py
 import toml
 import torch
+import logging
 
 import numpy as np
 from tqdm import tqdm
@@ -10,7 +12,10 @@ from ccsnet.sampling import tapping
 from ccsnet.waveform import get_hp_hc_from_q2ij, padding
 from ccsnet.utils import h5_thang
 
+
+# from ml4gw.transforms import SnrRescaler
 from ml4gw.transforms import SnrRescaler
+from ml4gw.utils.slicing import sample_kernels
 from ml4gw.distributions import PowerLaw, Cosine, Uniform
 from ml4gw import gw
 
@@ -24,6 +29,7 @@ class BackGroundDisplay:
         glitch_info,
         sample_rate,
         sample_duration,
+        outdir
     ):
         
         # Sample_factor <= 1
@@ -44,11 +50,14 @@ class BackGroundDisplay:
         self.num_ifos = len(ifos)
         
         self.kernel_length = sample_rate * sample_duration
-
+        self.outdir = outdir / "raw_data"
+        self.outdir.mkdir(parents=True, exist_ok=True)
         
     def __call__(
         self,
         glitch_dist: list,
+        iteration,
+        mode,
         choice_mask = [0, 1, 2, 3],
         glitch_offset = 0.9,
         target_value = 0,
@@ -113,6 +122,10 @@ class BackGroundDisplay:
             
         targets = torch.full((num_sample_data,), target_value)
         
+        # with h5py.File(self.outdir / "background.h5", "a") as g:
+            
+        #     g.create_dataset(f"{iteration:03d}_{mode}", data=X.numpy())
+        
         return X, targets
 
 class Injector:
@@ -124,6 +137,16 @@ class Injector:
         signals_dict,
         sample_rate,
         sample_duration,
+        init_distance,
+        psds,
+        fftlength,
+        overlap, 
+        outdir,
+        batch_size = 32,
+        steps_per_epoch = 20,
+        buffer_duration = 4,
+        off_set = 0.15,
+        time_shift = -0.05
     ):
 
         self.tensors, self.vertices = gw.get_ifo_geometry(*ifos)
@@ -133,11 +156,43 @@ class Injector:
         
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration
-        self.kernel_length = sample_rate * sample_duration
+        self.buffer_duration = buffer_duration
+        self.off_set = off_set
+        self.init_distance = init_distance
+        self.kernel_length = sample_duration * sample_rate
+        self.buffer_length = buffer_duration * sample_rate
+        self.max_center_offset = int((buffer_duration/2 - sample_duration - off_set) * sample_rate)
+        self.outdir = outdir / "raw_data"
+        self.outdir.mkdir(parents=True, exist_ok=True)
+        self.batch_size = batch_size
+        self.steps_per_epoch = steps_per_epoch
+
+        self.snr_distro = PowerLaw(12, 100, 3)
+        
+        self.rescaler = SnrRescaler(
+            num_channels=len(ifos), 
+            sample_rate = sample_rate,
+            waveform_duration = sample_duration,
+            highpass = 32,
+        )
+
+        self.rescaler.fit(
+            psds[0, :],
+            psds[1, :],
+            fftlength=fftlength,
+            overlap=overlap,
+            use_pre_cauculated_psd=True
+        )
+
+
+        if off_set <= -time_shift:
+            
+            logging.info(f"Core bounce siganl may leak out of sample kernel by {-time_shift - off_set}")
         
     def __call__(
         self,
         background,
+        iteration,
         max_distance = None,
     ):
     
@@ -150,8 +205,9 @@ class Injector:
         X = torch.empty((total_counts, 2, self.kernel_length))
         agg_count = 0
 
-        for name, count in tqdm(zip(self.ccsn_list, ccsn_counts), total=len(self.ccsn_list)):
-            
+        # for name, count in tqdm(zip(self.ccsn_list, ccsn_counts), total=len(self.ccsn_list)):
+        for name, count in zip(self.ccsn_list, ccsn_counts):    
+        
             time = self.signals[name][0]
             quad_moment = self.signals[name][1]
         
@@ -159,7 +215,7 @@ class Injector:
             theta = np.random.uniform(0, np.pi, count)
             phi = np.random.uniform(0, 2*np.pi, count)            
             
-            dist_distro = PowerLaw(1, max_distance[name], alpha=3)
+            dist_distro = PowerLaw(self.init_distance, max_distance[name], alpha=3)
             
             distance = 0.1*dist_distro(count)
             
@@ -174,16 +230,24 @@ class Injector:
                 hp,
                 hc,
                 distance.numpy(),
-                sample_kernel = self.sample_duration,
+                sample_kernel = self.buffer_duration,
                 sample_rate = self.sample_rate,
-                time_shift = -0.15, # Core-bounce will be at here
+                time_shift = -self.off_set, # Core-bounce will be at here
             )
             
-            # To Do:
-            # Add ml4gw.sample_kerel function here to shift the CCSN signal
+            shifted_waveforms = sample_kernels(
+                X = torch.Tensor(hp_hc),
+                kernel_size = self.sample_rate * self.sample_duration,
+                max_center_offset = self.max_center_offset,
+            )
             
-            X[agg_count:agg_count+count, :, :] = torch.Tensor(hp_hc)
+            X[agg_count:agg_count+count, :, :] = shifted_waveforms
             
+            
+            # with h5py.File(self.outdir / "signal.h5", "a") as g:
+                
+            #     g.create_dataset(f"{iteration:03d}_{name}", data=shifted_waveforms.numpy())
+            agg_count += count
         # prior = PriorDict()
         dec_distro = Cosine()
         psi_distro = Uniform(0, np.pi)
@@ -203,6 +267,17 @@ class Injector:
             plus=X[:,0,:],
             cross=X[:,1,:]
         )
+
+        # ht, target_snrs, rescale_factor = self.rescaler.forward(
+        #     ht,
+        #     target_snrs = self.snr_distro(total_counts)
+        # )
+
+        # with h5py.File(self.outdir / "signal.h5", "a") as g:
+            
+        #     g.create_dataset(f"{iteration:03d}_ht", data=ht.numpy())
+
+        # print(__file__, "Training time rescaled ht", ht)
         
         background += ht
 

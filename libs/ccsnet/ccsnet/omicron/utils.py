@@ -68,7 +68,7 @@ def psd_estimiater(
     
     
     num_channels = len(ifos)
-    psds = torch.empty([num_channels, int((sample_rate*kernel_width)/2) +1])
+    psds = torch.empty([num_channels, int((sample_rate*kernel_width)/2) +1]).double()
     
     
     spec_trans = FittableSpectralTransform()
@@ -82,6 +82,6 @@ def psd_estimiater(
             overlap=overlap,
         )
 
-    with h5py.File(psd_path, "a") as g:
+    with h5py.File(psd_path, "w") as g:
         
         g.create_dataset("psd", data=psds.numpy())
