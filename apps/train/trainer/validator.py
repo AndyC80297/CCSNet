@@ -1,6 +1,7 @@
 import h5py
 import torch
 import logging
+import pickle 
 
 import numpy as np
 
@@ -30,6 +31,7 @@ class Validator:
         sample_rate: int, 
         sqrtnum: int,
         sample_duration, 
+        max_iteration: int, 
         output_dir: Path,
         device: str ="cuda"
         # validaton_type: [list, dict], # bg, glitch, bg+signal, glitch+signal
@@ -50,6 +52,8 @@ class Validator:
         self.sqrtnum = sqrtnum
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration
+        self.max_iteration = max_iteration
+        
         self.kernel_length = sample_rate * sample_duration
         self.output_dir = output_dir
         # self.sample_data = int(batch_size * steps_per_epoch * sample_factor)
@@ -144,20 +148,20 @@ class Validator:
         
     ):
         
-        
-        
-        if iteration >= 0:
+
             
-            for name, distance in max_distance.items():
-                
-                # read_item = [f"Itera{iteration:03d}/{noise_mode}/{name}"]
-                
-                # dist = h5_thang.h5_data(read_item)[read_item[0]]
-                
-                if tpr_dict[name][1] >= 0.5:
-                
-                    max_distance[name] += 5
+        for name, distance in max_distance.items():
+            
+            if tpr_dict[name][1] >= 0.5:
+            
+                max_distance[name] += 5
+            
+        if (iteration + 1) == self.max_iteration:
         
+            with open(output_dir / "Max_Distance.pkl", "wb") as f:
+                pickle.dump(max_distance, f)
+                
+            
         
         return max_distance
     

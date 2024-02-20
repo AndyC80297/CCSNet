@@ -126,6 +126,7 @@ def main(
         sample_rate=sample_rate, 
         sqrtnum=val_sqrtnum,
         sample_duration=sample_duration, 
+        max_iteration=max_iteration,
         output_dir=outdir
     )
 
@@ -140,6 +141,8 @@ def main(
         max_distance=max_distance,
         noise_glitch_dist = [0, 0.375, 0.375, 0.25],
         signal_glitch_dist = [0.7247, 0.09, 0.17, 0.0153],
+        # noise_glitch_dist = [1, 0, 0, 0],
+        # signal_glitch_dist = [0.25, 0.25, 0.25, 0.25],
         validation_scheme=validation_scheme,
         whiten_model=whiten_model,
         psds = psds,

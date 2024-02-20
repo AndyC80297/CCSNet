@@ -31,6 +31,7 @@ def one_loop_training(
     iteration,
     batch_size,
     steps_per_epoch,
+    max_iteration,
     outdir,
     device
 ):
@@ -110,6 +111,10 @@ def one_loop_training(
     if iteration % 5 ==0:
 
         torch.save(model.state_dict(), outdir/f"models/Iter{iteration:03d}")
+        
+    if (iteration + 1) == max_iteration:
+
+        torch.save(model.state_dict(), outdir/f"final_model")
 
 
     return distance
@@ -231,6 +236,7 @@ def Tachyon(
             iteration,
             batch_size,
             steps_per_epoch,
+            max_iteration,
             outdir,
             device
         )
