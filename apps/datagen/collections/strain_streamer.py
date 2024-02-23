@@ -9,7 +9,7 @@ from gwdatafind import find_urls
 from gwpy.timeseries import TimeSeries
 from gwpy.segments import DataQualityDict
 
-ARGUMENTS_FILE = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
+ARGUMENTS_FILE = "/home/andy/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
 
 ccsnet_arguments = toml.load(ARGUMENTS_FILE)
 

@@ -5,7 +5,8 @@ from pathlib import Path
 
 from ccsnet.omicron import glitch_merger, psd_estimiater
 from ccsnet.utils import h5_thang
-ARGUMENTS_FILE = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
+
+ARGUMENTS_FILE = "/home/andy/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
 
 ccsnet_arguments = toml.load(ARGUMENTS_FILE)
 
@@ -24,7 +25,7 @@ background_info = h5_thang(ccsnet_arguments["backgrounds"])
 
 psd_estimiater(
     ifos=ccsnet_arguments["ifos"],
-    strains=torch.tensor(background_info.h5_data()["segments00/strain"]).double(),  # This part need to modify to segments-wise operation
+    strains=torch.tensor(background_info.h5_data()["segments03/strain"]).double(),  # This part need to modify to segments-wise operation
     sample_rate=ccsnet_arguments["sample_rate"],
     kernel_width=ccsnet_arguments["sample_duration"],
     fftlength=ccsnet_arguments["fftlength"],

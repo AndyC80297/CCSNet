@@ -35,15 +35,15 @@ class BackGroundDisplay:
         # Sample_factor <= 1
         bg_info = h5_thang(background_file)
 
-        background = bg_info.h5_data()["segments00/strain"]
+        background = bg_info.h5_data()["segments03/strain"]
         bg_attrs = bg_info.h5_attrs()
-        background_duration = bg_attrs["segments00/end"] - bg_attrs["segments00/start"]
+        background_duration = bg_attrs["segments03/end"] - bg_attrs["segments03/start"]
         
         
         self.background = torch.Tensor(background)
         self.glitch_info = glitch_info
         self.background_duration = background_duration
-        self.segment_start_time = bg_attrs["segments00/start"]
+        self.segment_start_time = bg_attrs["segments03/start"]
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration
         self.ifos = ifos

@@ -1,6 +1,9 @@
 import toml
+import h5py
 import torch
 import logging
+
+import numpy as np
 
 from torch.profiler import schedule, tensorboard_trace_handler
 from tqdm import tqdm
@@ -38,14 +41,11 @@ def one_loop_training(
     model.train()
     t_cost = 0
     samples_seen = 0
-    # psds.to(device)
-    
-    # print(psds.get_device())
-    # print(x.get_device())
+
     for j, (x, y) in enumerate(tqdm(train_data)):
         
         optimizer.zero_grad(
-            # set_to_none=True
+            set_to_none=True
         )
         
         x = whiten_model(
@@ -64,7 +64,7 @@ def one_loop_training(
         with torch.autocast("cuda", enabled=scaler is not None):
             predictions = model(x)
             loss = criterion(predictions, y)
-        t_cost += loss.item()
+        # t_cost += loss.item()
         samples_seen += len(x)
 
         if scaler is not None:
@@ -81,16 +81,22 @@ def one_loop_training(
             lr_scheduler.step()
 
         t_cost += loss.item()
-        
-    # average_cost = t_cost/(steps_per_epoch)
-    average_cost = t_cost/(j+1)
+
+    average_cost = t_cost/(steps_per_epoch)
+    # average_cost = t_cost/(j+1)
     logging.info("")
     logging.info(f"    ============================")
     logging.info(f"    === Training cost {average_cost:.4f} ===")
-    logging.info(f"    === Training cost {loss.item():.4f} ===")
+    # logging.info(f"    === The type of x: {x.type()} ===")
     logging.info(f"    ============================")
     logging.info("")
-    
+
+    with h5py.File(outdir/ "loss.h5", "a") as g:
+        
+        h = g.create_group(f"Itera{iteration:03d}/")
+        
+        h.create_dataset(f"loss", data=np.array([average_cost]))
+
     ###### Need to update distance
     model.eval()
     distance = validation_scheme(
@@ -241,7 +247,5 @@ def Tachyon(
             device
         )
         
-        # if early_stopping:
-            
-        #     break
+
         

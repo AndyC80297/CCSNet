@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "libs"
+name = "ccsnet"
 version = "0.0.1"
 description = "A library to train CCSNet"
 license = "MIT"

@@ -1,5 +1,6 @@
 import h5py
 import torch
+import toml
 import logging
 import pickle 
 
@@ -22,6 +23,7 @@ class Validator:
         self,
         ifos,
         signals_dict,
+        chosen_signals,
         # validation_fraction,
         # injection_control, # Distance, SNR, time_shift ### We might need another function here (ML4GW)
         # batch_size: int,
@@ -45,6 +47,7 @@ class Validator:
         # self.batch_size = batch_size
         
         self.signals_dict = signals_dict
+        self.chosen_signals = toml.load(chosen_signals)
         self.ccsn_list = list(signals_dict.keys())
         self.num_ccsn_type = len(self.ccsn_list)
         # self.siganl_sampled = self.num_ccsn_type * batch_size
@@ -122,50 +125,87 @@ class Validator:
             # )
             
             self.val_signal[name] = ht
-            
-        
-    def recorder(
-        self,
-        iteration,
-        
-        model,
-        mode,
-        name,
-        noise_preds,
-        distance,
-        output_dir
-    ):
-        
-        pass
+
     
     def summarizer(
         self,
         iteration,
-        tpr_dict,
+        # tpr_dict,
         max_distance,
         output_dir,
+        factor = [0.50, 0.95, 0.99],
         noise_mode = "noise"
         
     ):
         
+        score = torch.empty([3, len(self.ccsn_list), 4])
 
-            
-        for name, distance in max_distance.items():
-            
-            if tpr_dict[name][1] >= 0.5:
-            
-                max_distance[name] += 5
-            
-        if (iteration + 1) == self.max_iteration:
-        
-            with open(output_dir / "Max_Distance.pkl", "wb") as f:
-                pickle.dump(max_distance, f)
+        modes = [
+            "noise",
+            "h1_glitch",
+            "l1_glitch",
+            "simultaneous_glitch"
+        ]
+
+
+        history = h5_thang(output_dir / "raw_data" / "history.h5")
+        distance = h5_thang(output_dir / "raw_data" / "max_distance.h5").h5_data()
+
+        for i, mode in enumerate(modes):
+            # print(f"Mode: {mode.upper()}:")
+            trace_tag = f"Itera{iteration:03d}/{mode}/{mode}"
+            noise_pred = torch.tensor(history.h5_data([trace_tag])[trace_tag])
+
+            thereshold = torch.quantile(
+                noise_pred,
+                torch.tensor(factor)
+            )
+
+            sig_count = 0
+            for family in self.chosen_signals.keys():
+                # print("  ", family)
+                for name in self.chosen_signals[family]:
+
+                    full_name = f"{family}/{name}"
+
+                    trace_tag = f"Itera{iteration:03d}/{mode}/{full_name}"
+                    
+                    sig_out = torch.tensor(history.h5_data([trace_tag])[trace_tag])
                 
-            
+                    tprs = (sig_out.view(self.sqrtnum ** 4, 1) >= thereshold).sum(0)/len(sig_out)
+
+                    score[:, sig_count, i] = tprs
+                    sig_count += 1
+
+        with h5py.File(output_dir / "val_performance.h5", "a") as g:
+
+            g.create_dataset(f"Itera{iteration:03d}_score", data=score.numpy())
+
+        noise_score = score[1].mean(axis=0)
+
+        for i, mode in enumerate(modes):
+
+            logging.info(f"  Mode: {mode.upper():15s}  {noise_score[i]:.04f}")
+
+        wave_score = score[1].mean(axis=1)
+        wave_count = 0
+        for family in self.chosen_signals.keys():
+            logging.info(f"  {family}")
+            for name in self.chosen_signals[family]:
+
+                full_name = f"{family}/{name}"
+                dis_tag = f"Itera{iteration:03d}/{full_name}"
+
+                logging.info(f"    {name:20s} DIS:{distance[dis_tag][0]:03d}   {wave_score[wave_count]:.04f}")
+
+
+                if wave_score[wave_count] >= 0.5:
+                    max_distance[f"{family}/{name}"] += 3
+                wave_count += 1
         
         return max_distance
     
-    # @torch.no_grad
+
     def prediction(
         self,
         inputs,
@@ -219,24 +259,25 @@ class Validator:
         iteration, 
         max_distance = None, 
         # output_dir=None, 
+        # saving = True,
+        signal_saving=None,
         device="cuda"
     ):
-        
-        
-        with h5py.File(self.output_dir/ "loss.h5", "a") as g:
+
+        with h5py.File(self.output_dir/ "raw_data" /"max_distance.h5", "a") as g:
             
-            h = g.create_group(f"Itera{iteration:03d}/")
-            
-            h.create_dataset(f"loss", data=np.array([loss]))
-            
-        print(max_distance)
+            h = g.create_group(f"Itera{iteration:03d}")
+            for name in self.ccsn_list:
+
+                h.create_dataset(f"{name}", data=np.array([max_distance[name]]))
+
         noise_setting = {
             "noise": [1, 0, 0, 0],
             "l1_glitch": [0, 1, 0, 0],
             "h1_glitch": [0, 0, 1, 0],
             "simultaneous_glitch": [0, 0, 0, 1]
         }
-        print()
+
         for mode, noise_protion in noise_setting.items():
             
             noise, targets = back_ground_display(
@@ -251,9 +292,6 @@ class Validator:
                 target_value = 0
             )
             
-            print(f"Mode: {mode.upper()}:")
-            # print("It's just some noise", noise)
-            # print()
             noise_prediction = self.prediction(
                 noise, 
                 targets,
@@ -262,29 +300,17 @@ class Validator:
                 whiten_model,
                 psds,
             )
-            
-            with h5py.File(self.output_dir/"history.h5", "a") as g:
+
+            with h5py.File(self.output_dir/ "raw_data" / "history.h5", "a") as g:
                 
                 h = g.create_group(f"Itera{iteration:03d}/{mode}")
                 
                 h.create_dataset(f"{mode}", data=noise_prediction.detach().cpu().numpy().reshape(-1))
                 
-            thereshold = torch.quantile(
-                noise_prediction,
-                torch.tensor([0.50, 0.95, 0.99]).to(device)
-            )
-            
-            tpr_dict = {}
+
             for name in self.ccsn_list:
-                # print(name)
+                
                 signal = noise + self.val_signal[name] / max_distance[name]
-                
-                # if mode == "noise":
-                #     with h5py.File(self.output_dir/"val_signal.h5", "a") as g:
-                
-                #         h = g.create_group(f"Itera{iteration:03d}/{name}")
-                
-                #         h.create_dataset(f"Signal", data=self.val_signal[name].numpy())
                 
                 injection_prediction = self.prediction(
                     signal, 
@@ -294,19 +320,24 @@ class Validator:
                     whiten_model,
                     psds,
                 )
-                
-                tprs = (injection_prediction >= thereshold).sum(0)/len(injection_prediction)
-                print("    ", name, "TPR:", tprs.detach().cpu().numpy())
-                tpr_dict[name] = tprs.detach().cpu().numpy()
-                with h5py.File(self.output_dir/"history.h5", "a") as g:
+
+
+                with h5py.File(self.output_dir/ "raw_data" / "history.h5", "a") as g:
                     
                     h = g[f"Itera{iteration:03d}/{mode}"]
                     
                     h.create_dataset(f"{name}", data=injection_prediction.detach().cpu().numpy().reshape(-1))
-            print()    
+
+                if signal_saving is not None:
+
+                    if mode == "noise":
+                        with h5py.File(self.output_dir / "raw_data/val_signal.h5", "a") as g:
+                    
+                            h = g.create_group(f"Itera{iteration:03d}/{name}")
+                    
+                            h.create_dataset(f"Signal", data=self.val_signal[name].numpy())                
                 
-                
-        return self.summarizer(iteration, tpr_dict, max_distance, self.output_dir)
+        return self.summarizer(iteration, max_distance, self.output_dir)
     
         # return early_stopping, max_distance
 # Read CCSN h5 files

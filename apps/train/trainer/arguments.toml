@@ -1,57 +1,52 @@
 # This part majorly serves for datagen
-# start = 1262254622
-# start = 1262653854
-# end = 1262686622
+
 start = 1262397225
 end = 1262404611
-# start = 1262686622
-# end = 1262859422
-sample_rate = 4096
-fftlength=2
-overlap=1
 ifos = ["H1", "L1"]
 frame_type = ["HOFT_C01", "HOFT_C01"]
 state_flag = ["DCS-ANALYSIS_READY_C01:1", "DCS-ANALYSIS_READY_C01:1"]
 channels = ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"]
+
+sample_rate = 4096
+fftlength=2
+overlap=1
 
 # A. Should includes in with the active segements time
 # B. Try to pass envioment variable to read file 
 raw_ccsn = "/home/hongyin.chen/Data/CCSNet/production/CCSNe/RAW"
 omicron_output = "/home/hongyin.chen/Data/stashed_CCSNet_data/CCSNet_data/Publication/omicron/training"
 
-# backgrounds = "/home/hongyin.chen/Data/CCSNet/pseudo_data/background.h5" 
-# backgrounds = "/home/hongyin.chen/Data/CCSNet/production/five_day_run/background.h5"
-backgrounds = "/home/hongyin.chen/Data/CCSNet/pseudo_data/very_short_segment_run/background.h5"
 
-# All family mixed, consider use another config file to sample signals
-
-# signals = "/home/hongyin.chen/Data/CCSNet/pseudo_data/signals.h5" 
-signals = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/CCSNe/Resampled"
-# chosen_signals = "/home/hongyin.chen/Xperimental/CCSNet/sandbox/ccsn.toml"
-chosen_signals = "/home/hongyin.chen/Xperimental/CCSNet/sandbox/ccsn_2.toml"
-glitch_info = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/glitch_info.h5" # Consider combine this into background file
-
-psd_files = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/psds.h5" # Consider combine this into background file
+# backgrounds = "/home/hongyin.chen/Data/CCSNet/pseudo_data/very_short_segment_run/background.h5"
+# glitch_info = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/glitch_info.h5" # Consider combine this into background file
+# psd_files = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/psds.h5" # Consider combine this into background file
+# chosen_signals = "/home/hongyin.chen/Xperimental/CCSNet/sandbox/ccsn_2.toml"
+# signals = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/CCSNe/Resampled"
 
 # backgrounds = "${DATA_PATH}/background.h5"
 # psd_files = "${DATA_PATH}/psds.h5"
 # glitch_info = "${DATA_PATH}/glitch_info.h5"
 # signals = "${DATA_PATH}/CCSNe/Resampled"
 
+backgrounds = "/home/andy/Data/CCSNet/recover_runs/background.h5"
+psd_files = "/home/andy/Data/CCSNet/recover_runs/psds.h5"
+glitch_info = "/home/andy/Data/CCSNet/recover_runs/glitch_info.h5"
+chosen_signals = "/home/andy/anti_gravity/CCSNet/apps/train/ccsn.toml"
+signals = "/home/andy/Data/CCSNet/recover_runs/CCSNe/Resampled"
 
 
 # Training phase
 init_distance = 1
 sample_duration = 3
 model_parameter = {c_depth = 8, n_chann = 64, l1 = 1024, l2 = 128}
-batch_size = 512
-steps_per_epoch = 200
-max_iteration = 200
+batch_size = 32
+steps_per_epoch = 10
+max_iteration = 10
 max_lr = 4e-3
 lr_ramp_epochs = 75 
 weight_decay = 1e-5
 highpass = 32
 # pretrained_model = None
 learning_rate = 0.004
-output_dir = "/home/hongyin.chen/Outputs/CCSNet_Out_dir/pseudo_output_117"
-val_sqrtnum = 8
+output_dir = "/home/andy/Outputs/CCSNet_Out_dir/xperiment_runs/Result_003"
+val_sqrtnum = 4

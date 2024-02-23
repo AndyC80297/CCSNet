@@ -19,7 +19,7 @@ from ccsnet.train.train import Tachyon
 from ml4gw.transforms import Whiten
 from ml4gw.transforms.transform import FittableSpectralTransform
 
-ARGUMENTS_FILE = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
+ARGUMENTS_FILE = "/home/andy/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
 
 ccsnet_arguments = toml.load(ARGUMENTS_FILE)
 
@@ -39,6 +39,7 @@ signals_dict = load_h5_as_dict(
 def main(
     background_file = ccsnet_arguments["backgrounds"], 
     signals_dict = signals_dict, 
+    chosen_signals = ccsnet_arguments["chosen_signals"],
     init_distance = ccsnet_arguments["init_distance"],
     glitch_info = ccsnet_arguments["glitch_info"], 
     max_iteration = ccsnet_arguments["max_iteration"], 
@@ -119,6 +120,7 @@ def main(
     validation_scheme = Validator(
         ifos=ifos,
         signals_dict=signals_dict,
+        chosen_signals=chosen_signals,
         psds=psds,
         fftlength=fftlength,
         overlap=overlap,
