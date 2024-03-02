@@ -37,7 +37,7 @@ def train_time_sampling(
         sample_factor = sample_factor,
         glitch_dist = noise_glitch_dist,
         iteration=iteration,
-        mode="background",
+        mode="Train",
         choice_mask = choice_mask,
         glitch_offset = glitch_offset,
         target_value = 0
@@ -49,7 +49,7 @@ def train_time_sampling(
         sample_factor = sample_factor,
         glitch_dist = signal_glitch_dist,
         iteration=iteration,
-        mode="glitch",
+        mode="Train",
         choice_mask = choice_mask,
         glitch_offset = glitch_offset,
         target_value = 1

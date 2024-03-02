@@ -130,12 +130,9 @@ class Validator:
     def summarizer(
         self,
         iteration,
-        # tpr_dict,
         max_distance,
-        output_dir,
         factor = [0.50, 0.95, 0.99],
         noise_mode = "noise"
-        
     ):
         
         score = torch.empty([3, len(self.ccsn_list), 4])
@@ -148,8 +145,8 @@ class Validator:
         ]
 
 
-        history = h5_thang(output_dir / "raw_data" / "history.h5")
-        distance = h5_thang(output_dir / "raw_data" / "max_distance.h5").h5_data()
+        history = h5_thang(self.output_dir / "raw_data" / "history.h5")
+        distance = h5_thang(self.output_dir / "raw_data" / "max_distance.h5").h5_data()
 
         for i, mode in enumerate(modes):
             # print(f"Mode: {mode.upper()}:")
@@ -177,7 +174,7 @@ class Validator:
                     score[:, sig_count, i] = tprs
                     sig_count += 1
 
-        with h5py.File(output_dir / "val_performance.h5", "a") as g:
+        with h5py.File(self.output_dir / "val_performance.h5", "a") as g:
 
             g.create_dataset(f"Itera{iteration:03d}_score", data=score.numpy())
 
@@ -214,7 +211,7 @@ class Validator:
         model,
         criterion,
         whiten_model,
-        psds,
+        psds
     ):  
         
         with torch.no_grad():
@@ -231,7 +228,7 @@ class Validator:
                 batch_size=self.sqrtnum**4, 
                 shuffle=False
             )
-            # print(__file__, "Type of the psd", type(psds.to("cuda")))
+
             for x, y in data_loader:
                 
                 x = whiten_model(
@@ -240,11 +237,12 @@ class Validator:
                 )
                 
                 output = model(x)
-                loss = criterion(output, y)
+                # loss = criterion(output, y)
                 preds.append(output)
-                
-            # print(loss.item())
-            return torch.cat(preds)
+
+
+            
+            return x, torch.cat(preds)
             
         
 
@@ -288,11 +286,12 @@ class Validator:
                 glitch_offset = 0.9,
                 sample_factor = 1,
                 iteration=iteration,
-                mode=f"validation_{mode}",
+                # mode=f"validation_{mode}",
+                mode="Validate",
                 target_value = 0
             )
             
-            noise_prediction = self.prediction(
+            val_data, noise_prediction = self.prediction(
                 noise, 
                 targets,
                 model,
@@ -306,13 +305,14 @@ class Validator:
                 h = g.create_group(f"Itera{iteration:03d}/{mode}")
                 
                 h.create_dataset(f"{mode}", data=noise_prediction.detach().cpu().numpy().reshape(-1))
+                # h.create_dataset(f"{mode}_siganl", data=val_data.detach().cpu().numpy())
                 
 
             for name in self.ccsn_list:
                 
                 signal = noise + self.val_signal[name] / max_distance[name]
                 
-                injection_prediction = self.prediction(
+                val_data, injection_prediction = self.prediction(
                     signal, 
                     torch.ones_like(targets),
                     model,
@@ -327,6 +327,7 @@ class Validator:
                     h = g[f"Itera{iteration:03d}/{mode}"]
                     
                     h.create_dataset(f"{name}", data=injection_prediction.detach().cpu().numpy().reshape(-1))
+                    # h.create_dataset(f"{name}_siganl", data=val_data.detach().cpu().numpy())
 
                 if signal_saving is not None:
 
@@ -335,9 +336,9 @@ class Validator:
                     
                             h = g.create_group(f"Itera{iteration:03d}/{name}")
                     
-                            h.create_dataset(f"Signal", data=self.val_signal[name].numpy())                
+                            # h.create_dataset(f"Signal", data=self.val_signal[name].numpy())                
                 
-        return self.summarizer(iteration, max_distance, self.output_dir)
+        return self.summarizer(iteration, max_distance)
     
         # return early_stopping, max_distance
 # Read CCSN h5 files

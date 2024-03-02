@@ -1,7 +1,12 @@
 # This part majorly serves for datagen
 
-start = 1262397225
-end = 1262404611
+#Train
+# start = 1262632990
+start = 1262653854
+end = 1262686622
+# Test
+# start = 1262919719 
+# end = 1262944254
 ifos = ["H1", "L1"]
 frame_type = ["HOFT_C01", "HOFT_C01"]
 state_flag = ["DCS-ANALYSIS_READY_C01:1", "DCS-ANALYSIS_READY_C01:1"]
@@ -39,14 +44,14 @@ signals = "/home/andy/Data/CCSNet/recover_runs/CCSNe/Resampled"
 init_distance = 1
 sample_duration = 3
 model_parameter = {c_depth = 8, n_chann = 64, l1 = 1024, l2 = 128}
-batch_size = 32
-steps_per_epoch = 10
-max_iteration = 10
+batch_size = 512
+steps_per_epoch = 200
+max_iteration = 200
 max_lr = 4e-3
 lr_ramp_epochs = 75 
 weight_decay = 1e-5
 highpass = 32
 # pretrained_model = None
 learning_rate = 0.004
-output_dir = "/home/andy/Outputs/CCSNet_Out_dir/xperiment_runs/Result_003"
+output_dir = "/home/andy/Outputs/CCSNet_Out_dir/recover_runs_ADAMW/Result_003"
 val_sqrtnum = 4

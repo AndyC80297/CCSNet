@@ -29,21 +29,46 @@ class BackGroundDisplay:
         glitch_info,
         sample_rate,
         sample_duration,
-        outdir
+        outdir,
+        training_portion = 0.75
     ):
         
         # Sample_factor <= 1
-        bg_info = h5_thang(background_file)
+        segments = "segments03"
+        self.bg_dur = {}
+        self.start_time = {}
+        self.background = {}
+        
 
-        background = bg_info.h5_data()["segments03/strain"]
+        bg_info = h5_thang(background_file)
+        background = torch.Tensor(bg_info.h5_data()[f"{segments}/strain"])
         bg_attrs = bg_info.h5_attrs()
-        background_duration = bg_attrs["segments03/end"] - bg_attrs["segments03/start"]
+        bg_dur = bg_attrs[f"{segments}/end"] - bg_attrs[f"{segments}/start"]
+        self.train_dur = int(bg_dur * training_portion)
+
+        self.bg_dur["Train"] = int(bg_dur * training_portion)
+        self.bg_dur["Validate"] = int(bg_dur * (1 - training_portion))
+
+        self.start_time["Train"] = bg_attrs[f"{segments}/start"]
+        self.start_time["Validate"] = bg_attrs[f"{segments}/start"] + self.bg_dur["Train"]
+
+        self.background["Train"] = background[:,:self.bg_dur["Train"]*sample_rate]
+        self.background["Validate"] = background[:,-self.bg_dur["Validate"]*sample_rate:]
         
-        
-        self.background = torch.Tensor(background)
+        # print("Train duration:", self.bg_dur["Train"])
+        # print("Validate duration:", self.bg_dur["Validate"])
+
+        # print("Train t0:", self.start_time["Train"])
+        # print("Validate t0:", self.start_time["Validate"])
+
+        # print("Train shape:", self.background["Train"].shape)
+        # print("Validate shape:", self.background["Validate"].shape)
+
+        # print("Grand Start", bg_attrs[f"{segments}/start"])
+        # print("Grand End", bg_attrs[f"{segments}/end"])
+              
         self.glitch_info = glitch_info
-        self.background_duration = background_duration
-        self.segment_start_time = bg_attrs["segments03/start"]
+        self.segment_start_time = bg_attrs[f"{segments}/start"]
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration
         self.ifos = ifos
@@ -89,9 +114,9 @@ class BackGroundDisplay:
 
             X[glitch_mask, i, :] = glitch_sampler(
                 gltich_info=glitch_label,
-                strain = self.background[i, :],
-                segment_duration = self.background_duration,
-                segment_start_time = self.segment_start_time,
+                strain = self.background[mode][i, :],
+                segment_duration = self.bg_dur[mode],
+                segment_start_time = self.start_time[mode],
                 ifos = [ifo],
                 sample_counts = glitch_count,
                 sample_rate = self.sample_rate,
@@ -104,17 +129,18 @@ class BackGroundDisplay:
             
             reverse_count = reverse_mask.sum()
             glitch_label = h5_thang(self.glitch_info).h5_data([f"{ifo}/time"])
-
+            
             mask_dict = masking(
                 glitch_info=glitch_label,
-                segment_duration=self.background_duration,
+                segment_duration=self.bg_dur[mode],
+                segment_start_time=self.start_time[mode],
                 shift_range=self.sample_duration,
                 pad_width=self.sample_duration/2,
                 merge_edges = True
             )
 
             X[reverse_mask, i, :] = strain_sampling(
-                self.background[i, :],
+                self.background[mode][i, :],
                 mask_dict,
                 sample_counts=reverse_count,
                 kernel_width=self.sample_duration
@@ -268,10 +294,10 @@ class Injector:
             cross=X[:,1,:]
         )
 
-        # ht, target_snrs, rescale_factor = self.rescaler.forward(
-        #     ht,
-        #     target_snrs = self.snr_distro(total_counts)
-        # )
+        ht, target_snrs, rescale_factor = self.rescaler.forward(
+            ht,
+            target_snrs = self.snr_distro(total_counts)
+        )
 
         # with h5py.File(self.outdir / "signal.h5", "a") as g:
             

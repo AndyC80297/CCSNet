@@ -116,11 +116,11 @@ def one_loop_training(
 
     if iteration % 5 ==0:
 
-        torch.save(model.state_dict(), outdir/f"models/Iter{iteration:03d}")
+        torch.save(model.state_dict(), outdir/f"models/Iter{iteration:03d}.pt")
         
     if (iteration + 1) == max_iteration:
 
-        torch.save(model.state_dict(), outdir/f"final_model")
+        torch.save(model.state_dict(), outdir/f"final_model.pt")
 
 
     return distance
