@@ -81,8 +81,8 @@ if __name__ == "__main__":
     
     background_collector(
         ifos = ccsnet_arguments["ifos"],
-        train_start = ccsnet_arguments["start"], # 1262254622,
-        train_stop = ccsnet_arguments["end"], # 1262686622,
+        train_start = ccsnet_arguments["train_start"], # 1262254622,
+        train_stop = ccsnet_arguments["train_end"], # 1262686622,
         sample_rate = ccsnet_arguments["sample_rate"], # 4096,
         state_flag = ccsnet_arguments["state_flag"], # ["DCS-ANALYSIS_READY_C01", "DCS-ANALYSIS_READY_C01"],
         frame_type = ccsnet_arguments["frame_type"], # ["HOFT_C01", "HOFT_C01"],

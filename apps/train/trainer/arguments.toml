@@ -2,11 +2,11 @@
 
 #Train
 # start = 1262632990
-start = 1262653854
-end = 1262686622
+train_start = 1262653854
+train_end = 1262686622
 # Test
-# start = 1262919719 
-# end = 1262944254
+test_start = 1262919719 
+test_end = 1262944254
 ifos = ["H1", "L1"]
 frame_type = ["HOFT_C01", "HOFT_C01"]
 state_flag = ["DCS-ANALYSIS_READY_C01:1", "DCS-ANALYSIS_READY_C01:1"]
@@ -33,6 +33,7 @@ omicron_output = "/home/hongyin.chen/Data/stashed_CCSNet_data/CCSNet_data/Public
 # glitch_info = "${DATA_PATH}/glitch_info.h5"
 # signals = "${DATA_PATH}/CCSNe/Resampled"
 
+data_dir = "/home/hongyin.chen/Data/CCSNet/recover_runs"
 backgrounds = "/home/andy/Data/CCSNet/recover_runs/background.h5"
 psd_files = "/home/andy/Data/CCSNet/recover_runs/psds.h5"
 glitch_info = "/home/andy/Data/CCSNet/recover_runs/glitch_info.h5"
