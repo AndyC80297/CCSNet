@@ -22,30 +22,23 @@ raw_ccsn = "/home/hongyin.chen/Data/CCSNet/production/CCSNe/RAW"
 omicron_output = "/home/hongyin.chen/Data/stashed_CCSNet_data/CCSNet_data/Publication/omicron/training"
 
 
-# backgrounds = "/home/hongyin.chen/Data/CCSNet/pseudo_data/very_short_segment_run/background.h5"
-# glitch_info = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/glitch_info.h5" # Consider combine this into background file
-psd_files = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/psds.h5" # Consider combine this into background file
+# Training & Validation
+# data_dir = "/home/hongyin.chen/Data/CCSNet/recover_runs"
+data_dir = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run"
+backgrounds = "background.h5"
+psd_files = "psds.h5"
+glitch_info = "glitch_info.h5"
+
+chosen_signals = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/ccsn.toml"
+signals_dir = "CCSNe/Resampled"
 # chosen_signals = "/home/hongyin.chen/Xperimental/CCSNet/sandbox/ccsn_2.toml"
 # signals = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/CCSNe/Resampled"
 
-# backgrounds = "${DATA_PATH}/background.h5"
-# psd_files = "${DATA_PATH}/psds.h5"
-# glitch_info = "${DATA_PATH}/glitch_info.h5"
-# signals = "${DATA_PATH}/CCSNe/Resampled"
-
-
-
-chosen_signals = "/home/andy/anti_gravity/CCSNet/apps/train/ccsn.toml"
-signals = "/home/andy/Data/CCSNet/recover_runs/CCSNe/Resampled"
-
-data_dir = "/home/hongyin.chen/Data/CCSNet/recover_runs"
-backgrounds = "/home/andy/Data/CCSNet/recover_runs/background.h5"
-# psd_files = "/home/andy/Data/CCSNet/recover_runs/psds.h5"
-glitch_info = "/home/andy/Data/CCSNet/recover_runs/glitch_info.h5"
-
-test_dir = "/home/hongyin.chen/Data/CCSNet/Test_data/First_run"
-test_background = "test_background.h5"
-test_data = "test_dataset.h5"
+# Test
+test_dir = "/home/hongyin.chen/Data/CCSNet/test_runs"
+test_background = "background.h5"
+test_data = "test_dataset"
+test_psds = "psds.h5"
 
 # Training phase
 init_distance = 1
@@ -62,3 +55,8 @@ highpass = 32
 learning_rate = 0.004
 output_dir = "/home/andy/Outputs/CCSNet_Out_dir/recover_runs_ADAMW/Result_003"
 val_sqrtnum = 4
+
+# Test
+test_count = 5000
+snr_distro = [8, 10, 12, 15, 20, 25, 30, 35, 40]
+count = 50
