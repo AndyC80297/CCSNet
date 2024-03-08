@@ -66,7 +66,7 @@ class BackGroundDisplay:
 
         # print("Grand Start", bg_attrs[f"{segments}/start"])
         # print("Grand End", bg_attrs[f"{segments}/end"])
-              
+        
         self.glitch_info = glitch_info
         self.segment_start_time = bg_attrs[f"{segments}/start"]
         self.sample_rate = sample_rate

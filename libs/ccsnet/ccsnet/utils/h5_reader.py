@@ -3,8 +3,8 @@ import h5py
 class h5_thang():
     
     """
-    This funtion severs for loading all groups/name of h5 compressed data to a dictionary.
-    The data can be eazily acess by the proivded groups/name. 
+    This function severs for loading all groups/name of h5 compressed data to a dictionary.
+    The data can be eazily access by the provided groups/name. 
     """
     
     def __init__(
@@ -63,15 +63,16 @@ class h5_thang():
     
     def h5_data(
         self,
-        items: list=None,
-        verbose: bool=False 
+        items: list=None, 
+        verbose: bool=False, 
+        n_data=None
     )->dict:
 
         """
         Args:
             items (list): A list of groups/name to require from the compressed h5 file.
         Returns:
-            dict: A dictonary that contains all direct acessable data
+            dict: A dictionary that contains all direct accessible data
         """
         if items == None:
             items = self.h5_keys(verbose=False)
@@ -83,6 +84,9 @@ class h5_thang():
         data_dict = {}
         with h5py.File(self.file , 'r', locking=False) as h1:
             for item in items:
+                if n_data is not None:
+                    data_dict[item] = h1[item][:n_data, ...]
+                    
                 data_dict[item] = h1[item][:]
                     
         return data_dict

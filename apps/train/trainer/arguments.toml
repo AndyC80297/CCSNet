@@ -24,7 +24,7 @@ omicron_output = "/home/hongyin.chen/Data/stashed_CCSNet_data/CCSNet_data/Public
 
 # backgrounds = "/home/hongyin.chen/Data/CCSNet/pseudo_data/very_short_segment_run/background.h5"
 # glitch_info = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/glitch_info.h5" # Consider combine this into background file
-# psd_files = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/psds.h5" # Consider combine this into background file
+psd_files = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/psds.h5" # Consider combine this into background file
 # chosen_signals = "/home/hongyin.chen/Xperimental/CCSNet/sandbox/ccsn_2.toml"
 # signals = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/CCSNe/Resampled"
 
@@ -33,13 +33,19 @@ omicron_output = "/home/hongyin.chen/Data/stashed_CCSNet_data/CCSNet_data/Public
 # glitch_info = "${DATA_PATH}/glitch_info.h5"
 # signals = "${DATA_PATH}/CCSNe/Resampled"
 
-data_dir = "/home/hongyin.chen/Data/CCSNet/recover_runs"
-backgrounds = "/home/andy/Data/CCSNet/recover_runs/background.h5"
-psd_files = "/home/andy/Data/CCSNet/recover_runs/psds.h5"
-glitch_info = "/home/andy/Data/CCSNet/recover_runs/glitch_info.h5"
+
+
 chosen_signals = "/home/andy/anti_gravity/CCSNet/apps/train/ccsn.toml"
 signals = "/home/andy/Data/CCSNet/recover_runs/CCSNe/Resampled"
 
+data_dir = "/home/hongyin.chen/Data/CCSNet/recover_runs"
+backgrounds = "/home/andy/Data/CCSNet/recover_runs/background.h5"
+# psd_files = "/home/andy/Data/CCSNet/recover_runs/psds.h5"
+glitch_info = "/home/andy/Data/CCSNet/recover_runs/glitch_info.h5"
+
+test_dir = "/home/hongyin.chen/Data/CCSNet/Test_data/First_run"
+test_background = "test_background.h5"
+test_data = "test_dataset.h5"
 
 # Training phase
 init_distance = 1
