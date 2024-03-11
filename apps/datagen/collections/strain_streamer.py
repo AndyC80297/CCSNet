@@ -11,7 +11,7 @@ from gwpy.segments import DataQualityDict
 
 ARGUMENTS_FILE = "/home/andy/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
 
-ccsnet_arguments = toml.load(ARGUMENTS_FILE)
+ccsnet_args = toml.load(ARGUMENTS_FILE)
 
 def background_collector(
     ifos,
@@ -79,13 +79,25 @@ def background_collector(
 
 if __name__ == "__main__":
     
+    # background_collector(
+    #     ifos = ccsnet_args["ifos"],
+    #     train_start = ccsnet_args["train_start"], # 1262254622,
+    #     train_stop = ccsnet_args["train_end"], # 1262686622,
+    #     sample_rate = ccsnet_args["sample_rate"], # 4096,
+    #     state_flag = ccsnet_args["state_flag"], # ["DCS-ANALYSIS_READY_C01", "DCS-ANALYSIS_READY_C01"],
+    #     frame_type = ccsnet_args["frame_type"], # ["HOFT_C01", "HOFT_C01"],
+    #     channels = ccsnet_args["channels"], # ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"],
+    #     background_path = Path(ccsnet_args["backgrounds"]) # "/home/hongyin.chen/Data/CCSNet/production/five_day_run/background.h5"
+    # )
+    
+    
     background_collector(
-        ifos = ccsnet_arguments["ifos"],
-        train_start = ccsnet_arguments["train_start"], # 1262254622,
-        train_stop = ccsnet_arguments["train_end"], # 1262686622,
-        sample_rate = ccsnet_arguments["sample_rate"], # 4096,
-        state_flag = ccsnet_arguments["state_flag"], # ["DCS-ANALYSIS_READY_C01", "DCS-ANALYSIS_READY_C01"],
-        frame_type = ccsnet_arguments["frame_type"], # ["HOFT_C01", "HOFT_C01"],
-        channels = ccsnet_arguments["channels"], # ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"],
-        background_path = Path(ccsnet_arguments["backgrounds"]) # "/home/hongyin.chen/Data/CCSNet/production/five_day_run/background.h5"
+        ifos = ccsnet_args["ifos"],
+        train_start = ccsnet_args["test_start"], # 1262254622,
+        train_stop = ccsnet_args["test_end"], # 1262686622,
+        sample_rate = ccsnet_args["sample_rate"], # 4096,
+        state_flag = ccsnet_args["state_flag"], # ["DCS-ANALYSIS_READY_C01", "DCS-ANALYSIS_READY_C01"],
+        frame_type = ccsnet_args["frame_type"], # ["HOFT_C01", "HOFT_C01"],
+        channels = ccsnet_args["channels"], # ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"],
+        background_path = Path(ccsnet_args["test_dir"]) / ccsnet_args["test_background"] # "/home/hongyin.chen/Data/CCSNet/production/five_day_run/background.h5"
     )

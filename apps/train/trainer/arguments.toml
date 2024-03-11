@@ -39,6 +39,7 @@ test_dir = "/home/hongyin.chen/Data/CCSNet/test_runs"
 test_background = "background.h5"
 test_data = "test_dataset"
 test_psds = "psds.h5"
+test_glitch_info = "glitch_info.h5"
 
 # Training phase
 init_distance = 1
@@ -59,4 +60,4 @@ val_sqrtnum = 4
 # Test
 test_count = 5000
 snr_distro = [8, 10, 12, 15, 20, 25, 30, 35, 40]
-count = 50
+count = 5000
