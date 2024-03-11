@@ -54,10 +54,14 @@ weight_decay = 1e-5
 highpass = 32
 # pretrained_model = None
 learning_rate = 0.004
-output_dir = "/home/andy/Outputs/CCSNet_Out_dir/recover_runs_ADAMW/Result_003"
+# output_dir = "/home/andy/Outputs/CCSNet_Out_dir/recover_runs_ADAMW/Result_003"
+output_dir = "/home/hongyin.chen/Outputs/CCSNet_Out_dir/recover_runs_ADAMW/Result_003"
 val_sqrtnum = 4
 
 # Test
 test_count = 5000
 snr_distro = [8, 10, 12, 15, 20, 25, 30, 35, 40]
 count = 5000
+
+test_signals = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/ccsn.toml"
+test_model = "/home/hongyin.chen/Xperimental/CCSNet/sandbox/test_pub_RECOVER/Data/CCSNet_ADAM_03/final_model.pt"

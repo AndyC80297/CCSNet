@@ -23,37 +23,28 @@ ccsnet_args = toml.load(ARGUMENTS_FILE)
 data_dir = Path(ccsnet_args["data_dir"])
 test_dir = Path(ccsnet_args["test_dir"])
 
-test_dir.mkdir(parents=True, exist_ok=True)
+test_bg = test_dir / ccsnet_args["test_background"] # Background
+psd_path = test_dir / ccsnet_args["test_psds"]
 signals_dir = data_dir / ccsnet_args["signals_dir"]
+
+test_data_dir = test_dir / ccsnet_args["test_data"]
+test_data_dir.mkdir(parents=True, exist_ok=True)
+seg = "segments00"
+
+test_start = h5_thang(test_bg).h5_attrs()[f"{seg}/strain"]
+test_end = h5_thang(test_bg).h5_attrs()[f"{seg}/end"]
 
 signals_dict = load_h5_as_dict(
     ccsnet_args["chosen_signals"],
     signals_dir
 )
 
-test_bg = test_dir / ccsnet_args["test_background"] # Background
-test_data_dir = test_dir / ccsnet_args["test_data"]
-glitch_info = test_dir / ccsnet_args["test_glitch_info"]
-test_data_dir.mkdir(parents=True, exist_ok=True)
-
-
-psd_path = test_dir / ccsnet_args["test_psds"]
-psds = torch.tensor(h5_thang(psd_path).h5_data(["psd"])["psd"]).double()
-
-count = ccsnet_args["test_count"]
-
-background = torch.tensor(h5_thang(test_bg).h5_data()["segments00/strain"])
-attrs = h5_thang(test_bg).h5_attrs()
-
-test_start = attrs["segments00/start"]
-test_end = attrs["segments00/end"]
-
 background_display = Test_BackGroundDisplay(
     ifos = ccsnet_args["ifos"],
-    background = background,
+    background = torch.tensor(h5_thang(test_bg).h5_data()[f"{seg}/strain"]),
     background_dur = test_end - test_start,
     start_time = test_start,
-    glitch_info = glitch_info,
+    glitch_info = test_dir / ccsnet_args["test_glitch_info"],
     sample_rate = ccsnet_args["sample_rate"],
     sample_duration = ccsnet_args["sample_duration"]
 )
@@ -63,7 +54,7 @@ inited_injector = Test_Injector(
     sample_rate = ccsnet_args["sample_rate"],
     sample_duration = ccsnet_args["sample_duration"],
     highpass = ccsnet_args["highpass"],
-    psds = psds,
+    psds = torch.tensor(h5_thang(psd_path).h5_data(["psd"])["psd"]).double(),
     fftlength = ccsnet_args["fftlength"],
     overlap = ccsnet_args["overlap"],
     count = ccsnet_args["count"],
@@ -73,10 +64,7 @@ inited_injector = Test_Injector(
     save_dir = test_data_dir
 )
 
-
-
-
-# # Load BG
+# Load BG
 background_list = {
     "No_Glitch": [1, 0, 0, 0],
     "H1_Glitch": [0, 0, 1, 0],
@@ -97,10 +85,6 @@ for bg_key, bg_item in background_list.items():
     with h5py.File(test_data_dir / f"{bg_key}.h5", "w") as g:
         
         g.create_dataset("Signal", data=bg_data.numpy())
-        # g.create_dataset("distance", data=1/rescale_factor.numpy())
-        # g.attrs["SNR"] = snr
-        
-        # Generate CCSN 
 
     for key in signals_dict.keys():
         
@@ -119,14 +103,3 @@ for bg_key, bg_item in background_list.items():
                 g.create_dataset("Signal", data=ht.numpy())
                 g.create_dataset("distance", data=1/rescale_factor.numpy())
                 g.attrs["SNR"] = snr
-
-# # Inject signal
-
-# # Save data
-
-
-# # with h5py.File(test_file, "a") as g:
-    
-#     # h = g.create_group()
-    
-#     # g.attrs[""] = 
