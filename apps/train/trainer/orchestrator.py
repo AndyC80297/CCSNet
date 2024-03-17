@@ -34,7 +34,7 @@ class BackGroundDisplay:
     ):
         
         # Sample_factor <= 1
-        segments = "segments03"
+        segments = "segments00"
         self.bg_dur = {}
         self.start_time = {}
         self.background = {}

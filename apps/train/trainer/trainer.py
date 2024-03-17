@@ -12,7 +12,7 @@ from orchestrator import BackGroundDisplay, Injector, forged_dataloader
 
 from ccsnet import train
 from ccsnet.arch import WaveNet
-from ccsnet.utils import h5_thang
+from ccsnet.utils import h5_thang, args_control
 from ccsnet.waveform import load_h5_as_dict
 from ccsnet.train.train import Tachyon
 
@@ -21,21 +21,25 @@ from ml4gw.transforms.transform import FittableSpectralTransform
 
 ARGUMENTS_FILE = "/home/andy/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
 
-ccsnet_arguments = toml.load(ARGUMENTS_FILE)
+# ccsnet_args = toml.load(ARGUMENTS_FILE)
 
+current_path = Path(__file__)
+ccsnet_args_path = Path("/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml")
+some_env = Path("/home/hongyin.chen/anti_gravity/CCSNet/.env")
+
+ccsnet_arguments = args_control(
+    ccsnet_args_path,
+    some_env,
+)
+ccsnet_arguments["chosen_signals"] = Path("/home/hongyin.chen/anti_gravity/CCSNet/apps/train/ccsn.toml")
 logging.basicConfig(level=logging.NOTSET)
 
-
-bg_file_dict = h5_thang(ccsnet_arguments["backgrounds"]).h5_data()
-psd = h5_thang(ccsnet_arguments["psd_files"]).h5_data()["psd"]
-# signals_dict = h5_thang(ccsnet_arguments["signals"]).h5_data(["signals"]) # This data is in shape (500, 2, 16384)
+psd = h5_thang(ccsnet_arguments["psds"]).h5_data()["psd"]
 signals_dict = load_h5_as_dict(
     ccsnet_arguments["chosen_signals"],
-    ccsnet_arguments["signals"]
+    ccsnet_arguments["signals_dir"]
 )
 
-# Pass in arguments
-# Function starts at here 
 def main(
     background_file = ccsnet_arguments["backgrounds"], 
     signals_dict = signals_dict, 
@@ -57,7 +61,6 @@ def main(
     weight_decay = ccsnet_arguments["weight_decay"], 
     learning_rate = ccsnet_arguments["learning_rate"], 
     outdir: Path = Path(ccsnet_arguments["output_dir"]), 
-    # val_batch_size = ccsnet_arguments["val_batch_size"],
     val_sqrtnum = ccsnet_arguments["val_sqrtnum"],
     device: str = "cuda", 
 ):

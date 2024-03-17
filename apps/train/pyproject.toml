@@ -23,6 +23,7 @@ logging = "^0.4.9.6"
 tqdm = "^4.66.1"
 matplotlib = "3.7.0"
 bokeh = "^3.3.4"
+python-dotenv = "^1.0.1"
 
 
 
