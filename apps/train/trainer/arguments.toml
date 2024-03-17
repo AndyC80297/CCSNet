@@ -1,45 +1,29 @@
-# This part majorly serves for datagen
-
-#Train
+# Basic Settings
 # start = 1262632990
 train_start = 1262653854
 train_end = 1262686622
-# Test
 test_start = 1262919719 
 test_end = 1262944254
 ifos = ["H1", "L1"]
 frame_type = ["HOFT_C01", "HOFT_C01"]
 state_flag = ["DCS-ANALYSIS_READY_C01:1", "DCS-ANALYSIS_READY_C01:1"]
 channels = ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"]
-
 sample_rate = 4096
 fftlength=2
 overlap=1
 
-# A. Should includes in with the active segements time
-# B. Try to pass envioment variable to read file 
-raw_ccsn = "/home/hongyin.chen/Data/CCSNet/production/CCSNe/RAW"
-omicron_output = "/home/hongyin.chen/Data/stashed_CCSNet_data/CCSNet_data/Publication/omicron/training"
-
-
 # Training & Validation
-# data_dir = "/home/hongyin.chen/Data/CCSNet/recover_runs"
-data_dir = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run"
 backgrounds = "background.h5"
-psd_files = "psds.h5"
-glitch_info = "glitch_info.h5"
-
-chosen_signals = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/ccsn.toml"
+psds = "psds.h5"
+glitch = "glitch_info.h5"
 signals_dir = "CCSNe/Resampled"
-# chosen_signals = "/home/hongyin.chen/Xperimental/CCSNet/sandbox/ccsn_2.toml"
-# signals = "/home/hongyin.chen/Data/CCSNet/production/one_segmet_run/CCSNe/Resampled"
 
 # Test
-test_dir = "/home/hongyin.chen/Data/CCSNet/test_runs"
-test_background = "background.h5"
-test_data = "test_dataset"
-test_psds = "psds.h5"
-test_glitch_info = "glitch_info.h5"
+test_backgrounds = "test_background.h5"
+test_psds = "test_psd.h5"
+test_glitch = "test_glitch_info.h5"
+test_signals_dir = "CCSNe/Resampled"
+test_datasets = "test_datasets"
 
 # Training phase
 init_distance = 1
@@ -52,16 +36,12 @@ max_lr = 4e-3
 lr_ramp_epochs = 75 
 weight_decay = 1e-5
 highpass = 32
-# pretrained_model = None
 learning_rate = 0.004
-# output_dir = "/home/andy/Outputs/CCSNet_Out_dir/recover_runs_ADAMW/Result_003"
-output_dir = "/home/hongyin.chen/Outputs/CCSNet_Out_dir/recover_runs_ADAMW/Result_003"
-val_sqrtnum = 4
+val_sqrtnum = 8
 
 # Test
 test_count = 5000
 snr_distro = [8, 10, 12, 15, 20, 25, 30, 35, 40]
-count = 5000
+test_batch_size = 1024
+test_model = "final_model.pt"
 
-test_signals = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/ccsn.toml"
-test_model = "/home/hongyin.chen/Xperimental/CCSNet/sandbox/test_pub_RECOVER/Data/CCSNet_ADAM_03/final_model.pt"

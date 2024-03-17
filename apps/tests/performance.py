@@ -4,6 +4,7 @@ import h5py
 
 import numpy as np
 
+import time
 from tqdm import tqdm
 from pathlib import Path
 from ccsnet.arch import WaveNet
@@ -67,7 +68,7 @@ def test_data_loader(
     n_ifos=2, 
     sample_rate=4096,
     sample_duration=3,
-    batch_size: int = 32,
+    batch_size: int = 1024,
     shuffle=False,
     device="cpu"
 ):
@@ -120,7 +121,7 @@ class Streamer:
         
         with torch.no_grad():
             for signal, index in dataloader:
-                
+                print("      True Excution")
                 signal = self.whiten_model(
                     signal,
                     self.psds
@@ -147,12 +148,12 @@ if __name__ == '__main__':
     
     psds = torch.tensor(h5_thang(psd_path).h5_data(["psd"])["psd"]).double()
     
-    selected_ccsn = toml.load(ccsnet_args["test_signals"])
+    selected_ccsn = Path("/home/hongyin.chen/anti_gravity/CCSNet/apps/train/ccsn.toml")
     
     bg_list = [
-        # "No_Glitch",
-        # "H1_Glitch",
-        # "L1_Glitch",
+        "No_Glitch",
+        "H1_Glitch",
+        "L1_Glitch",
         "Combined"
     ]
     
@@ -171,30 +172,33 @@ if __name__ == '__main__':
     
     for bg_mode in bg_list:
             
-        for file in tqdm(sorted(test_data_dir.glob(f"{bg_mode}*.h5"))):
-            
+        for file in (sorted(test_data_dir.glob(f"{bg_mode}*.h5"))):
+
             # Data Loading
             with h5py.File(file, "r") as h:
                 
                 signal = h["Signal"][:]
-            
             # Predicting
-            
+
             data_loader = test_data_loader(
                 signal,
                 n_ifos=2, 
                 sample_rate=ccsnet_args["sample_rate"],
                 sample_duration=ccsnet_args["sample_duration"],
-                batch_size= 4,
+                batch_size=ccsnet_args["test_batch_size"],
                 shuffle=False,
                 device=device
             )
-            
+
+            # Streaming
+
             stream_out = ccsnet_streamer(data_loader)
-            
+
             preds = []
             indexs = []
-            
+
+            # Output looping
+
             for pred, index in stream_out:
                 
                 preds.append(pred.cpu().detach().numpy())
@@ -202,9 +206,10 @@ if __name__ == '__main__':
                 
             preds = np.concatenate(preds).reshape([-1])
             indexs = np.concatenate(indexs).reshape([-1])
-            
-            
+
             # Output saving
+
+            start = time.time()
             if file.name[:-3] == bg_mode:
                 with h5py.File(out_dir / "Backgrounds.h5", "a") as g:
                     
@@ -228,7 +233,7 @@ if __name__ == '__main__':
                     h.create_dataset(f"Index", data=indexs)
                     h.create_dataset(f"Distance", data=distance)
             
-        
+
         # print(type(file.name))
     # project = "CCSNet_ADAM_03"
     # trained_weights = f"/home/hongyin.chen/Xperimental/CCSNet/sandbox/test_pub_RECOVER/Data/{project}/final_model.pt"
