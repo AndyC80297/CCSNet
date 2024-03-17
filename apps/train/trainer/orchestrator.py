@@ -184,6 +184,7 @@ class Injector:
         self.sample_duration = sample_duration
         self.buffer_duration = buffer_duration
         self.off_set = off_set
+        self.time_shift = time_shift
         self.init_distance = init_distance
         self.kernel_length = sample_duration * sample_rate
         self.buffer_length = buffer_duration * sample_rate
@@ -231,34 +232,31 @@ class Injector:
         X = torch.empty((total_counts, 2, self.kernel_length))
         agg_count = 0
 
-        # for name, count in tqdm(zip(self.ccsn_list, ccsn_counts), total=len(self.ccsn_list)):
         for name, count in zip(self.ccsn_list, ccsn_counts):    
         
             time = self.signals[name][0]
             quad_moment = self.signals[name][1]
-        
-
+            
+            
             theta = np.random.uniform(0, np.pi, count)
             phi = np.random.uniform(0, 2*np.pi, count)            
             
-            dist_distro = PowerLaw(self.init_distance, max_distance[name], alpha=3)
-            
-            distance = 0.1*dist_distro(count)
+            distance = 0.1 * np.ones(count)
             
             hp, hc = get_hp_hc_from_q2ij(
                 quad_moment,
                 theta=theta,
                 phi=phi
             )
-
+            
             hp_hc = padding(
                 time,
                 hp,
                 hc,
-                distance.numpy(),
+                distance,
                 sample_kernel = self.buffer_duration,
                 sample_rate = self.sample_rate,
-                time_shift = -self.off_set, # Core-bounce will be at here
+                time_shift = self.time_shift, # Core-bounce will be at here
             )
             
             shifted_waveforms = sample_kernels(

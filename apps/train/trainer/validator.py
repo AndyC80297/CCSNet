@@ -60,10 +60,18 @@ class Validator:
         self.kernel_length = sample_rate * sample_duration
         self.output_dir = output_dir
         # self.sample_data = int(batch_size * steps_per_epoch * sample_factor)
-        self.snr_distro = PowerLaw(12, 100, 3)
-        dist_distro = Uniform(1, 1) # Just for scaling keep this to one preserve the distance to 10kpc
-        
-        distance = 0.1*dist_distro(self.sqrtnum ** 4)
+
+        dec_distro = Cosine()
+        psi_distro = Uniform(0, np.pi)
+        phi_distro = Uniform(0, 2 * np.pi)
+
+        dec = dec_distro(sqrtnum ** 4)
+        psi = psi_distro(sqrtnum ** 4)
+        phi = phi_distro(sqrtnum ** 4)
+
+        # self.snr_distro = PowerLaw(12, 100, 3)
+        self.snr_distro = Uniform(8, 12)
+        distance = 0.1 * np.ones(self.sqrtnum ** 4)
 
         self.val_signal = {}
         for name in self.ccsn_list:
@@ -71,7 +79,7 @@ class Validator:
             time = self.signals_dict[name][0]
             quad_moment = self.signals_dict[name][1]            
 
-            hp, hc, theta, phi = on_grid_pol_to_sim(
+            hp, hc, ori_theta, ori_phi = on_grid_pol_to_sim(
                 quad_moment,
                 sqrtnum ** 2
             )
@@ -80,18 +88,9 @@ class Validator:
                 time,
                 hp,
                 hc,
-                distance.numpy(),
+                distance,
                 sample_kernel = self.sample_duration, 
             )
-            
-            ### This step would have to be fixed and it be sampled outside of the loop
-            dec_distro = Cosine()
-            psi_distro = Uniform(0, np.pi)
-            phi_distro = Uniform(0, 2 * np.pi)
-            
-            dec = dec_distro(sqrtnum ** 4)
-            psi = psi_distro(sqrtnum ** 4)
-            phi = phi_distro(sqrtnum ** 4)
             
             ht = gw.compute_observed_strain(
                 dec,
@@ -104,25 +103,25 @@ class Validator:
                 cross=torch.Tensor(hp_hc[:,1,:])
             )
 
-            # rescaler = SnrRescaler(
-            #     num_channels=len(ifos), 
-            #     sample_rate = sample_rate,
-            #     waveform_duration = self.sample_duration,
-            #     highpass = 32,
-            # )
+            rescaler = SnrRescaler(
+                num_channels=len(ifos), 
+                sample_rate = sample_rate,
+                waveform_duration = self.sample_duration,
+                highpass = 32,
+            )
             
-            # rescaler.fit(
-            #     psds[0, :],
-            #     psds[1, :],
-            #     fftlength=fftlength,
-            #     overlap=overlap,
-            #     use_pre_cauculated_psd=True
-            # )
+            rescaler.fit(
+                psds[0, :],
+                psds[1, :],
+                fftlength=fftlength,
+                overlap=overlap,
+                use_pre_cauculated_psd=True
+            )
             
-            # ht, target_snrs, rescale_factor = rescaler.forward(
-            #     ht,
-            #     target_snrs = self.snr_distro(sqrtnum ** 4)
-            # )
+            ht, target_snrs, rescale_factor = rescaler.forward(
+                ht,
+                target_snrs = self.snr_distro(sqrtnum ** 4)
+            )
             
             self.val_signal[name] = ht
 
@@ -130,7 +129,7 @@ class Validator:
     def summarizer(
         self,
         iteration,
-        max_distance,
+        max_distance = None,
         factor = [0.50, 0.95, 0.99],
         noise_mode = "noise"
     ):
@@ -146,7 +145,7 @@ class Validator:
 
 
         history = h5_thang(self.output_dir / "raw_data" / "history.h5")
-        distance = h5_thang(self.output_dir / "raw_data" / "max_distance.h5").h5_data()
+        # distance = h5_thang(self.output_dir / "raw_data" / "max_distance.h5").h5_data()
 
         for i, mode in enumerate(modes):
             # print(f"Mode: {mode.upper()}:")
@@ -193,14 +192,18 @@ class Validator:
                 full_name = f"{family}/{name}"
                 dis_tag = f"Itera{iteration:03d}/{full_name}"
 
-                logging.info(f"    {name:20s} DIS:{distance[dis_tag][0]:03d}   {wave_score[wave_count]:.04f}")
+                # logging.info(f"    {name:20s} DIS:{distance[dis_tag][0]:03d}   {wave_score[wave_count]:.04f}")
+                logging.info(f"    {name:20s} SNR:8-12   TPR:{wave_score[wave_count]:.04f}")
 
 
-                if wave_score[wave_count] >= 0.5:
-                    max_distance[f"{family}/{name}"] += 3
+                # if wave_score[wave_count] >= 0.5:
+                #     max_distance[f"{family}/{name}"] += 3
                 wave_count += 1
         
-        return max_distance
+        if max_distance is not None:
+            return max_distance
+        
+
     
 
     def prediction(
@@ -239,8 +242,6 @@ class Validator:
                 output = model(x)
                 # loss = criterion(output, y)
                 preds.append(output)
-
-
             
             return x, torch.cat(preds)
             
@@ -255,19 +256,20 @@ class Validator:
         whiten_model, 
         psds, 
         iteration, 
-        max_distance = None, 
-        # output_dir=None, 
-        # saving = True,
+        max_distance = None,
         signal_saving=None,
-        device="cuda"
+        device="cpu"
     ):
 
-        with h5py.File(self.output_dir/ "raw_data" /"max_distance.h5", "a") as g:
-            
-            h = g.create_group(f"Itera{iteration:03d}")
-            for name in self.ccsn_list:
 
-                h.create_dataset(f"{name}", data=np.array([max_distance[name]]))
+        if max_distance is not None:
+
+            with h5py.File(self.output_dir/ "raw_data" /"max_distance.h5", "a") as g:
+                
+                h = g.create_group(f"Itera{iteration:03d}")
+                for name in self.ccsn_list:
+
+                    h.create_dataset(f"{name}", data=np.array([max_distance[name]]))
 
         noise_setting = {
             "noise": [1, 0, 0, 0],
@@ -310,8 +312,13 @@ class Validator:
 
             for name in self.ccsn_list:
                 
-                signal = noise + self.val_signal[name] / max_distance[name]
-                
+                if max_distance is not None:
+                    
+                    signal = noise + self.val_signal[name] / max_distance[name]
+                else:
+                    
+                    signal = noise + self.val_signal[name]
+
                 val_data, injection_prediction = self.prediction(
                     signal, 
                     torch.ones_like(targets),
@@ -337,25 +344,10 @@ class Validator:
                             h = g.create_group(f"Itera{iteration:03d}/{name}")
                     
                             # h.create_dataset(f"Signal", data=self.val_signal[name].numpy())                
-                
-        return self.summarizer(iteration, max_distance)
-    
+
+        if  max_distance is not None:
+            return self.summarizer(iteration)
+        self.summarizer(iteration)
         # return early_stopping, max_distance
-# Read CCSN h5 files
-# Label each CCSN them by name
 
-# Sample BG, Glitch, CCSN
-# Injection rescalling
-# Whiten, Cropping
-
-####################
-### Model Stream ###
-####################
-
-# This function should interact with validation scheme
-### The validation scheme should includes 
-# (1). Recall at var(??)% of glitch exclusion
-# (2). 
-# def forward ...
-#   return valdation result
         

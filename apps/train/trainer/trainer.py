@@ -6,6 +6,8 @@ import logging
 import numpy as np
 
 from pathlib import Path
+from dotenv import dotenv_values
+from argparse import ArgumentParser
 
 from validator import Validator
 from orchestrator import BackGroundDisplay, Injector, forged_dataloader
@@ -19,31 +21,20 @@ from ccsnet.train.train import Tachyon
 from ml4gw.transforms import Whiten
 from ml4gw.transforms.transform import FittableSpectralTransform
 
-ARGUMENTS_FILE = "/home/andy/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
-
-# ccsnet_args = toml.load(ARGUMENTS_FILE)
-
-current_path = Path(__file__)
-ccsnet_args_path = Path("/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml")
-some_env = Path("/home/hongyin.chen/anti_gravity/CCSNet/.env")
-
-ccsnet_arguments = args_control(
-    ccsnet_args_path,
-    some_env,
-)
-ccsnet_arguments["chosen_signals"] = Path("/home/hongyin.chen/anti_gravity/CCSNet/apps/train/ccsn.toml")
 logging.basicConfig(level=logging.NOTSET)
 
-psd = h5_thang(ccsnet_arguments["psds"]).h5_data()["psd"]
-signals_dict = load_h5_as_dict(
-    ccsnet_arguments["chosen_signals"],
-    ccsnet_arguments["signals_dir"]
+parser = ArgumentParser()
+parser.add_argument("-e", "--env", help="The env setting")
+args = parser.parse_args()
+
+ccsnet_arguments = args_control(
+    args.env,
 )
 
 def main(
     background_file = ccsnet_arguments["backgrounds"], 
-    signals_dict = signals_dict, 
-    chosen_signals = ccsnet_arguments["chosen_signals"],
+    chosen_signals = ccsnet_arguments["train_siganls"],
+    signals_dir = ccsnet_arguments["signals_dir"],
     init_distance = ccsnet_arguments["init_distance"],
     glitch_info = ccsnet_arguments["glitch_info"], 
     max_iteration = ccsnet_arguments["max_iteration"], 
@@ -54,13 +45,13 @@ def main(
     ifos = ccsnet_arguments["ifos"], 
     fftlength = ccsnet_arguments["fftlength"], 
     overlap = ccsnet_arguments["overlap"],
-    psd = psd, 
+    psd_file = ccsnet_arguments["psds"], 
     highpass = ccsnet_arguments["highpass"], 
     model=WaveNet, 
     pretrained_model = None, 
     weight_decay = ccsnet_arguments["weight_decay"], 
     learning_rate = ccsnet_arguments["learning_rate"], 
-    outdir: Path = Path(ccsnet_arguments["output_dir"]), 
+    outdir: Path = ccsnet_arguments["output_dir"], 
     val_sqrtnum = ccsnet_arguments["val_sqrtnum"],
     device: str = "cuda", 
 ):
@@ -69,18 +60,15 @@ def main(
     to the model. It acts like a placeholder that aranges its arguments to
     different functions for calling, iterate, or excution. 
     """
-    
-    
-    num_ifos = len(ifos)
-    ### Consider to add a wapper to control the input type and output behavior
 
-    # Load data to memory
+    psd = h5_thang(psd_file).h5_data()["psd"]
+    psds = torch.cuda.DoubleTensor(psd)
 
-    # Sampling & Windowing
-    ### Buffer setting 
-    ### Try reading mutlipule ccsn hdf file at once 
-    ### By providing names and index
-    
+    signals_dict = load_h5_as_dict(
+        chosen_signals,
+        signals_dir
+    )
+
     background_sampler = BackGroundDisplay(
         ifos,
         background_file = background_file,
@@ -95,7 +83,6 @@ def main(
     for name in signals_dict.keys():
         max_distance[name] = init_distance
 
-    psds = torch.cuda.DoubleTensor(psd)
     
     signal_sampler = Injector(
         ifos=ifos,
@@ -135,10 +122,6 @@ def main(
         output_dir=outdir
     )
 
-    # psds = torch.cuda.FloatTensor(psd)
-
-    # psds = (torch.rand((2, 6145)) * 1e-32).to("cuda")
-
     Tachyon(
         architecture=model, 
         background_sampler=background_sampler, 
@@ -154,7 +137,7 @@ def main(
         batch_size = batch_size,
         steps_per_epoch = steps_per_epoch,
         max_iteration = max_iteration,
-        num_ifo = num_ifos,
+        num_ifo = len(ifos),
         pretrained_model = pretrained_model,
         weight_decay = weight_decay,
         learning_rate = learning_rate,
@@ -162,13 +145,8 @@ def main(
         outdir= outdir
     )
 
-    
-    # Remeber to pass the training and validation method to one function loop s
-    # Make sure that we can pass the training and validation function to the training loop 
-    # While in the training loop create a "cache" that saves the current training iterations and steps 
-    # Also make sure that this variables can be acess by any file in order to make on training loop variable checks
+
 
 if __name__ == "__main__":
     data = main()
     
-

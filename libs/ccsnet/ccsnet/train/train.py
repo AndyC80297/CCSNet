@@ -99,7 +99,7 @@ def one_loop_training(
 
     ###### Need to update distance
     model.eval()
-    distance = validation_scheme(
+    validation_scheme(
         loss=average_cost,
         back_ground_display=background_sampler,
         # batch_size,
@@ -108,7 +108,7 @@ def one_loop_training(
         whiten_model=whiten_model,
         psds=psds,
         iteration=iteration,
-        max_distance=max_distance,
+        # max_distance=max_distance,
         # outdir=outdir,
         device=device
     )
@@ -123,7 +123,7 @@ def one_loop_training(
         torch.save(model.state_dict(), outdir/f"final_model.pt")
 
 
-    return distance
+    # return distance
 
 def Tachyon(
     architecture: Callable,
@@ -226,7 +226,7 @@ def Tachyon(
             
         logging.info(f"=== Epoch {iteration + 1}/{max_iteration} ===")
         # Add iteration caching
-        max_distance = one_loop_training(
+        one_loop_training(
             background_sampler,
             train_data,
             validation_scheme,
