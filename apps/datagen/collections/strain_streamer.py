@@ -101,3 +101,7 @@ if __name__ == "__main__":
         channels = ccsnet_args["channels"], # ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"],
         background_path = Path(ccsnet_args["test_dir"]) / ccsnet_args["test_background"] # "/home/hongyin.chen/Data/CCSNet/production/five_day_run/background.h5"
     )
+
+    # time start 
+    # time end 
+    # background

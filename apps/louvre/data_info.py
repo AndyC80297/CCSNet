@@ -48,15 +48,16 @@ def plot_active_segments(
         flag_start,
         test_end
     )
-    
+
     plt = flags.plot(
         "name", 
         figsize=(15, 2), 
         xlabel="GPSTime (s)", 
         title="Active segments"
     )
-    
-    # flags = flags.intersection()
+    print("Train End", train_end)
+    flags = flags.intersection()
+    print(flags.active.to_table())
     # flags.name = "H1&L1"
     # coin_seg["H1&L1:ANALYSIS_READY_C01"] = flags
     
