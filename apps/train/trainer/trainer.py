@@ -6,7 +6,6 @@ import logging
 import numpy as np
 
 from pathlib import Path
-from dotenv import dotenv_values
 from argparse import ArgumentParser
 
 from validator import Validator
@@ -29,6 +28,7 @@ args = parser.parse_args()
 
 ccsnet_arguments = args_control(
     args.env,
+    saving=True
 )
 
 def main(

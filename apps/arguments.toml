@@ -2,7 +2,7 @@
 # start = 1262632990
 train_start = 1262653854
 train_end = 1262686622
-test_start = 1262919719 
+test_start =  1262688611 # 1262919719
 test_end = 1262944254
 ifos = ["H1", "L1"]
 frame_type = ["HOFT_C01", "HOFT_C01"]
@@ -14,19 +14,14 @@ overlap=1
 
 # Training & Validation
 backgrounds = "background.h5"
-psds = "psds.h5"
-glitch_info = "glitch_info.h5"
 signals_dir = "CCSNe/Resampled"
 
 # Test
 test_backgrounds = "test_background.h5"
-test_psds = "test_psd.h5"
-test_glitch_info = "test_glitch_info.h5"
-test_signals_dir = "CCSNe/Resampled"
-test_datasets = "test_datasets"
+test_siganl_parameter = "signal_parameter.h5"
+sampled_background = "sampled_background.h5"
 
 # Training phase
-init_distance = 1
 sample_duration = 3
 model_parameter = {c_depth = 8, n_chann = 64, l1 = 1024, l2 = 128}
 batch_size = 512
@@ -40,8 +35,9 @@ learning_rate = 0.004
 val_sqrtnum = 4
 
 # Test
-test_count = 5000
-snr_distro = [8, 10, 12, 15, 20, 25, 30, 35, 40]
+test_count = 20000
 test_batch_size = 1024
 test_model = "final_model.pt"
+snr_distro = [8, 10, 12, 15, 20, 25, 30, 35, 40]
+
 

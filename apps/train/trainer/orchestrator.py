@@ -55,18 +55,6 @@ class BackGroundDisplay:
         self.background["Train"] = background[:,:self.bg_dur["Train"]*sample_rate]
         self.background["Validate"] = background[:,-self.bg_dur["Validate"]*sample_rate:]
         
-        # print("Train duration:", self.bg_dur["Train"])
-        # print("Validate duration:", self.bg_dur["Validate"])
-
-        # print("Train t0:", self.start_time["Train"])
-        # print("Validate t0:", self.start_time["Validate"])
-
-        # print("Train shape:", self.background["Train"].shape)
-        # print("Validate shape:", self.background["Validate"].shape)
-
-        # print("Grand Start", bg_attrs[f"{segments}/start"])
-        # print("Grand End", bg_attrs[f"{segments}/end"])
-        
         self.glitch_info = glitch_info
         self.segment_start_time = bg_attrs[f"{segments}/start"]
         self.sample_rate = sample_rate
@@ -128,7 +116,7 @@ class BackGroundDisplay:
             reverse_mask = (1 - glitch_tape[i, :]).astype("bool")
             
             reverse_count = reverse_mask.sum()
-            glitch_label = h5_thang(self.glitch_info).h5_data([f"{ifo}/time"])
+            # glitch_label = h5_thang(self.glitch_info).h5_data([f"{ifo}/time"])
             
             mask_dict = masking(
                 glitch_info=glitch_label,

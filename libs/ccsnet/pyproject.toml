@@ -17,6 +17,7 @@ python = "^3.8"
 # torch deps
 torch = "^1.10"
 torchtyping = "^0.1"
+python-dotenv = "^1.0.1"
 
 [build-system]
 requires = ["poetry>=1.2"]
