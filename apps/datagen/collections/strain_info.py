@@ -2,33 +2,70 @@ import toml
 import torch
 
 from pathlib import Path
+from argparse import ArgumentParser
 
 from ccsnet.omicron import glitch_merger, psd_estimiater
-from ccsnet.utils import h5_thang
+from ccsnet.utils import h5_thang, args_control
 
-ARGUMENTS_FILE = "/home/andy/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
+parser = ArgumentParser()
+parser.add_argument("-e", "--env", help="The env setting")
+args = parser.parse_args()
 
-ccsnet_arguments = toml.load(ARGUMENTS_FILE)
-
-# To Do:
-# Provide glitch info at each segments
-# Provide PSD at each segment
-
-# glitch_merger(
-#     ifos=ccsnet_arguments["ifos"],
-#     omicron_path=Path(ccsnet_arguments["omicron_output"]),
-#     channels=ccsnet_arguments["channels"],
-#     output_file=ccsnet_arguments["glitch_info"]
-# )
-
-background_info = h5_thang(ccsnet_arguments["backgrounds"])
-
-psd_estimiater(
-    ifos=ccsnet_arguments["ifos"],
-    strains=torch.tensor(background_info.h5_data()["segments03/strain"]).double(),  # This part need to modify to segments-wise operation
-    sample_rate=ccsnet_arguments["sample_rate"],
-    kernel_width=ccsnet_arguments["sample_duration"],
-    fftlength=ccsnet_arguments["fftlength"],
-    overlap=ccsnet_arguments["overlap"],
-    psd_path=Path(ccsnet_arguments["psd_files"])
+ccsnet_args = args_control(
+    args.env,
 )
+
+glitch_merger(
+    ifos=ccsnet_args["ifos"],
+    omicron_path=Path("/home/hongyin.chen/anti_gravity/anomaly_detection/CCSNet_test_01"),
+    channels=ccsnet_args["channels"],
+    output_file=ccsnet_args["test_glitch_info"]
+)
+
+
+def main(
+    # Segments & General
+    ifos,
+    start,
+    end,
+    sample_rate,
+    frame_type,
+    state_flag,
+    channels,
+
+    # Gltich
+    omicron_path,
+
+    # Get Strain
+
+    # PSD
+    strains,
+    kernel_width,
+    fftlength,
+    overlap,
+
+    # Saving
+    output_file: Path,
+
+):
+
+
+    # Read glitch file from omicron triggers
+    
+    num_ifo = len(ifos)
+
+    query_flag = []
+    for i, ifo in enumerate(ifos):
+        query_flag.append(f"{ifo}:{state_flag[i]}")
+
+    flags = DataQualityDict.query_dqsegdb(
+        query_flag,
+        start,
+        end
+    )
+
+    for contents in flags.intersection().active.to_table():
+        
+        idx = contents["index"]
+        start = contents["start"]
+        end = contents["end"]

@@ -1,8 +1,11 @@
-
-import torch
+import sys
 import h5py
+import torch
 
 import numpy as np
+import logging
+
+from pathlib import Path
 
 from ml4gw import gw
 from ml4gw.transforms import SnrRescaler
@@ -12,29 +15,61 @@ from ml4gw.distributions import Cosine, Uniform
 from ccsnet.utils import h5_thang
 from ccsnet.sampling import tapping
 from ccsnet.sampling import masking, strain_sampling, glitch_sampler
+from ccsnet.omicron import glitch_merger, psd_estimiater
 from ccsnet.waveform import get_hp_hc_from_q2ij, padding
 
 class Test_BackGroundDisplay:
     
     def __init__(
         self,
-        ifos,
-        background,
-        background_dur,
-        start_time,
-        glitch_info,
-        sample_rate,
-        sample_duration
+        ifos: list,
+        background_file : Path, 
+        sample_duration: float,
+        sample_rate: int = 4096,
+        test_seg: int = 1
     ):
-        
-        # Sample_factor <= 1
-        
-        self.background = background
-        self.bg_dur = background_dur
-        self.start_time = start_time
+        """Load background data and glitch trigger times to memmory.
 
+        Args:
+            ifos (list): Detectors.
+            background_file (Path): Path of background to load.
+            glitch_info_file (Path): Path of glitch to load.
+            sample_duration (float): Time window(sec) to sample background.
+            sample_rate (int, optional): Sampling rate of the strain data. Defaults to 4096.
+            test_seg (int, optional): The nth largest activae segment . Defaults to 1.
+        """
         
-        self.glitch_info = glitch_info
+        bgh5 = h5_thang(background_file)
+
+        attrs = bgh5.h5_attrs()
+
+        seg_counts = int(len(bgh5.h5_keys()) / 22)
+        
+        if seg_counts < test_seg:
+            sys.exit(f"Assinged segmnet segment{test_seg:02d} is too large.")
+        segs_dur = np.zeros(seg_counts)
+        
+        for i in range(seg_counts):
+
+            segs_dur[i] = attrs[f"segments{i:02d}/start"] - attrs[f"segments{i:02d}/end"]
+
+        seg = f"segments{np.argsort(segs_dur)[test_seg - 1]:02}"
+
+        start = attrs[f"{seg}/start"]
+        end = attrs[f"{seg}/end"]
+        
+        self.background = torch.Tensor(bgh5.h5_data([f"{seg}/strain"])[f"{seg}/strain"])
+        self.bgh5 = bgh5
+        self.seg = seg
+        self.bg_dur = end - start
+        self.start_time = start
+        
+        logging.info(f"Analysing sement {seg}.")
+        logging.info(f"  Start time: {int(start)}")
+        logging.info(f"  -End- time: {int(end)}")
+        logging.info(f"Duration: {int(self.bg_dur)}")
+
+        # self.glitch_info = h5_thang(glitch_info_file)
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration
         self.ifos = ifos
@@ -47,14 +82,10 @@ class Test_BackGroundDisplay:
         glitch_dist: list,
         choice_mask = [0, 1, 2, 3],
         glitch_offset = 0.9,
-        target_value = 0,
-        batch_size = 32,
-        steps_per_epoch = 20,
-        sample_factor = 1/2 # This will have to be returned to check if the total sample 
-        # factor equals to one.
+        test_count: int = 5000
     ):
-
-        num_sample_data = int(batch_size * steps_per_epoch * sample_factor)
+        
+        num_sample_data = test_count
         
         X = torch.empty((num_sample_data, self.num_ifos, self.kernel_length))
 
@@ -65,10 +96,10 @@ class Test_BackGroundDisplay:
         )
         
         glitch_tape = tapping(self.num_ifos, mask)
-        
+        glitch_label = {}
         for i, ifo in enumerate(self.ifos):
 
-            glitch_label = h5_thang(self.glitch_info).h5_data([f"{ifo}/time"])
+            glitch_label[f"{ifo}/time"] = self.bgh5.h5_data([f"{self.seg}/{ifo}/time"])[f"{self.seg}/{ifo}/time"]
 
             glitch_mask = glitch_tape[i, :].astype("bool")
             glitch_count = glitch_mask.sum()
@@ -92,7 +123,7 @@ class Test_BackGroundDisplay:
             reverse_mask = (1 - glitch_tape[i, :]).astype("bool")
             
             reverse_count = reverse_mask.sum()
-            glitch_label = h5_thang(self.glitch_info).h5_data([f"{ifo}/time"])
+            # glitch_label = self.glitch_info.h5_data([f"{ifo}/time"])
             
             mask_dict = masking(
                 glitch_info=glitch_label,
@@ -109,135 +140,55 @@ class Test_BackGroundDisplay:
                 sample_counts=reverse_count,
                 kernel_width=self.sample_duration
             )
-            
-        targets = torch.full((num_sample_data,), target_value)
         
-        # with h5py.File(self.outdir / "background.h5", "a") as g:
-            
-        #     g.create_dataset(f"{iteration:03d}_{mode}", data=X.numpy())
-        
-        return X, targets
-
-class Test_Injector:
-
-    def __init__(
+        return X
+    
+    def get_psds(
         self,
-        ifos: list,
-        sample_rate: int,
-        sample_duration,
-        highpass,
-        psds,
         fftlength,
         overlap,
-        count,
-        snr_distro,
-        buffer_duration=3,
-        time_shift=0,
-        off_set=0,
-        save_dir=None,
+        device="cpu"
     ):
-        
-        
-        self.sample_rate = sample_rate
-        self.off_set = off_set
-        self.time_shift = time_shift
-        self.snr_distro = snr_distro
-        self.sample_duration = sample_duration
-        self.buffer_duration = buffer_duration
-        if off_set is not None:
-            self.max_center_offset = int((buffer_duration/2 - sample_duration - off_set) * sample_rate)
-        self.count = count 
-        self.tensors, self.vertices = gw.get_ifo_geometry(*ifos)
-        
-        self.rescaler = SnrRescaler(
-            num_channels=len(ifos), 
-            sample_rate = self.sample_rate,
-            waveform_duration = sample_duration,
-            highpass = highpass,
-        )
-        
-        dec_distro = Cosine()
-        psi_distro = Uniform(0, np.pi)
-        phi_distro = Uniform(0, 2 * np.pi)
-        
-        # Soft init values
-        self.rescaler.fit(
-            psds[0, :],
-            psds[1, :],
-            fftlength=fftlength,
-            overlap=overlap,
-            use_pre_cauculated_psd=True
-        )
 
-        self.ori_theta = np.random.uniform(0, np.pi, count)
-        self.ori_phi = np.random.uniform(0, 2*np.pi, count)
-        self.distance = 0.1 * np.ones(count)
-        self.dec = dec_distro(count)
-        self.psi = psi_distro(count)
-        self.phi = phi_distro(count)
+        psds = psd_estimiater(
+            ifos=self.ifos,
+            strains=torch.tensor(self.background).double(),  # This part need to modify to segments-wise operation
+            sample_rate=self.sample_duration,
+            kernel_width=self.sample_duration,
+            fftlength=fftlength,
+            overlap=overlap
+        ).to(device)
         
-        if save_dir is not None:
+
+        return psds.to(device)
+
+def random_ccsn_parameter(
+    count:int ,
+    save_path: Path = None 
+):
+    
+    dec_distro = Cosine()
+    psi_distro = Uniform(0, np.pi)
+    phi_distro = Uniform(0, 2 * np.pi)
+
+    ori_theta = np.random.uniform(0, np.pi, count)
+    ori_phi = np.random.uniform(0, 2*np.pi, count)
+    dec = dec_distro(count)
+    psi = psi_distro(count)
+    phi = phi_distro(count)
+    
+    if save_path.is_file():
+
+        return ori_theta, ori_phi, dec, psi, phi
+    
+    with h5py.File(save_path, "a") as g:
+        
+        g.create_dataset("ori_theta", data=ori_theta)
+        g.create_dataset("ori_phi", data=ori_phi)
+        g.create_dataset("dec", data=dec)
+        g.create_dataset("psi", data=psi)
+        g.create_dataset("phi", data=phi)
             
-            with h5py.File(save_dir / "parameters.h5", "w") as g:
-                
-                g.create_dataset("ori_theta", data=self.ori_theta)
-                g.create_dataset("ori_phi", data=self.ori_phi)
-                g.create_dataset("dec", data=self.dec)
-                g.create_dataset("psi", data=self.psi)
-                g.create_dataset("phi", data=self.phi)
-                
-                
-    def __call__(
-        self,
-        time,
-        quad_moment
-    ):
-        
-            
-        hp, hc = get_hp_hc_from_q2ij(
-            quad_moment,
-            theta=self.ori_theta,
-            phi=self.ori_phi
-        )
-        
-        hp_hc = padding(
-            time,
-            hp,
-            hc,
-            self.distance,
-            sample_kernel = self.buffer_duration,
-            sample_rate = self.sample_rate,
-            time_shift = self.time_shift, # Core-bounce will be at here
-        )
-        
-        if self.buffer_duration > self.sample_duration:
-        
-            hp_hc = sample_kernels(
-                X = torch.Tensor(hp_hc),
-                kernel_size = self.sample_rate * self.sample_duration,
-                max_center_offset = self.max_center_offset,
-            )
-        
-        ht = gw.compute_observed_strain(
-            self.dec,
-            self.psi,
-            self.phi,
-            detector_tensors=self.tensors,
-            detector_vertices=self.vertices,
-            sample_rate=self.sample_rate,
-            # plus=torch.tensor(hp_hc[:,0,:]).float(),
-            # cross=torch.tensor(hp_hc[:,1,:]).float(),
-            plus=hp_hc[:,0,:].clone().detach(),
-            cross=hp_hc[:,1,:].clone().detach()
-        )
-        
-        
-        for snr in self.snr_distro:
-            
-            scaled_ht, _, rescale_factor = self.rescaler.forward(
-                ht,
-                target_snrs = snr * torch.ones(self.count)
-            )
-            
-            
-            yield snr, scaled_ht, rescale_factor
+    return ori_theta, ori_phi, dec, psi, phi
+
+
