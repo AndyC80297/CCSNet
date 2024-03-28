@@ -6,8 +6,10 @@ import logging
 import numpy as np
 
 from tqdm import tqdm
+from pathlib import Path
 from tqdm.contrib import tzip
 from argparse import ArgumentParser
+from torch.utils.data import TensorDataset, DataLoader
 
 from ccsnet.arch import WaveNet
 from ccsnet.utils import h5_thang, args_control
@@ -31,7 +33,6 @@ ccsnet_args = args_control(
     saving=False
 )
 
-
 ccsnet_streamer = Streamer(
     num_ifos=len(ccsnet_args["ifos"]),
     sample_rate=ccsnet_args["sample_rate"],
@@ -41,10 +42,9 @@ ccsnet_streamer = Streamer(
     highpass=ccsnet_args["highpass"],
     test_seg=args.seg,
     background_file=ccsnet_args["test_backgrounds"], # ccsnet_args["test_backgrounds"]
+    map_device="cpu",
     device=device
 )
-
-whiten_model, nn_model, psds = ccsnet_streamer.get_models()
 
 inited_injector = Waveform_Projector(
     ifos=ccsnet_args["ifos"],
@@ -68,11 +68,15 @@ signals_dict = load_h5_as_dict(
 )
 
 sampled_background = h5_thang(ccsnet_args["sampled_background"]).h5_data()
+
 count = ccsnet_args["test_count"]
 
+start = time.time()
 with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as g:
 
     with torch.no_grad():
+
+        logging.info(f"= - = - = - = - =")
 
         for mode, raw_bg in sampled_background.items():
 
@@ -83,21 +87,24 @@ with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as 
             )
 
             preds = []
-
+            
             for noise_data, _ in noise_loader:
-                
-                pred = ccsnet_streamer.stream(noise_data)
+
+                pred = ccsnet_streamer.stream(
+                    noise_data, 
+                    psd=None
+                )
                 
                 preds.append(pred.cpu().detach().numpy())
 
             prediction = np.concatenate(preds).reshape([-1])
-
+            logging.info(f"{mode}: average performance {prediction.mean():.02f}")
             h = g.create_dataset(name=f"{mode}", data=prediction)
-
+        logging.info(f"= - = - = - = - =")
 
 with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g:
 
-    for key in signals_dict.keys():
+    for key in tqdm(signals_dict.keys()):
 
         g1 = g.create_group(key)
         scaled_ht, distance = inited_injector(
@@ -130,15 +137,20 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
                 for snr in ccsnet_args["snr_distro"]:
 
                     preds = []
-                    for background, siganl in tzip(noise_loader, ccsn_loader):
+                    for background, siganl in zip(noise_loader, ccsn_loader):
                         
                         factor = (snr/4)
                         X = background[0] + siganl[0] * factor
         
-                        pred = ccsnet_streamer.stream(X)
+                        pred = ccsnet_streamer.stream(
+                            X, 
+                            psd=None
+                        )
                         
                         preds.append(pred.cpu().detach().numpy())
                     
                     prediction = np.concatenate(preds).reshape([-1])
 
                     g2.create_dataset(name=f"SNR_{snr:02d}", data=prediction)
+
+logging.info(f"Time spent on test is {int(time.time() - start)/60:.02f} min.")

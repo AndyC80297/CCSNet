@@ -97,7 +97,8 @@ class Streamer:
         highpass,
         test_seg,
         background_file,
-        device ='cpu'
+        map_device="cpu",
+        device ="cpu"
     ):
         
         bgh5 = h5_thang(background_file)
@@ -121,7 +122,8 @@ class Streamer:
             num_ifos=num_ifos,
             # sample_rate = sample_rate,
             architecture = architecture,
-            model_weights = model_weights,
+            model_weights=model_weights,
+            map_device=map_device,
             device = device
         )
 
@@ -133,6 +135,7 @@ class Streamer:
 
         psds  = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
         self.psds = psds.to(device)
+        self.device = device
         
     def __call__(
         self,
@@ -154,10 +157,16 @@ class Streamer:
             
     def stream(
         self,
-        X
+        X,
+        psd = None
     ):
         
-        X = self.whiten_model(X, self.psds)
+        if psd is not None:
+            psds = psd.to(self.device)
+        else:
+            psds = self.psds
+            
+        X = self.whiten_model(X, psds)
         X = self.nn_model(X)
         
         return X
