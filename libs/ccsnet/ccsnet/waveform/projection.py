@@ -1,3 +1,4 @@
+import time as ti
 import torch
 
 import numpy as np
@@ -10,6 +11,7 @@ from ml4gw.utils.slicing import sample_kernels
 
 from ccsnet.utils import h5_thang
 from ccsnet.waveform import get_hp_hc_from_q2ij, padding
+from ccsnet.waveform import pol_from_quad, torch_padding
 
 
 class Waveform_Projector: 
@@ -92,24 +94,26 @@ class Waveform_Projector:
     ):
         
         count = len(ori_theta)
-            
-        hp, hc = get_hp_hc_from_q2ij(
+        start = ti.time()
+        hp, hc = pol_from_quad(
             quad_moment,
             theta=ori_theta,
             phi=ori_phi
         )
-        
-        hp_hc = padding(
+        print(f"Time spent on pol_from_quad {ti.time() - start:.02f}")
+        start = ti.time()
+        hp, hc = torch_padding(
             time,
             hp,
             hc,
-            0.1 * np.ones(count),
+            # 0.1 * np.ones(count),
             sample_kernel = self.buffer_duration,
             sample_rate = self.sample_rate,
             time_shift = self.time_shift, # Core-bounce will be at here
         )
-        
-        hp_hc = torch.tensor(hp_hc).float()
+        print(f"Time spent on padding {ti.time() - start:.02f}")
+        # hp_hc = torch.tensor(hp_hc).float()
+        hp_hc = torch.stack((hp, hc), axis=1)
         
         if self.buffer_duration > self.sample_duration:
         
@@ -118,23 +122,22 @@ class Waveform_Projector:
                 kernel_size = self.sample_rate * self.sample_duration,
                 max_center_offset = self.max_center_offset,
             )
-
-        
-
+        start = ti.time()
         ht = gw.compute_observed_strain(
-            torch.tensor(dec),
-            torch.tensor(psi),
-            torch.tensor(phi),
+            dec,
+            psi,
+            phi,
             detector_tensors=self.tensors,
             detector_vertices=self.vertices,
             sample_rate=self.sample_rate,
             plus=hp_hc[:,0,:],
             cross=hp_hc[:,1,:]
         )
-        
+        print(f"Time spent on projection {ti.time() - start:.02f}")
+        start = ti.time()
         scaled_ht, _, inversed_distance = self.rescaler.forward(
             ht,
             target_snrs = default_snr * torch.ones(count)
         )
-        
+        print(f"Time spent on rescaling {ti.time() - start:.02f}")
         return scaled_ht, 1/inversed_distance

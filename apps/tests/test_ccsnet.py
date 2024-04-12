@@ -104,19 +104,23 @@ with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as 
 
 with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g:
 
-    for key in tqdm(signals_dict.keys()):
+    for key in signals_dict.keys():
 
         g1 = g.create_group(key)
+        start = time.time()
         scaled_ht, distance = inited_injector(
             time = signals_dict[key][0],
-            quad_moment = signals_dict[key][1],
-            ori_theta=siganl_parameter["ori_theta"][:count],
-            ori_phi=siganl_parameter["ori_phi"][:count],
-            dec=siganl_parameter["dec"][:count],
-            psi=siganl_parameter["psi"][:count],
-            phi=siganl_parameter["phi"][:count],
+            quad_moment = torch.Tensor(signals_dict[key][1] * 0.1),
+            ori_theta=torch.tensor(siganl_parameter["ori_theta"][:count]),
+            ori_phi=torch.tensor(siganl_parameter["ori_phi"][:count]),
+            dec=torch.tensor(siganl_parameter["dec"][:count]),
+            psi=torch.tensor(siganl_parameter["psi"][:count]),
+            phi=torch.tensor(siganl_parameter["phi"][:count]),
         )
+        print(f"Injection spent time {time.time() - start:.02f}")
+
         g1.create_dataset(name="SNR_4_Distance", data=distance.numpy())
+        test_loop_start = time.time()
         with torch.no_grad():
             
             ccsn_loader = test_data_loader(
@@ -137,7 +141,7 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
                 for snr in ccsnet_args["snr_distro"]:
 
                     preds = []
-                    for background, siganl in zip(noise_loader, ccsn_loader):
+                    for background, siganl in tzip(noise_loader, ccsn_loader):
                         
                         factor = (snr/4)
                         X = background[0] + siganl[0] * factor
@@ -152,5 +156,5 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
                     prediction = np.concatenate(preds).reshape([-1])
 
                     g2.create_dataset(name=f"SNR_{snr:02d}", data=prediction)
-
+        print(f"Test loop spent {time.time() - test_loop_start:.02f}")
 logging.info(f"Time spent on test is {int(time.time() - start)/60:.02f} min.")

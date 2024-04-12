@@ -22,7 +22,7 @@ def args_saving(
 
 def args_control(
     envs_file,
-    project=Path(project),
+    project=project,
     test_segment=None,
     saving=False
 ):
@@ -30,7 +30,10 @@ def args_control(
     envs = dotenv_values(envs_file)
 
     code_base = Path(envs["CODE_BASE"])
-    result_dir = Path(envs["RESULT_DIR"]) / project 
+    if project is not None:
+        result_dir = Path(envs["RESULT_DIR"]) / project
+    else: 
+         result_dir = Path(envs["RESULT_DIR"]) / "Test_run"
     result_dir.mkdir(parents=True, exist_ok=True)
     
 
@@ -44,7 +47,7 @@ def args_control(
     
     ccsnet_args["result_dir"] = result_dir
     ccsnet_args["train_siganls"] = code_base / "apps/train/ccsn.toml"
-    ccsnet_args["test_siganls"] = code_base / "apps/tests/test_ccsn.toml"
+    ccsnet_args["test_signals"] = code_base / "apps/tests/test_ccsn.toml"
     
     # Data Control
     data_dir = Path(envs["DATA_PATH"])

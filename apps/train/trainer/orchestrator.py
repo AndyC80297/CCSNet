@@ -223,32 +223,32 @@ class Injector:
         for name, count in zip(self.ccsn_list, ccsn_counts):    
         
             time = self.signals[name][0]
-            quad_moment = self.signals[name][1]
+            quad_moment = torch.Tensor(self.signals[name][1] * 0.1)
             
             
-            theta = np.random.uniform(0, np.pi, count)
-            phi = np.random.uniform(0, 2*np.pi, count)            
+            theta = torch.Tensor(np.random.uniform(0, np.pi, count))
+            phi = torch.Tensor(np.random.uniform(0, 2*np.pi, count))       
             
-            distance = 0.1 * np.ones(count)
+            # distance = np.ones(count)
             
-            hp, hc = get_hp_hc_from_q2ij(
+            hp, hc = pol_from_quad(
                 quad_moment,
                 theta=theta,
                 phi=phi
             )
             
-            hp_hc = padding(
+            hp, hc = torch_padding(
                 time,
                 hp,
                 hc,
-                distance,
+                # distance,
                 sample_kernel = self.buffer_duration,
                 sample_rate = self.sample_rate,
                 time_shift = self.time_shift, # Core-bounce will be at here
             )
             
             shifted_waveforms = sample_kernels(
-                X = torch.Tensor(hp_hc),
+                X = torch.stack((hp, hc), axis=1),
                 kernel_size = self.sample_rate * self.sample_duration,
                 max_center_offset = self.max_center_offset,
             )
@@ -259,6 +259,7 @@ class Injector:
             # with h5py.File(self.outdir / "signal.h5", "a") as g:
                 
             #     g.create_dataset(f"{iteration:03d}_{name}", data=shifted_waveforms.numpy())
+            
             agg_count += count
         # prior = PriorDict()
         dec_distro = Cosine()
