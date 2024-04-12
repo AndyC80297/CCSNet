@@ -30,7 +30,9 @@ def args_control(
     envs = dotenv_values(envs_file)
 
     code_base = Path(envs["CODE_BASE"])
+    
     if project is not None:
+        project = Path(project)
         result_dir = Path(envs["RESULT_DIR"]) / project
     else: 
          result_dir = Path(envs["RESULT_DIR"]) / "Test_run"
@@ -52,12 +54,14 @@ def args_control(
     # Data Control
     data_dir = Path(envs["DATA_PATH"])
     data_dir = Path(data_dir)
+    ccsnet_args["data_dir"] = data_dir
     test_data_dir = data_dir / "Tests"
     test_data_dir.mkdir(parents=True, exist_ok=True)
     ccsnet_args["test_data_dir"] = test_data_dir
     
     ccsnet_args["backgrounds"] = data_dir / ccsnet_args["backgrounds"]
     ccsnet_args["signals_dir"] = data_dir / ccsnet_args["signals_dir"]
+    ccsnet_args["omicron_dir"] = data_dir / ccsnet_args["omicron_dir"]
     
     ccsnet_args["test_backgrounds"] = test_data_dir / ccsnet_args["test_backgrounds"]
     ccsnet_args["test_siganl_parameter"] = test_data_dir / ccsnet_args["test_siganl_parameter"]
@@ -81,6 +85,13 @@ def args_control(
         ccsnet_args["test_result_dir"] = test_result_dir
     
     if saving:
+
+        if project is None:
+
+            import sys
+
+            sys.exit("Project is None!")
+
 
         if len(project.parents) < 2:
 

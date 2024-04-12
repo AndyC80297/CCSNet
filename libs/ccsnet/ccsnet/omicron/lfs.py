@@ -10,7 +10,7 @@ def create_lcs(
     frametype,
     start_time,
     end_time,
-    project,
+    output_dir,
     urltype="file"
 ):
     """Select time, stateflag >>> get *.gwf file >>> 
@@ -27,10 +27,10 @@ def create_lcs(
     )
     
     
-    project = project / ifo
-    project.mkdir(parents=True, exist_ok=True)
+    output_dir = output_dir / ifo
+    output_dir.mkdir(parents=True, exist_ok=True)
     
-    f = open(project/"data_file.lcf", "a")
+    f = open(output_dir / "data_file.lcf", "a")
     for file in files:
         f.write(f"{file.replace(head, empty)}\n")
     f.close()

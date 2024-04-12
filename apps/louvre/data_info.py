@@ -4,6 +4,10 @@ import matplotlib as mpl
 
 from pathlib import Path
 from gwpy.segments import DataQualityDict
+
+from argparse import ArgumentParser
+from ccsnet.utils import args_control
+
 # Background active segment
 # PSDs
 # CCSN signals
@@ -18,12 +22,13 @@ mpl.rcParams['axes.axisbelow'] = True
 mpl.rcParams['figure.facecolor'] = 'white'
 mpl.rcParams['savefig.facecolor'] = 'white'
 mpl.rcParams['axes.formatter.useoffset'] = False
+mpl.rcParams['hatch.linewidth'] = 3.0 
 
 def plot_active_segments(
     train_start,
     train_end,
-    test_start,
-    test_end,
+    test_segs: list,
+    ana_end,
     ifos,
     ifo_state_flags,
     out_dir: Path,
@@ -43,30 +48,31 @@ def plot_active_segments(
     flag_start = train_start
     if glitch_start != None:
         flag_start = glitch_start
+
     flags = DataQualityDict.query_dqsegdb(
         state_flags,
         flag_start,
-        test_end
+        ana_end
     )
 
-    plt = flags.plot(
-        "name", 
-        figsize=(15, 2), 
-        xlabel="GPSTime (s)", 
-        title="Active segments"
-    )
-    print("Train End", train_end)
-    flags = flags.intersection()
-    print(flags.active.to_table())
-    # flags.name = "H1&L1"
-    # coin_seg["H1&L1:ANALYSIS_READY_C01"] = flags
-    
-    # plt = coin_seg.plot(
+    # plt = flags.plot(
     #     "name", 
-    #     figsize=(10, 1), 
+    #     figsize=(15, 2), 
     #     xlabel="GPSTime (s)", 
-    #     title="Coincident Active segments"
+    #     title="Active segments"
     # )
+    # print("Train End", train_end)
+    flags = flags.intersection()
+    # print(flags.active.to_table())
+    flags.name = "H1&L1"
+    coin_seg["H1&L1:ANALYSIS_READY_C01"] = flags
+    
+    plt = coin_seg.plot(
+        "name", 
+        figsize=(10, 1), 
+        xlabel="GPSTime (s)", 
+        title="Coincident Active segments"
+    )
     
     ax = plt.gca()
     
@@ -75,11 +81,15 @@ def plot_active_segments(
         ax.axvline(glitch_start, color="black", lw=linewidth, ls="-")
         ax.axvline(train_end, color="black", lw=linewidth, ls="-")
     
-    ax.axvline(train_start, color="blue", lw=linewidth, ls="--")
-    ax.axvline(train_end, color="blue", lw=linewidth, ls="--")
-    
-    ax.axvline(test_start, color="orange", lw=linewidth, ls="--")
-    ax.axvline(test_end, color="orange", lw=linewidth, ls="--")
+    ax.axvline(train_start, color="blue", lw=linewidth, ls="-")
+    ax.axvline(train_end, color="blue", lw=linewidth, ls="-")
+    # ax.axvspan(train_start, train_end, hatch='x', edgecolor="blue", fill=False, linewidth=linewidth)
+
+    for start, end in test_segs:
+
+        ax.axvline(start, color="#ee33ff", lw=linewidth, ls="-")
+        ax.axvline(end, color="#ee33ff", lw=linewidth, ls="-")
+        # ax.axvspan(start, end, hatch='x', edgecolor="#ff8b0f", fill=False, linewidth=linewidth)
     
     ax.get_axisbelow()
     ax.ticklabel_format(
@@ -98,20 +108,29 @@ def plot_active_segments(
     
 if __name__ == "__main__":
     
-    ARGUMENTS_FILE = Path.home() / "anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
-    ccsnet_args = toml.load(ARGUMENTS_FILE)
+    parser = ArgumentParser()
+    parser.add_argument("-e", "--env", help="The env setting")
+    args = parser.parse_args()
     
+    ccsnet_args = args_control(
+        args.env,
+        saving=False
+    )
 
-    
+    test_segs  = [
+        (1262688611, 1262705801),
+        (1262746233, 1262762284),
+        (1262919719, 1262944254),
+    ]
+
     plot_active_segments(
         train_start=ccsnet_args["train_start"],
         train_end=ccsnet_args["train_end"],
-        test_start=ccsnet_args["test_start"],
-        test_end=ccsnet_args["test_end"],
+        test_segs=test_segs,
+        ana_end=ccsnet_args["test_end"],
         ifos=ccsnet_args["ifos"],
         ifo_state_flags=ccsnet_args["state_flag"],
         out_dir=Path(ccsnet_args["data_dir"]) / "Louvre",
         figname="CCSNet_Active_segments.png",
-        # glitch_start=1262632990,
         transparent=False
     )

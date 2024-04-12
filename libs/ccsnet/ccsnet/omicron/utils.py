@@ -23,11 +23,11 @@ def glitch_merger(
     ifos,
     omicron_path: Path,
     channels,
-    output_file,
+    output_file=None,
     glitch_keys=glitch_keys
 ):
 
-
+    
     for i, ifo in enumerate(ifos):
 
         gltich_dir = omicron_path / f"{ifo}/trigger_output/merge/{ifo}:{channels[i]}"
@@ -48,12 +48,17 @@ def glitch_merger(
         for key in glitch_keys:
             h5_name[key] = np.concatenate(h5_name[key])
             
+        if output_file is None:
+            output_file = omicron_path / "glitch_info.h5"
+
         with h5py.File(output_file, "a") as g:
             
             g1 = g.create_group(ifo)
             
             for key in glitch_keys:
                 g1.create_dataset(key, data=h5_name[key])
+
+    return output_file
                 
                 
 def psd_estimiater(
