@@ -23,14 +23,14 @@ def glitch_merger(
     ifos,
     omicron_path: Path,
     channels,
-    output_file,
+    output_file=None,
     glitch_keys=glitch_keys
 ):
 
-
+    
     for i, ifo in enumerate(ifos):
 
-        gltich_dir = omicron_path / f"{ifo}/merge/{ifo}:{channels[i]}"
+        gltich_dir = omicron_path / f"{ifo}/trigger_output/merge/{ifo}:{channels[i]}"
 
         h5_name = {}
         for key in glitch_keys:
@@ -48,28 +48,44 @@ def glitch_merger(
         for key in glitch_keys:
             h5_name[key] = np.concatenate(h5_name[key])
             
+        if output_file is None:
+            output_file = omicron_path / "glitch_info.h5"
+
         with h5py.File(output_file, "a") as g:
             
             g1 = g.create_group(ifo)
             
             for key in glitch_keys:
                 g1.create_dataset(key, data=h5_name[key])
+
+    return output_file
                 
                 
 def psd_estimiater(
-    ifos,
-    strains,
-    sample_rate,
-    kernel_width,
-    fftlength,
-    overlap,
-    psd_path
-):
-    
+    ifos: list,
+    strains: torch.tensor,
+    sample_rate: int,
+    kernel_width: int,
+    fftlength: int,
+    overlap: int,
+    # psd_path
+) -> torch.Tensor:
+    """_summary_
+
+    Args:
+        ifos (list): Detectors.
+        strains (torch.tensor): 
+        sample_rate (int): Sampling rate of the strain data.
+        kernel_width (int): Sampling window in secound.
+        fftlength (int): 
+        overlap (int): 
+
+    Returns:
+        torch.Tensor: 
+    """
     
     num_channels = len(ifos)
-    psds = torch.empty([num_channels, int((sample_rate*kernel_width)/2) +1])
-    
+    psds = torch.empty([num_channels, int((sample_rate*kernel_width)/2) +1]).double()
     
     spec_trans = FittableSpectralTransform()
     
@@ -82,6 +98,4 @@ def psd_estimiater(
             overlap=overlap,
         )
 
-    with h5py.File(psd_path, "a") as g:
-        
-        g.create_dataset("psd", data=psds.numpy())
+    return psds

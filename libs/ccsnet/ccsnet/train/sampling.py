@@ -19,10 +19,10 @@ def forged_dataloader(
 def train_time_sampling(
     background_sampler,
     signal_sampler,
-    max_distance,
     batch_size,
     steps_per_epoch,
-    noise_glitch_dist ,
+    iteration,
+    noise_glitch_dist,
     signal_glitch_dist,
     sample_factor=1/2,
     choice_mask = [0, 1, 2, 3],
@@ -35,9 +35,11 @@ def train_time_sampling(
         steps_per_epoch = steps_per_epoch,
         sample_factor = sample_factor,
         glitch_dist = noise_glitch_dist,
+        mode="Train",
         choice_mask = choice_mask,
         glitch_offset = glitch_offset,
-        target_value = 0
+        iteration=iteration,
+        target_value = 0,
     )
 
     injection_siganl, injection_target = background_sampler(
@@ -45,15 +47,17 @@ def train_time_sampling(
         steps_per_epoch = steps_per_epoch,
         sample_factor = sample_factor,
         glitch_dist = signal_glitch_dist,
+        mode="Train",
         choice_mask = choice_mask,
         glitch_offset = glitch_offset,
-        target_value = 1
+        target_value = 1,
+        iteration=iteration,
     )
 
 
     injected_siganl = signal_sampler(
         background=injection_siganl,
-        max_distance=max_distance
+        iteration=iteration,
     )
 
 
