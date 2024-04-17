@@ -45,6 +45,7 @@ class CCSNet_Dataset(Dataset):
     def __init__(
         self, 
         signal, 
+        scaled_distance=None,
         n_ifos=2, 
         sample_rate=4096,
         sample_duration=3,
@@ -55,7 +56,13 @@ class CCSNet_Dataset(Dataset):
         self.signal = torch.FloatTensor(
             signal.reshape([-1, n_ifos, sample_duration*sample_rate])
         ).to(device)
-    
+        
+        self.scaled_distance = scaled_distance
+        if self.scaled_distance is not None:
+            self.scaled_distance = torch.FloatTensor(
+                scaled_distance.reshape([-1, 1])
+            ).to(device)
+
     def __len__(self):
         
         return len(self.signal)
@@ -63,8 +70,13 @@ class CCSNet_Dataset(Dataset):
     def __getitem__(self, index):
         x = self.signal[index]
 
+        if self.scaled_distance is not None:
+            dis = self.scaled_distance[index]
+
+            return x, dis, index
+
         return x, index
-    
+
 def test_data_loader(
     signal,
     n_ifos=2, 
@@ -72,11 +84,13 @@ def test_data_loader(
     sample_duration=3,
     batch_size: int = 1024,
     shuffle=False,
-    device="cpu"
+    device="cpu",
+    scaled_distance=None,
 ):
 
     dataset = CCSNet_Dataset(
         signal,
+        scaled_distance,
         n_ifos=n_ifos, 
         sample_rate=sample_rate,
         sample_duration=sample_duration,
@@ -120,7 +134,6 @@ class Streamer:
 
         self.nn_model = model_loader(
             num_ifos=num_ifos,
-            # sample_rate = sample_rate,
             architecture = architecture,
             model_weights=model_weights,
             map_device=map_device,
@@ -133,7 +146,7 @@ class Streamer:
             highpass,
         ).to(device)
 
-        psds  = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
+        psds = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
         self.psds = psds.to(device)
         self.device = device
         

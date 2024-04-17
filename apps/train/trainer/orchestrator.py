@@ -26,10 +26,10 @@ class BackGroundDisplay:
         self,
         ifos,
         background_file,
-        glitch_info,
+        # glitch_info,
         sample_rate,
         sample_duration,
-        outdir,
+        # outdir,
         training_portion = 0.75
     ):
         
@@ -55,7 +55,7 @@ class BackGroundDisplay:
         self.background["Train"] = background[:,:self.bg_dur["Train"]*sample_rate]
         self.background["Validate"] = background[:,-self.bg_dur["Validate"]*sample_rate:]
         
-        self.glitch_info = glitch_info
+        # self.glitch_info = glitch_info
         self.segment_start_time = bg_attrs[f"{segments}/start"]
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration

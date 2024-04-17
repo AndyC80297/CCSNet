@@ -63,7 +63,7 @@ inited_injector = Waveform_Projector(
 siganl_parameter = h5_thang(ccsnet_args["test_siganl_parameter"]).h5_data()
 
 signals_dict = load_h5_as_dict(
-    ccsnet_args["test_siganls"],
+    ccsnet_args["test_signals"],
     ccsnet_args["signals_dir"]
 )
 
@@ -75,7 +75,7 @@ start = time.time()
 with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as g:
 
     with torch.no_grad():
-
+        logging.info("")
         logging.info(f"= - = - = - = - =")
 
         for mode, raw_bg in sampled_background.items():
@@ -101,35 +101,35 @@ with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as 
             logging.info(f"{mode}: average performance {prediction.mean():.02f}")
             h = g.create_dataset(name=f"{mode}", data=prediction)
         logging.info(f"= - = - = - = - =")
-
+        logging.info("")
 with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g:
 
     for key in signals_dict.keys():
-
+        logging.info(f"Running {key} analysis")
         g1 = g.create_group(key)
         start = time.time()
         scaled_ht, distance = inited_injector(
             time = signals_dict[key][0],
-            quad_moment = torch.Tensor(signals_dict[key][1] * 0.1),
+            quad_moment = torch.Tensor(signals_dict[key][1] * 10),
             ori_theta=torch.tensor(siganl_parameter["ori_theta"][:count]),
             ori_phi=torch.tensor(siganl_parameter["ori_phi"][:count]),
             dec=torch.tensor(siganl_parameter["dec"][:count]),
             psi=torch.tensor(siganl_parameter["psi"][:count]),
             phi=torch.tensor(siganl_parameter["phi"][:count]),
         )
-        print(f"Injection spent time {time.time() - start:.02f}")
 
         g1.create_dataset(name="SNR_4_Distance", data=distance.numpy())
         test_loop_start = time.time()
         with torch.no_grad():
             
             ccsn_loader = test_data_loader(
-                scaled_ht,
+                signal=scaled_ht,
+                scaled_distance=distance,
                 batch_size=ccsnet_args["test_batch_size"],
                 device=device
             )
 
-            for mode, raw_bg in sampled_background.items():
+            for mode, raw_bg in tqdm(sampled_background.items()):
                 g2 = g1.create_group(mode)
 
                 noise_loader = test_data_loader(
@@ -141,7 +141,7 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
                 for snr in ccsnet_args["snr_distro"]:
 
                     preds = []
-                    for background, siganl in tzip(noise_loader, ccsn_loader):
+                    for background, siganl in zip(noise_loader, ccsn_loader):
                         
                         factor = (snr/4)
                         X = background[0] + siganl[0] * factor
@@ -156,5 +156,28 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
                     prediction = np.concatenate(preds).reshape([-1])
 
                     g2.create_dataset(name=f"SNR_{snr:02d}", data=prediction)
-        print(f"Test loop spent {time.time() - test_loop_start:.02f}")
+
+                
+                max_dis = distance.mean()
+                prob_dis = np.geomspace(max_dis/20, max_dis, 10)
+                for dis_i, dis in enumerate(prob_dis):
+                    
+                    preds = []
+                    count_down = 0
+                    for background, siganl in zip(noise_loader, ccsn_loader):
+
+                        scale_back_ht = torch.einsum('li, lik->lik', siganl[1], siganl[0]) / dis
+                        X = background[0] + scale_back_ht
+
+                        pred = ccsnet_streamer.stream(
+                            X, 
+                            psd=None
+                        )
+                        
+                        preds.append(pred.cpu().detach().numpy())
+                    
+                    prediction = np.concatenate(preds).reshape([-1])
+                    g2.create_dataset(name=f"Distance_{dis_i:02d}", data=prediction)
+                g2.create_dataset(name=f"Distances", data=prob_dis)
+        
 logging.info(f"Time spent on test is {int(time.time() - start)/60:.02f} min.")

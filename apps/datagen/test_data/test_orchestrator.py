@@ -69,7 +69,6 @@ class Test_BackGroundDisplay:
         logging.info(f"  -End- time: {int(end)}")
         logging.info(f"Duration: {int(self.bg_dur)}")
 
-        # self.glitch_info = h5_thang(glitch_info_file)
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration
         self.ifos = ifos
@@ -104,10 +103,8 @@ class Test_BackGroundDisplay:
             glitch_mask = glitch_tape[i, :].astype("bool")
             glitch_count = glitch_mask.sum()
             
-
             X[glitch_mask, i, :] = glitch_sampler(
-            # gltich_data_ =  glitch_sampler(
-                gltich_info=glitch_label,
+                glitch_info=glitch_label,
                 strain = self.background[i, :],
                 segment_duration = self.bg_dur,
                 segment_start_time = self.start_time,
@@ -118,12 +115,9 @@ class Test_BackGroundDisplay:
                 kernel_width = self.sample_duration,
             )
             
-            # print(type(gltich_data_))
-            
             reverse_mask = (1 - glitch_tape[i, :]).astype("bool")
             
             reverse_count = reverse_mask.sum()
-            # glitch_label = self.glitch_info.h5_data([f"{ifo}/time"])
             
             mask_dict = masking(
                 glitch_info=glitch_label,

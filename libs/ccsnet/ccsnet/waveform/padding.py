@@ -191,7 +191,6 @@ def torch_padding(
     t0_idx = int(time[0] * sample_rate)
 
     start = half_kernel_idx + t0_idx + time_shift_idx
-    # end = half_kernel_idx + t0_idx + time.shape[0] + time_shift_idx
     end = sample_kernel * sample_rate - (start + time.shape[0])
     if end > 0:
         pass

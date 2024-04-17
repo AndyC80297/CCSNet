@@ -89,31 +89,28 @@ class Waveform_Projector:
         dec,
         psi,
         phi,
-        # count,
         default_snr: float = 4
     ):
         
         count = len(ori_theta)
-        start = ti.time()
-        hp, hc = pol_from_quad(
+        
+        hp, hc = get_hp_hc_from_q2ij(
             quad_moment,
             theta=ori_theta,
             phi=ori_phi
         )
-        print(f"Time spent on pol_from_quad {ti.time() - start:.02f}")
-        start = ti.time()
-        hp, hc = torch_padding(
+        
+        hp_hc = padding(
             time,
             hp,
             hc,
-            # 0.1 * np.ones(count),
+            np.ones(count),
             sample_kernel = self.buffer_duration,
             sample_rate = self.sample_rate,
             time_shift = self.time_shift, # Core-bounce will be at here
         )
-        print(f"Time spent on padding {ti.time() - start:.02f}")
-        # hp_hc = torch.tensor(hp_hc).float()
-        hp_hc = torch.stack((hp, hc), axis=1)
+
+        hp_hc = torch.tensor(hp_hc).float()
         
         if self.buffer_duration > self.sample_duration:
         
@@ -122,7 +119,7 @@ class Waveform_Projector:
                 kernel_size = self.sample_rate * self.sample_duration,
                 max_center_offset = self.max_center_offset,
             )
-        start = ti.time()
+
         ht = gw.compute_observed_strain(
             dec,
             psi,
@@ -133,11 +130,14 @@ class Waveform_Projector:
             plus=hp_hc[:,0,:],
             cross=hp_hc[:,1,:]
         )
-        print(f"Time spent on projection {ti.time() - start:.02f}")
-        start = ti.time()
-        scaled_ht, _, inversed_distance = self.rescaler.forward(
-            ht,
-            target_snrs = default_snr * torch.ones(count)
-        )
-        print(f"Time spent on rescaling {ti.time() - start:.02f}")
-        return scaled_ht, 1/inversed_distance
+        
+        if default_snr is None:
+
+            return scaled_ht
+        if default_snr is not None:
+            scaled_ht, _, inversed_distance = self.rescaler.forward(
+                ht,
+                target_snrs = default_snr * torch.ones(count)
+            )
+            
+            return scaled_ht, 1/inversed_distance
