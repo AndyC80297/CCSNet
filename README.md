@@ -2,23 +2,26 @@
 
 ## Installation of CCSNet environments
 
-**Data generation for CCSNet**
+**Omicron Environment**
 ```
-  conda create -n datagen python=3.9 -y
-  ...
-```
-
-
-**For CCSNet model training**
-```
-  pip install poetry==1.7.1
-  cd CCSNet/apps/train
-  poetry install
-  cd CCSNet/libs/ccsnet
-  poetry install
+conda create -n ccsnet-datagen python=3.9 -y
+conda install -c conda-forge omicron=4.0.0 -y
+pip install poetry==1.7.1
+cd ~/CCSNet/libs/ccsnet
+poetry install
 ```
 
-**Run CCSNet** 
+**Training, Validation, and Testing Environment**
+```
+conda create -n ccsnet-train python=3.9 -y
+pip install poetry==1.7.1
+cd ~/CCSNet/apps/train
+poetry install
+cd ~/CCSNet/libs/ccsnet
+poetry install
+```
+
+## Run CCSNet
 
 To run ```CCSNet```, you would have to provide the project name and path of the code base, data, and output.
 
@@ -68,4 +71,4 @@ do
     PROJECT=$PROJECT CODE_BASE=$CODE_BASE python $CODE_BASE/apps/tests/test_ccsnet.py -e $CODE_BASE/.env -s $i -r run_01
 done
 ```
-and run ```bash ccsnet.sh``` to get a happy life.
+and run ```bash ccsnet.sh``` to get a happy life. (You would have to remove the CODE_BASE=${HOME}/path/to/ccsnet from the .env file)
