@@ -14,15 +14,11 @@ from ccsnet.arch import WaveNet
 from ccsnet.train import train_time_sampling
 from ml4gw.transforms import SnrRescaler
 
-# ARGUMENTS_FILE = "/home/hongyin.chen/anti_gravity/CCSNet/apps/train/trainer/arguments.toml"
-
-# ccsnet_arguments = toml.load(ARGUMENTS_FILE)
 
 def one_loop_training(
     background_sampler,
     train_data,
     validation_scheme,
-    max_distance,
     whiten_model,
     psds,
     model,
@@ -32,7 +28,6 @@ def one_loop_training(
     scaler,
     profiler,
     iteration,
-    batch_size,
     steps_per_epoch,
     max_iteration,
     outdir,
@@ -53,18 +48,10 @@ def one_loop_training(
             psds
         )
 
-        # p_value = model(x)
-
-        # # cost = criterion(p_value, torch.argmax(y, dim = 1))
-        # cost = criterion(p_value, y)
-
-        # cost.backward()
-        # opt.step()
-
         with torch.autocast("cuda", enabled=scaler is not None):
             predictions = model(x)
             loss = criterion(predictions, y)
-        # t_cost += loss.item()
+        
         samples_seen += len(x)
 
         if scaler is not None:
@@ -83,11 +70,10 @@ def one_loop_training(
         t_cost += loss.item()
 
     average_cost = t_cost/(steps_per_epoch)
-    # average_cost = t_cost/(j+1)
+
     logging.info("")
     logging.info(f"    ============================")
     logging.info(f"    === Training cost {average_cost:.4f} ===")
-    # logging.info(f"    === The type of x: {x.type()} ===")
     logging.info(f"    ============================")
     logging.info("")
 
@@ -102,35 +88,28 @@ def one_loop_training(
     validation_scheme(
         loss=average_cost,
         back_ground_display=background_sampler,
-        # batch_size,
         model=model,
         criterion=criterion,
         whiten_model=whiten_model,
         psds=psds,
         iteration=iteration,
-        # max_distance=max_distance,
-        # outdir=outdir,
         device=device
     )
 
 
     if iteration % 5 ==0:
 
-        torch.save(model.state_dict(), outdir/f"models/Iter{iteration:03d}.pt")
+        torch.save(model.state_dict(), outdir/f"models/Iter{iteration+1:03d}.pt")
         
     if (iteration + 1) == max_iteration:
 
         torch.save(model.state_dict(), outdir/f"final_model.pt")
-
-
-    # return distance
+        
 
 def Tachyon(
     architecture: Callable,
-    # Plz provide in memeory control for the data
     background_sampler, 
     signal_sampler,
-    max_distance,
     noise_glitch_dist,
     signal_glitch_dist,
     validation_scheme,
@@ -160,8 +139,6 @@ def Tachyon(
     
     model = architecture(num_ifo)
     model.to(device)
-    
-    logging.info
     
     # First Style
     if softmax_output_layer:
@@ -200,11 +177,10 @@ def Tachyon(
         
         
         train_data = train_time_sampling(
-            background_sampler,
-            signal_sampler,
-            max_distance,
-            batch_size,
-            steps_per_epoch,
+            background_sampler=background_sampler,
+            signal_sampler=signal_sampler,
+            batch_size=batch_size,
+            steps_per_epoch=steps_per_epoch,
             iteration = iteration, 
             sample_factor=1/2,
             noise_glitch_dist = noise_glitch_dist,
@@ -225,26 +201,24 @@ def Tachyon(
             
             
         logging.info(f"=== Epoch {iteration + 1}/{max_iteration} ===")
-        # Add iteration caching
+
         one_loop_training(
-            background_sampler,
-            train_data,
-            validation_scheme,
-            max_distance,
-            whiten_model,
-            psds,
-            model,
-            criterion,
-            opt,
-            lr_scheduler,
-            scaler,
-            profiler,
-            iteration,
-            batch_size,
-            steps_per_epoch,
-            max_iteration,
-            outdir,
-            device
+            background_sampler=background_sampler,
+            train_data=train_data,
+            validation_scheme=validation_scheme,
+            whiten_model=whiten_model,
+            psds=psds,
+            model=model,
+            criterion=criterion,
+            optimizer=opt,
+            lr_scheduler=lr_scheduler,
+            scaler=scaler,
+            profiler=profiler,
+            iteration=iteration,
+            steps_per_epoch=steps_per_epoch,
+            max_iteration=max_iteration,
+            outdir=outdir,
+            device=device
         )
         
 

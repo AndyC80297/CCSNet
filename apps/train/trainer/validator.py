@@ -24,9 +24,6 @@ class Validator:
         ifos,
         signals_dict,
         chosen_signals,
-        # validation_fraction,
-        # injection_control, # Distance, SNR, time_shift ### We might need another function here (ML4GW)
-        # batch_size: int,
         psds,
         fftlength,
         overlap,
@@ -36,21 +33,16 @@ class Validator:
         max_iteration: int, 
         output_dir: Path,
         device: str ="cuda"
-        # validaton_type: [list, dict], # bg, glitch, bg+signal, glitch+signal
-        # metric_method: [list, dict],  # Exculsion-socre, AUC-score
-        # stream: bool = False # If true, stream in data by a sliding window on the active segments then save infos of i/o
     ):
         
         self.ifos = ifos
         self.num_ifos = len(ifos)
         self.tensors, self.vertices = gw.get_ifo_geometry(*ifos)
-        # self.batch_size = batch_size
         
         self.signals_dict = signals_dict
         self.chosen_signals = toml.load(chosen_signals)
         self.ccsn_list = list(signals_dict.keys())
         self.num_ccsn_type = len(self.ccsn_list)
-        # self.siganl_sampled = self.num_ccsn_type * batch_size
         
         self.sqrtnum = sqrtnum
         self.sample_rate = sample_rate
@@ -59,7 +51,6 @@ class Validator:
         
         self.kernel_length = sample_rate * sample_duration
         self.output_dir = output_dir
-        # self.sample_data = int(batch_size * steps_per_epoch * sample_factor)
 
         dec_distro = Cosine()
         psi_distro = Uniform(0, np.pi)
@@ -69,9 +60,8 @@ class Validator:
         psi = psi_distro(sqrtnum ** 4)
         phi = phi_distro(sqrtnum ** 4)
 
-        # self.snr_distro = PowerLaw(12, 100, 3)
         self.snr_distro = Uniform(8, 12)
-        distance = 0.1 * np.ones(self.sqrtnum ** 4)
+        distance = np.ones(self.sqrtnum ** 4)
 
         self.val_signal = {}
         for name in self.ccsn_list:
@@ -80,7 +70,7 @@ class Validator:
             quad_moment = self.signals_dict[name][1]            
 
             hp, hc, ori_theta, ori_phi = on_grid_pol_to_sim(
-                quad_moment,
+                quad_moment * 0.1,
                 sqrtnum ** 2
             )
             
@@ -118,7 +108,8 @@ class Validator:
                 use_pre_cauculated_psd=True
             )
             
-            ht, target_snrs, rescale_factor = rescaler.forward(
+            # target_snrs, rescale_factor
+            ht, _, _ = rescaler.forward( 
                 ht,
                 target_snrs = self.snr_distro(sqrtnum ** 4)
             )
@@ -143,12 +134,10 @@ class Validator:
             "simultaneous_glitch"
         ]
 
-
         history = h5_thang(self.output_dir / "raw_data" / "history.h5")
-        # distance = h5_thang(self.output_dir / "raw_data" / "max_distance.h5").h5_data()
 
         for i, mode in enumerate(modes):
-            # print(f"Mode: {mode.upper()}:")
+            
             trace_tag = f"Itera{iteration:03d}/{mode}/{mode}"
             noise_pred = torch.tensor(history.h5_data([trace_tag])[trace_tag])
 
@@ -159,7 +148,6 @@ class Validator:
 
             sig_count = 0
             for family in self.chosen_signals.keys():
-                # print("  ", family)
                 for name in self.chosen_signals[family]:
 
                     full_name = f"{family}/{name}"
@@ -190,14 +178,9 @@ class Validator:
             for name in self.chosen_signals[family]:
 
                 full_name = f"{family}/{name}"
-                dis_tag = f"Itera{iteration:03d}/{full_name}"
 
-                # logging.info(f"    {name:20s} DIS:{distance[dis_tag][0]:03d}   {wave_score[wave_count]:.04f}")
                 logging.info(f"    {name:20s} SNR:8-12   TPR:{wave_score[wave_count]:.04f}")
 
-
-                # if wave_score[wave_count] >= 0.5:
-                #     max_distance[f"{family}/{name}"] += 3
                 wave_count += 1
         
         if max_distance is not None:
@@ -210,9 +193,7 @@ class Validator:
         self,
         inputs,
         targets,
-        # batch_size,
         model,
-        criterion,
         whiten_model,
         psds
     ):  
@@ -240,23 +221,21 @@ class Validator:
                 )
                 
                 output = model(x)
-                # loss = criterion(output, y)
                 preds.append(output)
             
             return x, torch.cat(preds)
             
-        
+
 
     def __call__(
         self, 
-        loss,
         back_ground_display, 
         model, 
         criterion,
         whiten_model, 
         psds, 
         iteration, 
-        max_distance = None,
+        max_distance=None,
         signal_saving=None,
         device="cpu"
     ):
@@ -288,9 +267,10 @@ class Validator:
                 glitch_offset = 0.9,
                 sample_factor = 1,
                 iteration=iteration,
-                # mode=f"validation_{mode}",
                 mode="Validate",
-                target_value = 0
+                target_value = 0,
+                noise_mode=mode
+
             )
             
             val_data, noise_prediction = self.prediction(
@@ -334,7 +314,6 @@ class Validator:
                     h = g[f"Itera{iteration:03d}/{mode}"]
                     
                     h.create_dataset(f"{name}", data=injection_prediction.detach().cpu().numpy().reshape(-1))
-                    # h.create_dataset(f"{name}_siganl", data=val_data.detach().cpu().numpy())
 
                 if signal_saving is not None:
 
@@ -342,12 +321,10 @@ class Validator:
                         with h5py.File(self.output_dir / "raw_data/val_signal.h5", "a") as g:
                     
                             h = g.create_group(f"Itera{iteration:03d}/{name}")
-                    
-                            # h.create_dataset(f"Signal", data=self.val_signal[name].numpy())                
+                             
 
         if  max_distance is not None:
             return self.summarizer(iteration)
         self.summarizer(iteration)
-        # return early_stopping, max_distance
 
         

@@ -10,7 +10,8 @@ def masking(
     shift_range: float = 3, 
     pad_width: float = 1.5, # Make this default to half of the kernel width
     sample_rate: int=4096, 
-    merge_edges: bool=True
+    merge_edges: bool=True,
+    edge_only: bool=False
 )->dict:
     
     """Provide a buffer mask the covers the glitch at the center of the kernel.
@@ -39,47 +40,62 @@ def masking(
     half_window = int(shift_range*sample_rate/2)
     seg_idx_count = segment_duration*sample_rate
     
+    if edge_only:
 
-    
-    for ifo, glitch_time in glitch_info.items():
 
-        ifo = ifo[:2]
-        # Initialing the first digits in the active segments aline to t0 = 0_sec
-        glitch_time -= segment_start_time
-        
-        # Pop out glitch that lives in the edges
-        ### This popping may need another argument passing.
-        glitch_time = glitch_time[glitch_time > pad_width]
-        glitch_time = glitch_time[glitch_time < segment_duration - pad_width]
-        
-        glitch_counts = len(glitch_time)
-        mask_kernel[ifo] = np.zeros((glitch_counts+2, 2)).astype("int")
-        
-        # Provde the pad out edges mask
-        mask_kernel[ifo][0, :] = np.array([0, pad_width*sample_rate])
-        mask_kernel[ifo][-1, :] = np.array([seg_idx_count-pad_width*sample_rate, seg_idx_count])
-        
-        # Collecting the mask by idx
-        glitch_idx = (glitch_time * 4096).astype("int")
-        
-        mask_kernel[ifo][1:-1, 0] = (glitch_idx - half_window)
-        mask_kernel[ifo][1:-1, 1] = (glitch_idx + half_window)
-        
+        for ifo, glitch_time in glitch_info.items():
 
-    if merge_edges:
-        
-        for ifo, mask in mask_kernel.items():
+            ifo = ifo[:2]
+            # Initialing the first digits in the active segments aline to t0 = 0_sec
+            calibate_time = glitch_time - segment_start_time
             
-            mask_counts = mask.shape[0]
-            for i in range(mask_counts -1 ):
+            mask_kernel[ifo] = np.zeros((2, 2)).astype("int")
+            
+            # Provide the pad out edges mask
+            mask_kernel[ifo][0, :] = np.array([0, pad_width*sample_rate])
+            mask_kernel[ifo][-1, :] = np.array([seg_idx_count-pad_width*sample_rate, seg_idx_count])
+
+        return mask_kernel
+    else:
+
+        for ifo, glitch_time in glitch_info.items():
+
+            ifo = ifo[:2]
+            # Initialing the first digits in the active segments aline to t0 = 0_sec
+            calibate_time = glitch_time - segment_start_time
+
+            # Pop out glitch that lives in the edges
+            ### This popping may need another argument passing.
+            calibate_time = calibate_time[calibate_time > pad_width]
+            calibate_time = calibate_time[calibate_time < segment_duration - pad_width]
+            
+            glitch_counts = len(calibate_time)
+            mask_kernel[ifo] = np.zeros((glitch_counts+2, 2)).astype("int")
+            
+            # Provide the pad out edges mask
+            mask_kernel[ifo][0, :] = np.array([0, pad_width*sample_rate])
+            mask_kernel[ifo][-1, :] = np.array([seg_idx_count-pad_width*sample_rate, seg_idx_count])
+            
+            # Collecting the mask by idx
+            glitch_idx = (calibate_time * 4096).astype("int")
+            
+            mask_kernel[ifo][1:-1, 0] = (glitch_idx - half_window)
+            mask_kernel[ifo][1:-1, 1] = (glitch_idx + half_window)
+            
+
+        if merge_edges:
+            
+            for ifo, mask in mask_kernel.items():
                 
-                if mask[i,1] > mask[i+1,0]:
-                    mask[i,1] = mask[i+1,0]
+                mask_counts = mask.shape[0]
+                for i in range(mask_counts -1 ):
                     
-                    
-    return mask_kernel
-
-
+                    if mask[i,1] > mask[i+1,0]:
+                        mask[i,1] = mask[i+1,0]
+                        
+                        
+        return mask_kernel
+    
 def filtering_idxs(
     mask_dict: dict,
     *n_idxs: int,
@@ -153,7 +169,7 @@ def strain_sampling(
 
 
 def glitch_sampler(
-    gltich_info,
+    glitch_info,
     strain,
     segment_duration,
     segment_start_time,
@@ -169,7 +185,7 @@ def glitch_sampler(
     sampled_strain = torch.zeros([sample_counts, sample_rate*kernel_width])
 
     mask_dict = masking(
-        gltich_info,
+        glitch_info,
         segment_duration=segment_duration,
         segment_start_time=segment_start_time,
         shift_range=shift_range,
@@ -177,17 +193,17 @@ def glitch_sampler(
         sample_rate=sample_rate, 
         merge_edges = False
     )
-    
     for _, ifo in enumerate(ifos):
         
         # Remove the padding mask
-        mask_dict[ifo] = mask_dict[ifo][1:-1]
+        mask_func = mask_dict[ifo][1:-1]
         
-        glitch_count = len(mask_dict[ifo])
+        glitch_count = len(mask_func)
+        
         selected_glitch = np.random.randint(0, glitch_count, (sample_counts,))
         sample_center = np.random.randint(
-            mask_dict[ifo][selected_glitch][:, 0], 
-            mask_dict[ifo][selected_glitch][:, 1], 
+            mask_func[selected_glitch][:, 0], 
+            mask_func[selected_glitch][:, 1], 
             size=(sample_counts)
         )
         
