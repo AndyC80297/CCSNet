@@ -86,7 +86,6 @@ def one_loop_training(
     ###### Need to update distance
     model.eval()
     validation_scheme(
-        loss=average_cost,
         back_ground_display=background_sampler,
         model=model,
         criterion=criterion,

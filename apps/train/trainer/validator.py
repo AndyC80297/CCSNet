@@ -277,7 +277,6 @@ class Validator:
                 noise, 
                 targets,
                 model,
-                criterion,
                 whiten_model,
                 psds,
             )
@@ -303,7 +302,6 @@ class Validator:
                     signal, 
                     torch.ones_like(targets),
                     model,
-                    criterion,
                     whiten_model,
                     psds,
                 )
