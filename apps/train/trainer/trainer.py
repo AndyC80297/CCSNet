@@ -1,4 +1,5 @@
 # import h5py
+import sys
 import toml
 import torch
 import ml4gw
@@ -20,8 +21,6 @@ from ccsnet.train.train import Tachyon
 from ml4gw.transforms import Whiten
 from ml4gw.transforms.transform import FittableSpectralTransform
 
-logging.basicConfig(level=logging.NOTSET)
-logging.info("Booting CCSNet...")
 parser = ArgumentParser()
 parser.add_argument("-e", "--env", help="The env setting")
 args = parser.parse_args()
@@ -30,6 +29,16 @@ ccsnet_arguments = args_control(
     args.env,
     saving=True
 )
+
+logging.basicConfig(
+    filename= ccsnet_arguments["result_dir"] / "train.log",
+    filemode='a',
+    format="%(asctime)s %(name)s %(levelname)s:\t%(message)s",
+    datefmt='%H:%M:%S',
+    level=logging.NOTSET
+)
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+logging.info("Booting CCSNet...")
 
 def main(
     background_file = ccsnet_arguments["backgrounds"], 
@@ -40,6 +49,7 @@ def main(
     steps_per_epoch = ccsnet_arguments["steps_per_epoch"], 
     sample_rate = ccsnet_arguments["sample_rate"], 
     sample_duration = ccsnet_arguments["sample_duration"], 
+    off_set = ccsnet_arguments["off_set"],
     ifos = ccsnet_arguments["ifos"], 
     fftlength = ccsnet_arguments["fftlength"], 
     overlap = ccsnet_arguments["overlap"],
@@ -87,6 +97,7 @@ def main(
         outdir = outdir,
         batch_size = batch_size,
         steps_per_epoch = steps_per_epoch,
+        off_set=off_set,
     )
 
 

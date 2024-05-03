@@ -1,3 +1,4 @@
+import sys
 import h5py
 import time
 import torch
@@ -19,8 +20,6 @@ from model_streamer import Streamer, test_data_loader
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-logging.basicConfig(level=logging.NOTSET)
-
 parser = ArgumentParser()
 parser.add_argument("-e", "--env", help="The env setting")
 parser.add_argument("-s", "--seg", type=int, help="Testing segment") ## Segments/Runs_XX
@@ -32,6 +31,16 @@ ccsnet_args = args_control(
     test_segment=f"Seg{args.seg:02d}/{args.run}",
     saving=False
 )
+
+logging.basicConfig(
+    filename= ccsnet_args["test_result_dir"] / "test.log",
+    filemode="a",
+    format="%(asctime)s %(name)s %(levelname)s:\t%(message)s",
+    datefmt="%H:%M:%S",
+    level=logging.NOTSET
+)
+
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
 
 ccsnet_streamer = Streamer(
     num_ifos=len(ccsnet_args["ifos"]),
@@ -55,9 +64,9 @@ inited_injector = Waveform_Projector(
     fftlength=ccsnet_args["fftlength"],
     overlap=ccsnet_args["overlap"],
     sample_duration=ccsnet_args["sample_duration"],
-    buffer_duration=3,
+    buffer_duration=4,
     time_shift=0,
-    off_set=0
+    off_set=ccsnet_args["off_set"]
 )
 
 siganl_parameter = h5_thang(ccsnet_args["test_siganl_parameter"]).h5_data()
@@ -70,7 +79,7 @@ signals_dict = load_h5_as_dict(
 sampled_background = h5_thang(ccsnet_args["sampled_background"]).h5_data()
 
 count = ccsnet_args["test_count"]
-
+print(count)
 start = time.time()
 with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as g:
 
@@ -102,6 +111,7 @@ with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as 
             h = g.create_dataset(name=f"{mode}", data=prediction)
         logging.info(f"= - = - = - = - =")
         logging.info("")
+
 with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g:
 
     for key in signals_dict.keys():
@@ -159,7 +169,7 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
 
                 
                 max_dis = distance.mean()
-                prob_dis = np.geomspace(max_dis/20, max_dis, 10)
+                prob_dis = np.geomspace(max_dis/50, max_dis*2, 20)
                 for dis_i, dis in enumerate(prob_dis):
                     
                     preds = []

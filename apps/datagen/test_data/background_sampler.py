@@ -63,3 +63,7 @@ if not ccsnet_args["sampled_background"].is_file():
             )
 
             g.create_dataset(name=bg_key, data=bg_data)
+
+else:
+
+    print("Background already sampled, skip sampling")

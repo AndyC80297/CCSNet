@@ -34,6 +34,7 @@ sampled_background = "sampled_background.h5"
 
 # Training phase
 sample_duration = 3
+off_set=0.15
 model_parameter = {c_depth = 8, n_chann = 64, l1 = 1024, l2 = 128}
 # noise_glitch_dist = [0, 0.375, 0.375, 0.25]
 batch_size = 32
@@ -50,6 +51,6 @@ val_sqrtnum = 4
 test_count = 500
 test_batch_size = 1024
 test_model = "final_model.pt"
-snr_distro = [8, 10, 12, 15, 20, 25, 30, 35, 40]
+snr_distro = [2, 4, 8, 10, 12, 15, 20, 25, 30, 35, 40]
 
 

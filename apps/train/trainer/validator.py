@@ -266,10 +266,10 @@ class Validator:
                 choice_mask = [0, 1, 2, 3],
                 glitch_offset = 0.9,
                 sample_factor = 1,
-                iteration=iteration,
+                # iteration=iteration,
                 mode="Validate",
                 target_value = 0,
-                noise_mode=mode
+                # noise_mode=mode
 
             )
             

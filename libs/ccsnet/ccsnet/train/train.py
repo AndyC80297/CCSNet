@@ -180,7 +180,7 @@ def Tachyon(
             signal_sampler=signal_sampler,
             batch_size=batch_size,
             steps_per_epoch=steps_per_epoch,
-            iteration = iteration, 
+            iteration = None, 
             sample_factor=1/2,
             noise_glitch_dist = noise_glitch_dist,
             signal_glitch_dist = signal_glitch_dist,
