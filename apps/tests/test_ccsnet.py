@@ -50,7 +50,7 @@ ccsnet_streamer = Streamer(
     fftlength=ccsnet_args["fftlength"],
     highpass=ccsnet_args["highpass"],
     test_seg=args.seg,
-    background_file=ccsnet_args["test_backgrounds"], # ccsnet_args["test_backgrounds"]
+    background_file=ccsnet_args["backgrounds"], # ccsnet_args["test_backgrounds"]
     map_device="cpu",
     device=device
 )
@@ -58,8 +58,8 @@ ccsnet_streamer = Streamer(
 inited_injector = Waveform_Projector(
     ifos=ccsnet_args["ifos"],
     sample_rate=ccsnet_args["sample_rate"],
-    background_file=ccsnet_args["test_backgrounds"],
-    seg=f"segments{args.seg - 1 :02d}",
+    background_file=ccsnet_args["backgrounds"],
+    seg=f"segments{args.seg:02d}",
     highpass=ccsnet_args["highpass"],
     fftlength=ccsnet_args["fftlength"],
     overlap=ccsnet_args["overlap"],
@@ -117,7 +117,7 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
     for key in signals_dict.keys():
         logging.info(f"Running {key} analysis")
         g1 = g.create_group(key)
-        start = time.time()
+        
         scaled_ht, distance = inited_injector(
             time = signals_dict[key][0],
             quad_moment = torch.Tensor(signals_dict[key][1] * 10),

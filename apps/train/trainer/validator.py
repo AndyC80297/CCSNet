@@ -2,7 +2,6 @@ import h5py
 import torch
 import toml
 import logging
-import pickle 
 
 import numpy as np
 
@@ -115,7 +114,6 @@ class Validator:
             )
             
             self.val_signal[name] = ht
-
     
     def summarizer(
         self,
@@ -185,10 +183,7 @@ class Validator:
         
         if max_distance is not None:
             return max_distance
-        
-
     
-
     def prediction(
         self,
         inputs,
@@ -224,17 +219,14 @@ class Validator:
                 preds.append(output)
             
             return x, torch.cat(preds)
-            
-
-
+    
     def __call__(
         self, 
         back_ground_display, 
         model, 
-        criterion,
         whiten_model, 
         psds, 
-        iteration, 
+        iteration=None, 
         max_distance=None,
         signal_saving=None,
         device="cpu"
@@ -266,14 +258,17 @@ class Validator:
                 choice_mask = [0, 1, 2, 3],
                 glitch_offset = 0.9,
                 sample_factor = 1,
-                # iteration=iteration,
+                iteration=iteration,
                 mode="Validate",
                 target_value = 0,
                 # noise_mode=mode
 
             )
             
-            val_data, noise_prediction = self.prediction(
+            # Give us validation data and noise_prediction.
+            # It will be better to return the smapled indciess of validation data 
+            # instead of the whole chunck of data.
+            _, noise_prediction = self.prediction( 
                 noise, 
                 targets,
                 model,
@@ -286,7 +281,6 @@ class Validator:
                 h = g.create_group(f"Itera{iteration:03d}/{mode}")
                 
                 h.create_dataset(f"{mode}", data=noise_prediction.detach().cpu().numpy().reshape(-1))
-                # h.create_dataset(f"{mode}_siganl", data=val_data.detach().cpu().numpy())
                 
 
             for name in self.ccsn_list:
@@ -298,7 +292,7 @@ class Validator:
                     
                     signal = noise + self.val_signal[name]
 
-                val_data, injection_prediction = self.prediction(
+                _, injection_prediction = self.prediction(
                     signal, 
                     torch.ones_like(targets),
                     model,

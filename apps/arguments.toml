@@ -2,8 +2,8 @@
 # start = 1262632990
 train_start = 1262653854
 train_end = 1262686622
-test_start =  1262688611 # 1262919719
-test_end = 1262944254
+test_start = 1262688611 # 1262919719
+test_end = 1263293411 # 1262944254
 ifos = ["H1", "L1"]
 frame_type = ["HOFT_C01", "HOFT_C01"]
 state_flag = ["DCS-ANALYSIS_READY_C01:1", "DCS-ANALYSIS_READY_C01:1"]
@@ -48,7 +48,7 @@ learning_rate = 0.004
 val_sqrtnum = 4
 
 # Test
-test_count = 500
+test_count = 20000
 test_batch_size = 1024
 test_model = "final_model.pt"
 snr_distro = [2, 4, 8, 10, 12, 15, 20, 25, 30, 35, 40]

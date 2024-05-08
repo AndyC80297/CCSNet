@@ -119,10 +119,14 @@ if __name__ == "__main__":
     segs = get_conincident_segs(
         ifos=ccsnet_args["ifos"],
         start=ccsnet_args["train_start"],
-        stop=ccsnet_args["train_end"],
+        stop=ccsnet_args["test_end"],
         state_flag=ccsnet_args["state_flag"]
     )
 
     for seg_num, seg in enumerate(segs):
 
-        main(seg, seg_num)
+        main(
+            seg, 
+            seg_num,
+            omicron_path=ccsnet_args["omicron_dir"] / f"Segs_{seg_num:02d}",
+        )

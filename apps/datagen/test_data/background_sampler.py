@@ -38,7 +38,7 @@ random_ccsn_parameter(
 
 background_display = Test_BackGroundDisplay(
     ifos=ccsnet_args["ifos"],
-    background_file=ccsnet_args["test_backgrounds"],
+    background_file=ccsnet_args["backgrounds"],
     sample_rate=ccsnet_args["sample_rate"],
     sample_duration=ccsnet_args["sample_duration"],
     test_seg=args.seg
