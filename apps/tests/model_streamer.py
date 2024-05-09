@@ -15,6 +15,7 @@ from ml4gw.transforms import Whiten
 
 from ccsnet.arch import WaveNet
 from ccsnet.utils import h5_thang, args_control
+from ccsnet.waveform import CCSNe_Dataset
 
 
 def model_loader(
@@ -40,42 +41,6 @@ def model_loader(
     
     return nn_model
 
-class CCSNet_Dataset(Dataset):
-
-    def __init__(
-        self, 
-        signal, 
-        scaled_distance=None,
-        n_ifos=2, 
-        sample_rate=4096,
-        sample_duration=3,
-        device="cpu"
-    ):
-
-        # Get data type from https://pytorch.org/docs/stable/tensors.html
-        self.signal = torch.FloatTensor(
-            signal.reshape([-1, n_ifos, sample_duration*sample_rate])
-        ).to(device)
-        
-        self.scaled_distance = scaled_distance
-        if self.scaled_distance is not None:
-            self.scaled_distance = torch.FloatTensor(
-                scaled_distance.reshape([-1, 1])
-            ).to(device)
-
-    def __len__(self):
-        
-        return len(self.signal)
-        
-    def __getitem__(self, index):
-        x = self.signal[index]
-
-        if self.scaled_distance is not None:
-            dis = self.scaled_distance[index]
-
-            return x, dis, index
-
-        return x, index
 
 def test_data_loader(
     signal,
@@ -88,7 +53,7 @@ def test_data_loader(
     scaled_distance=None,
 ):
 
-    dataset = CCSNet_Dataset(
+    dataset = CCSNe_Dataset(
         signal,
         scaled_distance,
         n_ifos=n_ifos, 

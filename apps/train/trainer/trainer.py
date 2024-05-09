@@ -59,7 +59,8 @@ def main(
     weight_decay=ccsnet_arguments["weight_decay"], 
     learning_rate=ccsnet_arguments["learning_rate"], 
     outdir: Path=ccsnet_arguments["result_dir"], 
-    val_sqrtnum=ccsnet_arguments["val_sqrtnum"],
+    val_count=ccsnet_arguments["val_count"],
+    val_batch=ccsnet_arguments["val_batch"],
     device: str="cuda", 
 ):
     """
@@ -69,7 +70,7 @@ def main(
     """
 
     training_segment = "segments00"
-    psd = h5_thang(background_file).h5_data()[f"{training_segment}/psd"]
+    psd = h5_thang(background_file).h5_data([f"{training_segment}/psd"])[f"{training_segment}/psd"]
     psds = torch.cuda.DoubleTensor(psd)
 
     signals_dict = load_h5_as_dict(
@@ -116,7 +117,8 @@ def main(
         fftlength=fftlength,
         overlap=overlap,
         sample_rate=sample_rate, 
-        sqrtnum=val_sqrtnum,
+        count=val_count,
+        batch_size=val_batch,
         sample_duration=sample_duration, 
         max_iteration=max_iteration,
         output_dir=outdir

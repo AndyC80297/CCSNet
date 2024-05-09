@@ -1,7 +1,7 @@
 # Basic Settings
 # start = 1262632990
 train_start = 1262653854
-train_end = 1262686622
+train_end = 1262686622 # 1262688492
 test_start = 1262688611 # 1262919719
 test_end = 1263293411 # 1262944254
 ifos = ["H1", "L1"]
@@ -45,7 +45,8 @@ lr_ramp_epochs = 75
 weight_decay = 1e-5
 highpass = 32
 learning_rate = 0.004
-val_sqrtnum = 4
+val_count = 32
+val_batch = 32
 
 # Test
 test_count = 20000

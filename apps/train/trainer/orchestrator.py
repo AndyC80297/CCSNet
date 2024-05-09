@@ -79,7 +79,7 @@ class BackGroundDisplay:
         
 
         self.bgh5 = h5_thang(background_file)
-        background = torch.Tensor(self.bgh5.h5_data()[f"{segment}/strain"])
+        background = torch.Tensor(self.bgh5.h5_data([f"{segment}/strain"])[f"{segment}/strain"])
         bg_attrs = self.bgh5.h5_attrs()
         bg_dur = bg_attrs[f"{segment}/end"] - bg_attrs[f"{segment}/start"]
         self.train_dur = int(bg_dur * training_portion)
