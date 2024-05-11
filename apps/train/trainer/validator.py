@@ -299,7 +299,7 @@ class Validator:
             with torch.no_grad():
 
                 with h5py.File(self.output_dir/ "raw_data" / "history.h5", "a") as g:
-                    h = g.create_group(f"Itera{iteration:03d}_{mode}")
+                    h = g.create_group(f"Validation_itera{iteration:03d}_{mode}")
 
                     preds = []
                     inject_preds = []
