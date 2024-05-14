@@ -237,6 +237,7 @@ class Injector:
         fftlength,
         overlap, 
         outdir,
+        signal_chopping:float=None, # Lable in second
         batch_size = 32,
         steps_per_epoch = 20,
         buffer_duration = 4,
@@ -247,8 +248,15 @@ class Injector:
         self.tensors, self.vertices = gw.get_ifo_geometry(*ifos)
         
         self.signals = signals_dict
-        self.ccsn_list = list(signals_dict.keys())
+        self.ccsn_list = list(self.signals.keys())
         
+        if signal_chopping is not None:
+            
+            for key in self.ccsn_list:
+                end = int((signal_chopping - self.signals[key][0][0]) * sample_rate)
+                self.signals[key][0] = self.signals[key][0][:end]
+                self.signals[key][1] = self.signals[key][1][:end]
+            
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration
         self.buffer_duration = buffer_duration

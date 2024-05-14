@@ -37,6 +37,7 @@ sample_duration = 3
 off_set=0.15
 model_parameter = {c_depth = 8, n_chann = 64, l1 = 1024, l2 = 128}
 # noise_glitch_dist = [0, 0.375, 0.375, 0.25]
+signal_chopping = 0.1
 batch_size = 32
 steps_per_epoch = 5
 max_iteration = 5

@@ -79,7 +79,7 @@ signals_dict = load_h5_as_dict(
 sampled_background = h5_thang(ccsnet_args["sampled_background"]).h5_data()
 
 count = ccsnet_args["test_count"]
-print(count)
+
 start = time.time()
 with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as g:
 
