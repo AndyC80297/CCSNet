@@ -58,7 +58,8 @@ class Validator:
         sample_duration, 
         max_iteration: int, 
         output_dir: Path,
-        device: str ="cuda"
+        signal_chopping:float=None, # Lable in second
+        device: str ="cpu"
     ):
         
         self.ifos = ifos
@@ -95,8 +96,16 @@ class Validator:
         self.val_signal = {}
         for name in self.ccsn_list:
             
-            time = self.signals_dict[name][0]
-            quad_moment = self.signals_dict[name][1] * 10 
+            if signal_chopping is None:
+
+                time = self.signals_dict[name][0]
+                quad_moment = self.signals_dict[name][1] * 10 
+                
+            else:
+
+                end = int((signal_chopping - self.signals[name][0][0]) * sample_rate)
+                time = self.signals[name][0][:end]
+                quad_moment = self.signals[name][1][:end] * 10
             
             hp, hc = get_hp_hc_from_q2ij(
                 quad_moment,

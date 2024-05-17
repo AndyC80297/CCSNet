@@ -41,6 +41,7 @@ logging.basicConfig(
 )
 
 logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+logging.info(f"Running Seg{args.seg:02d}")
 
 ccsnet_streamer = Streamer(
     num_ifos=len(ccsnet_args["ifos"]),

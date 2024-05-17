@@ -115,6 +115,7 @@ def main(
         ifos=ifos,
         signals_dict=signals_dict,
         chosen_signals=chosen_signals,
+        signal_chopping=signal_chopping,
         psds=psds,
         fftlength=fftlength,
         overlap=overlap,
