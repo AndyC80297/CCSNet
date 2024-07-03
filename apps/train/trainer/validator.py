@@ -103,9 +103,9 @@ class Validator:
                 
             else:
 
-                end = int((signal_chopping - self.signals[name][0][0]) * sample_rate)
-                time = self.signals[name][0][:end]
-                quad_moment = self.signals[name][1][:end] * 10
+                end = int((signal_chopping - self.signals_dict[name][0][0]) * sample_rate)
+                time = self.signals_dict[name][0][:end]
+                quad_moment = self.signals_dict[name][1][:end] * 10
             
             hp, hc = get_hp_hc_from_q2ij(
                 quad_moment,

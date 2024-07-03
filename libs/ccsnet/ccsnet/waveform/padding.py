@@ -94,11 +94,11 @@ def load_h5_as_dict(
     """Open up a buffer to load in different CCSN wavefroms.
 
     Args:
-        chosen_signals (dict): Name of each wavefrom given by a toml file
-        source_file (Path): The path that contains reasmpled raw waveform
+        chosen_signals (Path): A file with names of each wavefrom.
+        source_file (Path): The path that contains reasmpled raw waveform.
 
     Returns:
-        dict: Time and DDW of Each waveform
+        dict: Time and resampled SQDM of Each waveform
     """
     selected_ccsn = toml.load(chosen_signals)
     source_file = Path(source_file)
