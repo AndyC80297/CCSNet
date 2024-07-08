@@ -1,5 +1,6 @@
 import h5py
 import torch 
+import logging
 
 import numpy as np
 from pathlib import Path
@@ -50,6 +51,8 @@ def glitch_merger(
             
         if output_file is None:
             output_file = omicron_path / "glitch_info.h5"
+
+        logging.info(f"Saving merged glitch file to {output_file}")
 
         with h5py.File(output_file, "a") as g:
             

@@ -26,7 +26,6 @@ def create_lcs(
         urltype=urltype,
     )
     
-    
     output_dir = output_dir / ifo
     output_dir.mkdir(parents=True, exist_ok=True)
     

@@ -1,13 +1,12 @@
 # Basic Settings
-# start = 1262632990
-train_start = 1262653854
-train_end = 1262686622 # 1262688492
-test_start = 1262688611 # 1262919719
-test_end = 1263293411 # 1262944254
+train_start = 1384264488
+train_end = 1384290050 # 1262688492
+test_start = 1384300357 # 1262919719
+test_end = 1384869288 # 1262944254
 ifos = ["H1", "L1"]
-frame_type = ["HOFT_C01", "HOFT_C01"]
-state_flag = ["DCS-ANALYSIS_READY_C01:1", "DCS-ANALYSIS_READY_C01:1"]
-channels = ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"]
+frame_type = ["HOFT_C00", "HOFT_C00"]
+state_flag = ["DMT-ANALYSIS_READY:1", "DMT-ANALYSIS_READY:1"]
+channels = ["GDS-CALIB_STRAIN_CLEAN", "GDS-CALIB_STRAIN_CLEAN"]
 sample_rate = 4096
 fftlength=2
 overlap=1

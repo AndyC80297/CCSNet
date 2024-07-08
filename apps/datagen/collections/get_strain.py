@@ -24,6 +24,13 @@ ccsnet_args = args_control(
     args.env,
 )
 
+logging.basicConfig(
+    filemode='a',
+    format="%(asctime)s %(name)s %(levelname)s:\t%(message)s",
+    datefmt='%H:%M:%S',
+    level=logging.NOTSET
+)
+
 def get_background(
     seg:tuple,
     ifos:list,
@@ -101,6 +108,8 @@ def main(
         overlap=overlap
     ).to(device)
 
+    logging.info(f"Saving background to {backgrounds_file}")
+    
     with h5py.File(backgrounds_file, "a") as g:
 
         g1 = g.create_group(f"segments{seg_num:02d}")

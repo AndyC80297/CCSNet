@@ -142,7 +142,7 @@ if __name__ == "__main__":
         args.env,
         saving=False
     )
-
+    
     ana_segs = get_conincident_segs(
         ifos=ccsnet_args["ifos"],
         start=ccsnet_args["train_start"],
