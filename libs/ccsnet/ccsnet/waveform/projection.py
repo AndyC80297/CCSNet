@@ -1,10 +1,7 @@
 import torch
 
 import numpy as np
-
-import time as ti
 from pathlib import Path
-from torch.utils.data import Dataset
 
 from ml4gw import gw
 from ml4gw.transforms import SnrRescaler
@@ -142,41 +139,3 @@ class Waveform_Projector:
             )
             
             return scaled_ht, 1/inversed_distance
-
-
-class CCSNe_Dataset(Dataset):
-
-    def __init__(
-        self, 
-        signal, 
-        scaled_distance=None,
-        n_ifos=2, 
-        sample_rate=4096,
-        sample_duration=3,
-        device="cpu"
-    ):
-
-        # Get data type from https://pytorch.org/docs/stable/tensors.html
-        self.signal = torch.FloatTensor(
-            signal.reshape([-1, n_ifos, sample_duration*sample_rate])
-        ).to(device)
-        
-        self.scaled_distance = scaled_distance
-        if self.scaled_distance is not None:
-            self.scaled_distance = torch.FloatTensor(
-                scaled_distance.reshape([-1, 1])
-            ).to(device)
-
-    def __len__(self):
-        
-        return len(self.signal)
-        
-    def __getitem__(self, index):
-        x = self.signal[index]
-
-        if self.scaled_distance is not None:
-            dis = self.scaled_distance[index]
-
-            return x, dis, index
-
-        return x, index

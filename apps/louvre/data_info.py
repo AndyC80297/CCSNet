@@ -79,9 +79,9 @@ def plot_active_segments(
 
     ax = plt.gca()
     # ax.set_title("Coincident Active segments", fontsize=30)
-    # ax.set_xlabel("GPSTime (s)", fontsize=30)
-    # # ax.set_ticklabels(fontsize=40)
-    # ax.set_ylabel("H1&L1", fontsize=30)
+    ax.set_xlabel("GPSTime (s)", fontsize=20)
+    # ax.set_ticklabels(fontsize=40)
+    ax.set_ylabel("H1&L1", fontsize=15)
     if glitch_start != None:
         
         ax.axvline(glitch_start, color="black", lw=linewidth, ls="-")

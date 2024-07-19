@@ -15,7 +15,7 @@ from ml4gw.transforms import Whiten
 
 from ccsnet.arch import WaveNet
 from ccsnet.utils import h5_thang, args_control
-from ccsnet.waveform import CCSNe_Dataset
+from ccsnet.analysis import CCSNe_Dataset
 
 
 def model_loader(
