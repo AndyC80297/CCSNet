@@ -15,7 +15,7 @@ from ml4gw.distributions import PowerLaw, Cosine, Uniform
 
 from orchestrator import forged_dataloader
 from ccsnet.utils import h5_thang
-from ccsnet.waveform import CCSNe_Dataset
+from ccsnet.analysis import CCSNe_Dataset
 from ccsnet.waveform import get_hp_hc_from_q2ij, padding
 
 

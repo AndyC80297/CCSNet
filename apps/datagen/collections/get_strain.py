@@ -12,7 +12,7 @@ from gwpy.timeseries import TimeSeries
 from gwpy.segments import DataQualityDict
 
 from ccsnet.utils import h5_thang, args_control
-from ccsnet.omicron import glitch_merger, psd_estimiater
+from ccsnet.omicron import glitch_merger, psd_estimiater, call_gwf_from_local
 
 from run_omicron import get_conincident_segs
 
@@ -44,20 +44,29 @@ def get_background(
     
     strain = []
     print(f"Collecting strain data from {seg[0]} to {seg[1]} at {channels}")
-    for num in range(num_ifo):
+    # for num in range(num_ifo):
+    for i, ifo in enumerate(ifos):
     
-        files = find_urls(
-            site=f"{ifos[num][0]}",
-            frametype=f"{ifos[num]}_{frame_type[num]}",
-            gpsstart=seg[0],
-            gpsend=seg[1],
-            urltype="file",
-        )
+        # Hard coded for fetching KAGRA data
+        if ifo == "K1":
+            files = call_gwf_from_local(
+                ifo=ifo,
+                start=seg[0],
+                end=seg[1],
+            )
+        else:
+            files = find_urls(
+                site=f"{ifo[0]}",
+                frametype=f"{ifo}_{frame_type[i]}",
+                gpsstart=seg[0],
+                gpsend=seg[1],
+                urltype="file",
+            )
         
         strain.append(
             TimeSeries.read(
                 files,
-                f"{ifos[num]}:{channels[num]}",
+                f"{ifo}:{channels[i]}",
                 start=seg[0],
                 end=seg[1],
                 nproc=8,
@@ -125,12 +134,16 @@ def main(
 
 if __name__ == "__main__":
 
-    segs = get_conincident_segs(
-        ifos=ccsnet_args["ifos"],
-        start=ccsnet_args["train_start"],
-        stop=ccsnet_args["test_end"],
-        state_flag=ccsnet_args["state_flag"]
-    )
+    segs = ccsnet_args.get("ana_segs")
+
+    if segs is None:
+
+        segs = get_conincident_segs(
+            ifos=ccsnet_args["ifos"],
+            start=ccsnet_args["train_start"],
+            stop=ccsnet_args["test_end"],
+            state_flag=ccsnet_args["state_flag"]
+        )
 
     for seg_num, seg in enumerate(segs):
 

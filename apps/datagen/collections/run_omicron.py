@@ -8,7 +8,7 @@ from pathlib import Path
 from gwpy.segments import DataQualityDict
 from concurrent.futures import ThreadPoolExecutor
 
-from ccsnet.omicron import create_lcs
+from ccsnet.omicron import create_lcs, create_lcs_from_local
 
 
 def run_bash(bash_file):
@@ -24,6 +24,7 @@ def omicron_control(
     project_dir: Path,
     # INI
     q_range,
+    highpass,
     frequency_range,
     frame_type,
     channels,
@@ -34,6 +35,7 @@ def omicron_control(
     overlap_duration,
     mismatch_max,
     snr_threshold,
+    trmax=100000,
     # log_file: Path,
     verbose: bool = False,
     state_flag=None,
@@ -55,6 +57,8 @@ def omicron_control(
         config.add_section(section)
 
         config.set(section, "q-range", f"{q_range[0]} {q_range[1]}")
+        
+        config.set(section, "highpass", str(highpass))
         config.set(section, "frequency-range", f"{frequency_range[0]} {frequency_range[1]}")
         config.set(section, "frametype", f"{ifo}_{frame_type[i]}")
         config.set(section, "channels", f"{ifo}:{channels[i]}")
@@ -65,6 +69,7 @@ def omicron_control(
         config.set(section, "overlap-duration", str(overlap_duration))
         config.set(section, "mismatch-max", str(mismatch_max))
         config.set(section, "snr-threshold", str(snr_threshold))
+        config.set(section, "TRIGGERRATEMAX", str(100000))
         # in an online setting, can also pass state-vector,
         # and bits to check for science mode
         if state_flag != None:
@@ -127,7 +132,7 @@ def get_conincident_segs(
 
     return segs
 
-
+ 
 
 if __name__ == "__main__":
 
@@ -143,37 +148,51 @@ if __name__ == "__main__":
         saving=False
     )
     
-    ana_segs = get_conincident_segs(
-        ifos=ccsnet_args["ifos"],
-        start=ccsnet_args["train_start"],
-        stop=ccsnet_args["test_end"],
-        state_flag=ccsnet_args["state_flag"]
-    )
+    ana_segs = ccsnet_args.get("ana_segs")
+
+    if ana_segs is None:
+
+        ana_segs = get_conincident_segs(
+            ifos=ccsnet_args["ifos"],
+            start=ccsnet_args["train_start"],
+            stop=ccsnet_args["test_end"],
+            state_flag=ccsnet_args["state_flag"]
+        )
 
     bash_files = []
     
     for seg_count, (start, end) in enumerate(ana_segs):
 
-        print(start, end)
-
         for ifo, frametype in zip(ccsnet_args["ifos"], ccsnet_args["frame_type"]):
 
-            create_lcs(
-                ifo=ifo,
-                frametype=f"{ifo}_{frametype}",
-                start_time=start,
-                end_time=end,
-                output_dir=ccsnet_args["omicron_dir"] / f"Segs_{seg_count:02d}",
-                urltype="file"
-            )
+            # Currently Hard coded for KAGRA DATA 
+            if ifo == "K1":
+
+                create_lcs_from_local(
+                    ifo=ifo,
+                    frametype=frametype,
+                    start_time=start,
+                    end_time=end,
+                    output_dir=ccsnet_args["omicron_dir"] / f"Segs_{seg_count:02d}",
+                )
+
+            else:
+                create_lcs(
+                    ifo=ifo,
+                    frametype=f"{ifo}_{frametype}",
+                    start_time=start,
+                    end_time=end,
+                    output_dir=ccsnet_args["omicron_dir"] / f"Segs_{seg_count:02d}",
+                    urltype="file"
+                )
 
         bash_scripts = omicron_control(
             ifos=ccsnet_args["ifos"],
             start_time=start,
             end_time=end,
             project_dir=ccsnet_args["omicron_dir"] / f"Segs_{seg_count:02d}",
-            
             q_range=ccsnet_args["q_range"],
+            highpass=ccsnet_args["omi_highpass"],
             frequency_range=ccsnet_args["frequency_range"],
             frame_type=ccsnet_args["frame_type"],
             channels=ccsnet_args["channels"],
@@ -192,7 +211,7 @@ if __name__ == "__main__":
 
     # for bash_file in bash_files:
     #     print(bash_file)
-    with ThreadPoolExecutor(max_workers=2) as e:
+    with ThreadPoolExecutor(max_workers=8) as e:
     
         for bash_file in bash_files:
             e.submit(run_bash, bash_file)
