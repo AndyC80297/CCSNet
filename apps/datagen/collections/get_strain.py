@@ -125,6 +125,13 @@ if __name__ == "__main__":
 
     for seg_num, seg in enumerate(segs):
 
+        seg_duration = seg[1] - seg[0]
+        if seg_duration <= 120:
+            continue
+        
+        if seg_num <= 58:
+            continue
+
         main(
             seg, 
             seg_num,

@@ -192,7 +192,7 @@ if __name__ == "__main__":
 
     # for bash_file in bash_files:
     #     print(bash_file)
-    with ThreadPoolExecutor(max_workers=2) as e:
+    with ThreadPoolExecutor(max_workers=8) as e:
     
         for bash_file in bash_files:
             e.submit(run_bash, bash_file)
