@@ -27,6 +27,7 @@ class Waveform_Projector:
         fftlength,
         overlap,
         sample_duration,
+        device="cpu",
         buffer_duration=3,
         time_shift=0,
         off_set=0,
@@ -50,19 +51,21 @@ class Waveform_Projector:
 
         self.ifos = ifos
         self.sample_rate = sample_rate
-
+        
         bgh5 = h5_thang(background_file)
         psds = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
         
         self.tensors, self.vertices = gw.get_ifo_geometry(*self.ifos)
 
         self.sample_duration = sample_duration
+        self.device = device
+        
         self.rescaler = SnrRescaler(
             num_channels=len(self.ifos), 
             sample_rate = self.sample_rate,
             waveform_duration = self.sample_duration,
             highpass = highpass,
-        )
+        ).to(self.device)
         
         self.rescaler.fit(
             psds[0, :],
@@ -111,8 +114,8 @@ class Waveform_Projector:
             time_shift = self.time_shift, # Core-bounce will be at here
         )
 
-        hp_hc = torch.tensor(hp_hc).float()
-        
+        hp_hc = torch.tensor(hp_hc).float().to(self.device)
+        # breakpoint()
         if self.buffer_duration > self.sample_duration:
         
             hp_hc = sample_kernels(
@@ -122,11 +125,11 @@ class Waveform_Projector:
             )
 
         ht = gw.compute_observed_strain(
-            dec,
-            psi,
-            phi,
-            detector_tensors=self.tensors,
-            detector_vertices=self.vertices,
+            dec.to(self.device),
+            psi.to(self.device),
+            phi.to(self.device),
+            detector_tensors=self.tensors.to(self.device),
+            detector_vertices=self.vertices.to(self.device),
             sample_rate=self.sample_rate,
             plus=hp_hc[:,0,:],
             cross=hp_hc[:,1,:]
@@ -137,8 +140,8 @@ class Waveform_Projector:
             return scaled_ht
         if default_snr is not None:
             scaled_ht, _, inversed_distance = self.rescaler.forward(
-                ht,
-                target_snrs = default_snr * torch.ones(count)
+                ht, 
+                target_snrs = default_snr * torch.ones(count).to(self.device)
             )
             
             return scaled_ht, 1/inversed_distance
@@ -157,16 +160,18 @@ class CCSNe_Dataset(Dataset):
     ):
 
         # Get data type from https://pytorch.org/docs/stable/tensors.html
-        self.signal = torch.FloatTensor(
-            signal.reshape([-1, n_ifos, sample_duration*sample_rate])
-        ).to(device)
+        # self.signal = torch.FloatTensor(
+        #     signal.reshape([-1, n_ifos, sample_duration*sample_rate])
+        # ).to(device)
+        self.signal = signal
         
         self.scaled_distance = scaled_distance
         if self.scaled_distance is not None:
-            self.scaled_distance = torch.FloatTensor(
-                scaled_distance.reshape([-1, 1])
-            ).to(device)
-
+            # self.scaled_distance = torch.FloatTensor(
+            #     scaled_distance.reshape([-1, 1])
+            # ).to(device)
+            self.scaled_distance = scaled_distance.reshape([-1, 1])
+            
     def __len__(self):
         
         return len(self.signal)

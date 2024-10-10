@@ -1,5 +1,6 @@
 import h5py
 import toml
+import time as the_time
 import torch
 import logging
 
@@ -68,6 +69,7 @@ class BackGroundDisplay:
         sample_rate,
         sample_duration,
         outdir,
+        device="cpu",
         training_portion = 0.75
     ):
         
@@ -113,6 +115,7 @@ class BackGroundDisplay:
         self.glitch_label = glitch_label
         self.kernel_length = sample_rate * sample_duration
         self.outdir = outdir / "raw_data"
+        self.device = device
         self.outdir.mkdir(parents=True, exist_ok=True)
         
     def __call__(
@@ -132,7 +135,7 @@ class BackGroundDisplay:
 
         num_sample_data = int(batch_size * steps_per_epoch * sample_factor)
         
-        X = torch.empty((num_sample_data, self.num_ifos, self.kernel_length))
+        X = torch.empty((num_sample_data, self.num_ifos, self.kernel_length)).to(self.device)
 
         if glitch_dist is not None:
 
@@ -160,7 +163,7 @@ class BackGroundDisplay:
                     sample_rate = self.sample_rate,
                     shift_range = glitch_offset,
                     kernel_width = self.sample_duration,
-                )
+                ).to(self.device)
                 
                 reverse_mask = (1 - glitch_tape[i, :]).astype("bool")
                 reverse_count = reverse_mask.sum()
@@ -179,7 +182,7 @@ class BackGroundDisplay:
                     mask_dict,
                     sample_counts=reverse_count,
                     kernel_width=self.sample_duration
-                )
+                ).to(self.device)
 
         else:
 
@@ -200,7 +203,7 @@ class BackGroundDisplay:
                     mask_dict,
                     sample_counts=num_sample_data,
                     kernel_width=self.sample_duration
-                )
+                ).to(self.device)
 
         targets = torch.full((num_sample_data,), target_value)
         
@@ -221,7 +224,7 @@ class BackGroundDisplay:
                 print(f"Eatting popcornes! At {data_name}")
                 g.create_dataset(data_name, data=X.numpy())
         
-        return X, targets
+        return X, targets.to(self.device)
 
 class Injector:
 
@@ -237,6 +240,7 @@ class Injector:
         fftlength,
         overlap, 
         outdir,
+        device="cpu",
         signal_chopping:float=None, # Lable in second
         batch_size = 32,
         steps_per_epoch = 20,
@@ -267,9 +271,11 @@ class Injector:
         self.max_center_offset = int((buffer_duration/2 - sample_duration - off_set) * sample_rate)
         self.outdir = outdir / "raw_data"
         self.outdir.mkdir(parents=True, exist_ok=True)
+        self.device = device
         self.batch_size = batch_size
         self.steps_per_epoch = steps_per_epoch
 
+        self.tensors, self.vertices = self.tensors.to(device), self.vertices.to(device)
         self.snr_distro = PowerLaw(12, 100, 3)
         
         self.rescaler = SnrRescaler(
@@ -277,7 +283,7 @@ class Injector:
             sample_rate = sample_rate,
             waveform_duration = sample_duration,
             highpass = 32,
-        )
+        ).to(self.device)
 
         self.rescaler.fit(
             psds[0, :],
@@ -304,7 +310,7 @@ class Injector:
         ccsn_sample = np.random.choice(ccsn_num, total_counts)
         ccsn_counts = np.eye(ccsn_num)[ccsn_sample].sum(0).astype("int")
         
-        X = torch.empty((total_counts, 2, self.kernel_length))
+        X = torch.empty((total_counts, 2, self.kernel_length)).to(self.device)
         agg_count = 0
 
         for name, count in zip(self.ccsn_list, ccsn_counts):    
@@ -321,7 +327,7 @@ class Injector:
                 theta=theta,
                 phi=phi
             )
-            
+
             hp_hc = padding(
                 time,
                 hp,
@@ -331,9 +337,9 @@ class Injector:
                 sample_rate = self.sample_rate,
                 time_shift = self.time_shift, # Core-bounce will be at here
             )
-            
+
             shifted_waveforms = sample_kernels(
-                X = torch.Tensor(hp_hc),
+                X = torch.Tensor(hp_hc).to(self.device),
                 kernel_size = self.sample_rate * self.sample_duration,
                 max_center_offset = self.max_center_offset,
             )
@@ -358,42 +364,32 @@ class Injector:
         phi = phi_distro(total_counts)
         
         ht = gw.compute_observed_strain(
-            dec,
-            psi,
-            phi,
-            detector_tensors=self.tensors,
-            detector_vertices=self.vertices,
-            sample_rate=self.sample_rate,
-            plus=X[:,0,:],
-            cross=X[:,1,:]
+            dec.to(self.device), 
+            psi.to(self.device), 
+            phi.to(self.device), 
+            detector_tensors=self.tensors, 
+            detector_vertices=self.vertices, 
+            sample_rate=self.sample_rate, 
+            plus=X[:,0,:], 
+            cross=X[:,1,:] 
         )
 
-        ht, target_snrs, rescale_factor = self.rescaler.forward(
-            ht,
-            target_snrs = self.snr_distro(total_counts)
-        )
+        ht, target_snrs, rescale_factor = self.rescaler.forward(ht, target_snrs = self.snr_distro(total_counts).to(self.device))
 
         if iteration is not None:
             with h5py.File(self.outdir / "signal.h5", "a") as g:
                 
                 g.create_dataset(f"{iteration:03d}_ht", data=ht.numpy())
         
-        background += ht
-
-        return  background
+        return  background.to(self.device) + ht
     
     
 def forged_dataloader(
     inputs: list,
     targets: list,
     batch_size,
-    # whiten_model,
-    # psd,
-    pin_memory=True,
-    # n_workers
 ):
 
-    #### Apply whiten
     dataset = torch.utils.data.TensorDataset(
         torch.cat(inputs).to("cuda"), 
         torch.cat(targets).view(-1, 1).to(torch.float).to("cuda")

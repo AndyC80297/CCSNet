@@ -65,6 +65,7 @@ inited_injector = Waveform_Projector(
     fftlength=ccsnet_args["fftlength"],
     overlap=ccsnet_args["overlap"],
     sample_duration=ccsnet_args["sample_duration"],
+    device=device,
     buffer_duration=4,
     time_shift=0,
     off_set=ccsnet_args["off_set"]
@@ -129,12 +130,12 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
             phi=torch.tensor(siganl_parameter["phi"][:count]),
         )
 
-        g1.create_dataset(name="SNR_4_Distance", data=distance.numpy())
+        g1.create_dataset(name="SNR_4_Distance", data=distance.cpu().detach().numpy())
         test_loop_start = time.time()
         with torch.no_grad():
             
             ccsn_loader = test_data_loader(
-                signal=scaled_ht,
+                signal=scaled_ht.to(device),
                 scaled_distance=distance,
                 batch_size=ccsnet_args["test_batch_size"],
                 device=device
@@ -144,7 +145,7 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
                 g2 = g1.create_group(mode)
 
                 noise_loader = test_data_loader(
-                    torch.Tensor(raw_bg[:count, :,:]),
+                    torch.Tensor(raw_bg[:count, :,:]).to(device),
                     batch_size=ccsnet_args["test_batch_size"],
                     device=device
                 )
@@ -155,7 +156,8 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
                     for background, siganl in zip(noise_loader, ccsn_loader):
                         
                         factor = (snr/4)
-                        X = background[0] + siganl[0] * factor
+                        # breakpoint()
+                        X = background[0].to(device) + torch.multiply(siganl[0], factor)
         
                         pred = ccsnet_streamer.stream(
                             X, 
@@ -170,15 +172,16 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
 
                 
                 max_dis = distance.mean()
+                max_dis = max_dis.cpu()
                 prob_dis = np.geomspace(max_dis/50, max_dis*2, 20)
                 for dis_i, dis in enumerate(prob_dis):
                     
                     preds = []
                     count_down = 0
                     for background, siganl in zip(noise_loader, ccsn_loader):
-
+                        
                         scale_back_ht = torch.einsum('li, lik->lik', siganl[1], siganl[0]) / dis
-                        X = background[0] + scale_back_ht
+                        X = background[0].to(device) + scale_back_ht
 
                         pred = ccsnet_streamer.stream(
                             X, 

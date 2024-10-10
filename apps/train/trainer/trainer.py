@@ -59,7 +59,8 @@ def main(
     weight_decay=ccsnet_arguments["weight_decay"], 
     learning_rate=ccsnet_arguments["learning_rate"], 
     outdir: Path=ccsnet_arguments["result_dir"], 
-    signal_chopping=ccsnet_arguments["signal_chopping"],
+    signal_chopping=None,
+    # signal_chopping=ccsnet_arguments["signal_chopping"],
     val_count=ccsnet_arguments["val_count"],
     val_batch=ccsnet_arguments["val_batch"],
     device: str="cuda", 
@@ -70,7 +71,7 @@ def main(
     different functions for calling, iterate, or excution. 
     """
 
-    training_segment = "segments00"
+    training_segment = "segments062"
     psd = h5_thang(background_file).h5_data([f"{training_segment}/psd"])[f"{training_segment}/psd"]
     psds = torch.cuda.DoubleTensor(psd)
 
@@ -85,7 +86,8 @@ def main(
         segment=training_segment,
         sample_rate = sample_rate,
         sample_duration = sample_duration,
-        outdir=outdir
+        outdir=outdir,
+        device=device
     )
     
     signal_sampler = Injector(
@@ -97,6 +99,7 @@ def main(
         fftlength=fftlength,
         overlap=overlap,
         outdir=outdir,
+        device=device,
         signal_chopping=signal_chopping,
         batch_size = batch_size,
         steps_per_epoch = steps_per_epoch,
