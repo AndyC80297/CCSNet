@@ -27,7 +27,7 @@ args = parser.parse_args()
 
 ccsnet_args = args_control(
     envs_file=args.env,
-    test_segment=f"Seg{args.seg:02d}",
+    test_segment=f"Seg{args.seg:03d}",
     saving=False
 )
 
@@ -63,6 +63,15 @@ if not ccsnet_args["sampled_background"].is_file():
             )
 
             g.create_dataset(name=bg_key, data=bg_data)
+            
+    with h5py.File(ccsnet_args["psds"], "a") as g:
+        
+        psds = background_display.get_psds(
+            fftlength=ccsnet_args["fftlength"],
+            overlap=ccsnet_args["overlap"]
+        )
+        g.create_dataset(name="psds", data=bg_data)
+    
 
 else:
 

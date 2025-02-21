@@ -1,3 +1,4 @@
+import h5py
 import torch
 
 import numpy as np
@@ -27,6 +28,7 @@ class Waveform_Projector:
         fftlength,
         overlap,
         sample_duration,
+        test_psd_seg=None,
         buffer_duration=3,
         time_shift=0,
         off_set=0,
@@ -50,10 +52,17 @@ class Waveform_Projector:
 
         self.ifos = ifos
         self.sample_rate = sample_rate
-
-        bgh5 = h5_thang(background_file)
-        psds = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
         
+        if test_psd_seg is not None:
+
+            with h5py.File(test_psd_seg, "r") as h1:
+                psds = torch.tensor(h1["psd"][:]).double()
+                
+        else:
+            
+            bgh5 = h5_thang(background_file)
+            psds = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
+            
         self.tensors, self.vertices = gw.get_ifo_geometry(*self.ifos)
 
         self.sample_duration = sample_duration

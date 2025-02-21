@@ -2,6 +2,7 @@ import h5py
 import time
 import toml
 import torch
+import logging
 
 import numpy as np
 
@@ -17,6 +18,40 @@ from ccsnet.arch import WaveNet
 from ccsnet.utils import h5_thang, args_control
 from ccsnet.waveform import CCSNe_Dataset
 
+def replacement(
+    data,
+    coh_det,
+    roll:int=0,
+):
+
+    ndim = len(data.shape)
+
+    if ndim == 2:
+        
+        if coh_det == "H1":
+            data[1,:] = torch.roll(data[0,:], roll, dims=-1)
+        
+        elif coh_det == "L1":
+            data[0,:] = torch.roll(data[1,:], roll, dims=-1)
+            
+        else:
+            logging.info("Unknow ifo specifed!")
+            
+    elif ndim == 3:
+
+        if coh_det == "H1":
+            data[:,1,:] = torch.roll(data[:,0,:], roll, dims=-1)
+        
+        elif coh_det == "L1":
+            data[:,0,:] = torch.roll(data[:,1,:], roll, dims=-1)
+            
+        else:
+            logging.info("Unknow ifo specifed!")
+
+    else:
+        logging.info("Dimension of input unclear.")
+        
+    return data
 
 def model_loader(
     num_ifos: int,
@@ -74,32 +109,12 @@ class Streamer:
         model_weights,
         fftlength,
         highpass,
-        test_seg,
-        background_file,
+        test_psd_seg,
+        coh_det=None,
         map_device="cpu",
         device ="cpu"
     ):
         
-        bgh5 = h5_thang(background_file)
-
-        attrs = bgh5.h5_attrs()
-
-        seg_counts = int(len(bgh5.h5_keys()) / 22)
-        
-        if seg_counts < test_seg:
-            import sys
-            sys.exit(f"Assinged segmnet segment{test_seg:02d} is too large.")
-
-        # segs_dur = np.zeros(seg_counts)
-        
-        # for i in range(seg_counts):
-
-        #     segs_dur[i] = attrs[f"segments{i:02d}/start"] - attrs[f"segments{i:02d}/end"]
-
-        # seg = f"segments{np.argsort(segs_dur)[test_seg - 1]:02}"
-        
-        seg = f"segments{test_seg:02}"
-
         self.nn_model = model_loader(
             num_ifos=num_ifos,
             architecture = architecture,
@@ -114,7 +129,17 @@ class Streamer:
             highpass,
         ).to(device)
 
-        psds = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
+        if test_psd_seg is not None:
+
+            with h5py.File(test_psd_seg, "r") as h1:
+                psds = torch.tensor(h1["psd"][:]).double()
+                
+        if coh_det is not None:
+            psds = replacement(
+                data=psds,
+                coh_det=coh_det,
+            )
+
         self.psds = psds.to(device)
         self.device = device
         

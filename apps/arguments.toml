@@ -31,6 +31,7 @@ omicron_dir = "Omicron"
 test_backgrounds = "test_background.h5"
 test_siganl_parameter = "signal_parameter.h5"
 sampled_background = "sampled_background.h5"
+psds = "psds.h5"
 
 # Training phase
 sample_duration = 3
