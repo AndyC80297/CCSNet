@@ -2,6 +2,7 @@ import h5py
 import time
 import toml
 import torch
+import logging
 
 import numpy as np
 
@@ -15,7 +16,42 @@ from ml4gw.transforms import Whiten
 
 from ccsnet.arch import WaveNet
 from ccsnet.utils import h5_thang, args_control
+from ccsnet.waveform import CCSNe_Dataset
 
+def replacement(
+    data,
+    coh_det,
+    roll:int=0,
+):
+
+    ndim = len(data.shape)
+
+    if ndim == 2:
+        
+        if coh_det == "H1":
+            data[1,:] = torch.roll(data[0,:], roll, dims=-1)
+        
+        elif coh_det == "L1":
+            data[0,:] = torch.roll(data[1,:], roll, dims=-1)
+            
+        else:
+            logging.info("Unknow ifo specifed!")
+            
+    elif ndim == 3:
+
+        if coh_det == "H1":
+            data[:,1,:] = torch.roll(data[:,0,:], roll, dims=-1)
+        
+        elif coh_det == "L1":
+            data[:,0,:] = torch.roll(data[:,1,:], roll, dims=-1)
+            
+        else:
+            logging.info("Unknow ifo specifed!")
+
+    else:
+        logging.info("Dimension of input unclear.")
+        
+    return data
 
 def model_loader(
     num_ifos: int,
@@ -40,42 +76,6 @@ def model_loader(
     
     return nn_model
 
-class CCSNet_Dataset(Dataset):
-
-    def __init__(
-        self, 
-        signal, 
-        scaled_distance=None,
-        n_ifos=2, 
-        sample_rate=4096,
-        sample_duration=3,
-        device="cpu"
-    ):
-
-        # Get data type from https://pytorch.org/docs/stable/tensors.html
-        self.signal = torch.FloatTensor(
-            signal.reshape([-1, n_ifos, sample_duration*sample_rate])
-        ).to(device)
-        
-        self.scaled_distance = scaled_distance
-        if self.scaled_distance is not None:
-            self.scaled_distance = torch.FloatTensor(
-                scaled_distance.reshape([-1, 1])
-            ).to(device)
-
-    def __len__(self):
-        
-        return len(self.signal)
-        
-    def __getitem__(self, index):
-        x = self.signal[index]
-
-        if self.scaled_distance is not None:
-            dis = self.scaled_distance[index]
-
-            return x, dis, index
-
-        return x, index
 
 def test_data_loader(
     signal,
@@ -88,7 +88,7 @@ def test_data_loader(
     scaled_distance=None,
 ):
 
-    dataset = CCSNet_Dataset(
+    dataset = CCSNe_Dataset(
         signal,
         scaled_distance,
         n_ifos=n_ifos, 
@@ -109,29 +109,12 @@ class Streamer:
         model_weights,
         fftlength,
         highpass,
-        test_seg,
-        background_file,
+        test_psd_seg,
+        coh_det=None,
         map_device="cpu",
         device ="cpu"
     ):
         
-        bgh5 = h5_thang(background_file)
-
-        attrs = bgh5.h5_attrs()
-
-        seg_counts = int(len(bgh5.h5_keys()) / 22)
-        
-        if seg_counts < test_seg:
-            import sys
-            sys.exit(f"Assinged segmnet segment{test_seg:02d} is too large.")
-        segs_dur = np.zeros(seg_counts)
-        
-        for i in range(seg_counts):
-
-            segs_dur[i] = attrs[f"segments{i:02d}/start"] - attrs[f"segments{i:02d}/end"]
-
-        seg = f"segments{np.argsort(segs_dur)[test_seg - 1]:02}"
-
         self.nn_model = model_loader(
             num_ifos=num_ifos,
             architecture = architecture,
@@ -146,7 +129,17 @@ class Streamer:
             highpass,
         ).to(device)
 
-        psds = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
+        if test_psd_seg is not None:
+
+            with h5py.File(test_psd_seg, "r") as h1:
+                psds = torch.tensor(h1["psd"][:]).double()
+                
+        if coh_det is not None:
+            psds = replacement(
+                data=psds,
+                coh_det=coh_det,
+            )
+
         self.psds = psds.to(device)
         self.device = device
         

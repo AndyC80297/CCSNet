@@ -1,9 +1,11 @@
-import time as ti
+import h5py
 import torch
 
 import numpy as np
 
+import time as ti
 from pathlib import Path
+from torch.utils.data import Dataset
 
 from ml4gw import gw
 from ml4gw.transforms import SnrRescaler
@@ -26,6 +28,7 @@ class Waveform_Projector:
         fftlength,
         overlap,
         sample_duration,
+        test_psd_seg=None,
         buffer_duration=3,
         time_shift=0,
         off_set=0,
@@ -49,10 +52,17 @@ class Waveform_Projector:
 
         self.ifos = ifos
         self.sample_rate = sample_rate
-
-        bgh5 = h5_thang(background_file)
-        psds = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
         
+        if test_psd_seg is not None:
+
+            with h5py.File(test_psd_seg, "r") as h1:
+                psds = torch.tensor(h1["psd"][:]).double()
+                
+        else:
+            
+            bgh5 = h5_thang(background_file)
+            psds = torch.tensor(bgh5.h5_data([f"{seg}/psd"])[f"{seg}/psd"]).double()
+            
         self.tensors, self.vertices = gw.get_ifo_geometry(*self.ifos)
 
         self.sample_duration = sample_duration
@@ -141,3 +151,41 @@ class Waveform_Projector:
             )
             
             return scaled_ht, 1/inversed_distance
+
+
+class CCSNe_Dataset(Dataset):
+
+    def __init__(
+        self, 
+        signal, 
+        scaled_distance=None,
+        n_ifos=2, 
+        sample_rate=4096,
+        sample_duration=3,
+        device="cpu"
+    ):
+
+        # Get data type from https://pytorch.org/docs/stable/tensors.html
+        self.signal = torch.FloatTensor(
+            signal.reshape([-1, n_ifos, sample_duration*sample_rate])
+        ).to(device)
+        
+        self.scaled_distance = scaled_distance
+        if self.scaled_distance is not None:
+            self.scaled_distance = torch.FloatTensor(
+                scaled_distance.reshape([-1, 1])
+            ).to(device)
+
+    def __len__(self):
+        
+        return len(self.signal)
+        
+    def __getitem__(self, index):
+        x = self.signal[index]
+
+        if self.scaled_distance is not None:
+            dis = self.scaled_distance[index]
+
+            return x, dis, index
+
+        return x, index

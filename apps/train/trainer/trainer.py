@@ -1,4 +1,5 @@
 # import h5py
+import sys
 import toml
 import torch
 import ml4gw
@@ -20,8 +21,6 @@ from ccsnet.train.train import Tachyon
 from ml4gw.transforms import Whiten
 from ml4gw.transforms.transform import FittableSpectralTransform
 
-logging.basicConfig(level=logging.NOTSET)
-logging.info("Booting CCSNet...")
 parser = ArgumentParser()
 parser.add_argument("-e", "--env", help="The env setting")
 args = parser.parse_args()
@@ -30,6 +29,16 @@ ccsnet_arguments = args_control(
     args.env,
     saving=True
 )
+
+logging.basicConfig(
+    filename= ccsnet_arguments["result_dir"] / "train.log",
+    filemode='a',
+    format="%(asctime)s %(name)s %(levelname)s:\t%(message)s",
+    datefmt='%H:%M:%S',
+    level=logging.NOTSET
+)
+logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+logging.info("Booting CCSNet...")
 
 def main(
     background_file = ccsnet_arguments["backgrounds"], 
@@ -40,6 +49,7 @@ def main(
     steps_per_epoch = ccsnet_arguments["steps_per_epoch"], 
     sample_rate = ccsnet_arguments["sample_rate"], 
     sample_duration = ccsnet_arguments["sample_duration"], 
+    off_set = ccsnet_arguments["off_set"],
     ifos = ccsnet_arguments["ifos"], 
     fftlength = ccsnet_arguments["fftlength"], 
     overlap = ccsnet_arguments["overlap"],
@@ -49,7 +59,9 @@ def main(
     weight_decay=ccsnet_arguments["weight_decay"], 
     learning_rate=ccsnet_arguments["learning_rate"], 
     outdir: Path=ccsnet_arguments["result_dir"], 
-    val_sqrtnum=ccsnet_arguments["val_sqrtnum"],
+    signal_chopping=ccsnet_arguments["signal_chopping"],
+    val_count=ccsnet_arguments["val_count"],
+    val_batch=ccsnet_arguments["val_batch"],
     device: str="cuda", 
 ):
     """
@@ -59,7 +71,7 @@ def main(
     """
 
     training_segment = "segments00"
-    psd = h5_thang(background_file).h5_data()[f"{training_segment}/psd"]
+    psd = h5_thang(background_file).h5_data([f"{training_segment}/psd"])[f"{training_segment}/psd"]
     psds = torch.cuda.DoubleTensor(psd)
 
     signals_dict = load_h5_as_dict(
@@ -84,9 +96,11 @@ def main(
         psds=psds,
         fftlength=fftlength,
         overlap=overlap,
-        outdir = outdir,
+        outdir=outdir,
+        signal_chopping=signal_chopping,
         batch_size = batch_size,
         steps_per_epoch = steps_per_epoch,
+        off_set=off_set,
     )
 
 
@@ -101,11 +115,13 @@ def main(
         ifos=ifos,
         signals_dict=signals_dict,
         chosen_signals=chosen_signals,
+        signal_chopping=signal_chopping,
         psds=psds,
         fftlength=fftlength,
         overlap=overlap,
         sample_rate=sample_rate, 
-        sqrtnum=val_sqrtnum,
+        count=val_count,
+        batch_size=val_batch,
         sample_duration=sample_duration, 
         max_iteration=max_iteration,
         output_dir=outdir

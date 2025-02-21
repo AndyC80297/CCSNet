@@ -27,7 +27,7 @@ args = parser.parse_args()
 
 ccsnet_args = args_control(
     envs_file=args.env,
-    test_segment=f"Seg{args.seg:02d}",
+    test_segment=f"Seg{args.seg:03d}",
     saving=False
 )
 
@@ -38,7 +38,7 @@ random_ccsn_parameter(
 
 background_display = Test_BackGroundDisplay(
     ifos=ccsnet_args["ifos"],
-    background_file=ccsnet_args["test_backgrounds"],
+    background_file=ccsnet_args["backgrounds"],
     sample_rate=ccsnet_args["sample_rate"],
     sample_duration=ccsnet_args["sample_duration"],
     test_seg=args.seg
@@ -63,3 +63,16 @@ if not ccsnet_args["sampled_background"].is_file():
             )
 
             g.create_dataset(name=bg_key, data=bg_data)
+            
+    with h5py.File(ccsnet_args["psds"], "a") as g:
+        
+        psds = background_display.get_psds(
+            fftlength=ccsnet_args["fftlength"],
+            overlap=ccsnet_args["overlap"]
+        )
+        g.create_dataset(name="psds", data=bg_data)
+    
+
+else:
+
+    print("Background already sampled, skip sampling")

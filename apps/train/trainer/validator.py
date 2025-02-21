@@ -1,12 +1,13 @@
 import h5py
 import torch
 import toml
+import time
 import logging
-import pickle 
 
 import numpy as np
 
 from pathlib import Path
+from torch.utils.data import TensorDataset, DataLoader
 
 from ml4gw import gw
 from ml4gw.transforms import SnrRescaler
@@ -14,7 +15,31 @@ from ml4gw.distributions import PowerLaw, Cosine, Uniform
 
 from orchestrator import forged_dataloader
 from ccsnet.utils import h5_thang
-from ccsnet.waveform import on_grid_pol_to_sim, padding
+from ccsnet.waveform import CCSNe_Dataset
+from ccsnet.waveform import get_hp_hc_from_q2ij, padding
+
+
+def data_loader(
+    signal,
+    n_ifos=2, 
+    sample_rate=4096,
+    sample_duration=3,
+    batch_size: int = 1024,
+    shuffle=False,
+    device="cpu",
+    scaled_distance=None,
+):
+
+    dataset = CCSNe_Dataset(
+        signal,
+        scaled_distance,
+        n_ifos=n_ifos, 
+        sample_rate=sample_rate,
+        sample_duration=sample_duration,
+        device=device
+    )
+    
+    return DataLoader(dataset, batch_size=batch_size, shuffle=shuffle)
 
 
 class Validator:
@@ -28,11 +53,13 @@ class Validator:
         fftlength,
         overlap,
         sample_rate: int, 
-        sqrtnum: int,
+        count: int,
+        batch_size: int,
         sample_duration, 
         max_iteration: int, 
         output_dir: Path,
-        device: str ="cuda"
+        signal_chopping:float=None, # Lable in second
+        device: str ="cpu"
     ):
         
         self.ifos = ifos
@@ -44,7 +71,8 @@ class Validator:
         self.ccsn_list = list(signals_dict.keys())
         self.num_ccsn_type = len(self.ccsn_list)
         
-        self.sqrtnum = sqrtnum
+        self.count = count #sqrtnum
+        self.batch_size = batch_size
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration
         self.max_iteration = max_iteration
@@ -56,24 +84,35 @@ class Validator:
         psi_distro = Uniform(0, np.pi)
         phi_distro = Uniform(0, 2 * np.pi)
 
-        dec = dec_distro(sqrtnum ** 4)
-        psi = psi_distro(sqrtnum ** 4)
-        phi = phi_distro(sqrtnum ** 4)
+        ori_theta = np.random.uniform(0, np.pi, self.count)
+        ori_phi = np.random.uniform(0, 2*np.pi, self.count)
+        dec = dec_distro(self.count)
+        psi = psi_distro(self.count)
+        phi = phi_distro(self.count)
 
         self.snr_distro = Uniform(8, 12)
-        distance = np.ones(self.sqrtnum ** 4)
+        distance = np.ones(self.count)
 
         self.val_signal = {}
         for name in self.ccsn_list:
             
-            time = self.signals_dict[name][0]
-            quad_moment = self.signals_dict[name][1]            
+            if signal_chopping is None:
 
-            hp, hc, ori_theta, ori_phi = on_grid_pol_to_sim(
-                quad_moment * 0.1,
-                sqrtnum ** 2
-            )
+                time = self.signals_dict[name][0]
+                quad_moment = self.signals_dict[name][1] * 10 
+                
+            else:
+
+                end = int((signal_chopping - self.signals_dict[name][0][0]) * sample_rate)
+                time = self.signals_dict[name][0][:end]
+                quad_moment = self.signals_dict[name][1][:end] * 10
             
+            hp, hc = get_hp_hc_from_q2ij(
+                quad_moment,
+                theta=ori_theta,
+                phi=ori_phi
+            )
+
             hp_hc = padding(
                 time,
                 hp,
@@ -93,14 +132,14 @@ class Validator:
                 cross=torch.Tensor(hp_hc[:,1,:])
             )
 
-            rescaler = SnrRescaler(
+            self.rescaler = SnrRescaler(
                 num_channels=len(ifos), 
                 sample_rate = sample_rate,
                 waveform_duration = self.sample_duration,
                 highpass = 32,
             )
             
-            rescaler.fit(
+            self.rescaler.fit(
                 psds[0, :],
                 psds[1, :],
                 fftlength=fftlength,
@@ -109,18 +148,16 @@ class Validator:
             )
             
             # target_snrs, rescale_factor
-            ht, _, _ = rescaler.forward( 
+            ht, _, _ = self.rescaler.forward( 
                 ht,
-                target_snrs = self.snr_distro(sqrtnum ** 4)
+                target_snrs = self.snr_distro(self.count)
             )
             
             self.val_signal[name] = ht
-
     
     def summarizer(
         self,
         iteration,
-        max_distance = None,
         factor = [0.50, 0.95, 0.99],
         noise_mode = "noise"
     ):
@@ -182,147 +219,117 @@ class Validator:
                 logging.info(f"    {name:20s} SNR:8-12   TPR:{wave_score[wave_count]:.04f}")
 
                 wave_count += 1
-        
-        if max_distance is not None:
-            return max_distance
-        
 
     
+    def ccsne_loader(
+            self,
+            shuffle=False,
+            device="cpu"
+    ):
 
-    def prediction(
+        num_family = len(self.ccsn_list)
+
+        ccsne = torch.empty((self.count * num_family, self.num_ifos, self.kernel_length))
+
+        for i, name in enumerate(self.ccsn_list):
+            
+            # This part can be modify to iteration dependent
+            ccsne[i*self.count:(i+1)*self.count] = self.val_signal[name]
+
+
+        signal_dataset = CCSNe_Dataset(
+            signal=ccsne, 
+            n_ifos=self.num_ifos, 
+            sample_rate=self.sample_rate,
+            sample_duration=self.sample_duration,
+            device=device
+        )
+        
+        return DataLoader(signal_dataset, batch_size=self.batch_size, shuffle=shuffle)
+
+        
+
+    def background_loader(
         self,
         inputs,
-        targets,
-        model,
-        whiten_model,
-        psds
-    ):  
+        shuffle=False,
+        device="cpu"
+    ):
+
+        dataset = TensorDataset(
+            inputs.to(device),
+            # targets.view(-1, 1).to(torch.float).to(device)
+        )
         
-        with torch.no_grad():
-            
-            preds = []
-            
-            dataset = torch.utils.data.TensorDataset(
-                inputs.to("cuda"),
-                targets.view(-1, 1).to(torch.float).to("cuda")
-            )
-            
-            data_loader = torch.utils.data.DataLoader(
-                dataset, 
-                batch_size=self.sqrtnum**4, 
-                shuffle=False
-            )
+        return DataLoader(dataset, batch_size=self.batch_size, shuffle=shuffle)
 
-            for x, y in data_loader:
-                
-                x = whiten_model(
-                    x, 
-                    psds
-                )
-                
-                output = model(x)
-                preds.append(output)
-            
-            return x, torch.cat(preds)
-            
-
-
+    
     def __call__(
         self, 
         back_ground_display, 
         model, 
-        criterion,
         whiten_model, 
         psds, 
-        iteration, 
-        max_distance=None,
+        iteration=None, 
         signal_saving=None,
         device="cpu"
     ):
 
-
-        if max_distance is not None:
-
-            with h5py.File(self.output_dir/ "raw_data" /"max_distance.h5", "a") as g:
-                
-                h = g.create_group(f"Itera{iteration:03d}")
-                for name in self.ccsn_list:
-
-                    h.create_dataset(f"{name}", data=np.array([max_distance[name]]))
-
         noise_setting = {
-            "noise": [1, 0, 0, 0],
-            "l1_glitch": [0, 1, 0, 0],
-            "h1_glitch": [0, 0, 1, 0],
-            "simultaneous_glitch": [0, 0, 0, 1]
+            "No_Glitch": [1, 0, 0, 0],
+            "L1_Glitch": [0, 1, 0, 0],
+            "H1_Glitch": [0, 0, 1, 0],
+            "Combined": [0, 0, 0, 1]
         }
 
+        siganl_loader = self.ccsne_loader(device=device)
+
         for mode, noise_protion in noise_setting.items():
-            
-            noise, targets = back_ground_display(
-                batch_size = self.sqrtnum ** 4,
-                steps_per_epoch = 1,
+        
+            steps_per_epoch = int(self.count / self.batch_size)
+
+            if steps_per_epoch < 1:
+                steps_per_epoch = 1
+
+            noise, _ = back_ground_display(
+                batch_size = self.batch_size,
+                steps_per_epoch = steps_per_epoch,
                 glitch_dist = noise_protion,
                 choice_mask = [0, 1, 2, 3],
                 glitch_offset = 0.9,
                 sample_factor = 1,
-                iteration=iteration,
+                iteration=None,
                 mode="Validate",
                 target_value = 0,
-                noise_mode=mode
-
             )
             
-            val_data, noise_prediction = self.prediction(
-                noise, 
-                targets,
-                model,
-                whiten_model,
-                psds,
-            )
+            noise_loader = self.background_loader(noise, device=device)
 
-            with h5py.File(self.output_dir/ "raw_data" / "history.h5", "a") as g:
-                
-                h = g.create_group(f"Itera{iteration:03d}/{mode}")
-                
-                h.create_dataset(f"{mode}", data=noise_prediction.detach().cpu().numpy().reshape(-1))
-                # h.create_dataset(f"{mode}_siganl", data=val_data.detach().cpu().numpy())
-                
-
-            for name in self.ccsn_list:
-                
-                if max_distance is not None:
-                    
-                    signal = noise + self.val_signal[name] / max_distance[name]
-                else:
-                    
-                    signal = noise + self.val_signal[name]
-
-                val_data, injection_prediction = self.prediction(
-                    signal, 
-                    torch.ones_like(targets),
-                    model,
-                    whiten_model,
-                    psds,
-                )
-
+            with torch.no_grad():
 
                 with h5py.File(self.output_dir/ "raw_data" / "history.h5", "a") as g:
-                    
-                    h = g[f"Itera{iteration:03d}/{mode}"]
-                    
-                    h.create_dataset(f"{name}", data=injection_prediction.detach().cpu().numpy().reshape(-1))
+                    h = g.create_group(f"Validation_itera{iteration:03d}_{mode}")
 
-                if signal_saving is not None:
+                    preds = []
+                    inject_preds = []
+                    for noise_data in noise_loader:
 
-                    if mode == "noise":
-                        with h5py.File(self.output_dir / "raw_data/val_signal.h5", "a") as g:
-                    
-                            h = g.create_group(f"Itera{iteration:03d}/{name}")
-                             
+                        X = whiten_model(noise_data[0], psds)
+                        noise_output = model(X)
+                        
+                        for siganl, _ in siganl_loader:
 
-        if  max_distance is not None:
-            return self.summarizer(iteration)
-        self.summarizer(iteration)
+                            X = whiten_model(torch.add(noise_data[0], siganl[0]), psds)
+                            signal_output = model(X)
+                            
+                            inject_preds.append(signal_output)
+                        preds.append(noise_output)
+                
+                    h.create_dataset(f"noise", data=torch.cat(preds).detach().cpu().numpy().reshape(-1))
+                    h.create_dataset(f"signal", data=torch.cat(inject_preds).detach().cpu().numpy().reshape(-1))
+                
 
-        
+                logging.info(f"  {mode}:")
+                logging.info(f"    Noise Average : {torch.cat(preds).mean():.02f}")
+                logging.info(f"    Signal Average: {torch.cat(inject_preds).mean():.02f}")
+                logging.info("")

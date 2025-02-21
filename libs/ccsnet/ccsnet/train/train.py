@@ -72,9 +72,9 @@ def one_loop_training(
     average_cost = t_cost/(steps_per_epoch)
 
     logging.info("")
-    logging.info(f"    ============================")
-    logging.info(f"    === Training cost {average_cost:.4f} ===")
-    logging.info(f"    ============================")
+    logging.info(f"============================")
+    logging.info(f"=== Training cost {average_cost:.4f} ===")
+    logging.info(f"============================")
     logging.info("")
 
     with h5py.File(outdir/ "loss.h5", "a") as g:
@@ -83,18 +83,20 @@ def one_loop_training(
         
         h.create_dataset(f"loss", data=np.array([average_cost]))
 
-    ###### Need to update distance
+    logging.info(f"  =========================")
+    logging.info(f"  === Validation Scheme ===")
+    logging.info(f"  =========================")
+    logging.info("")
     model.eval()
     validation_scheme(
         back_ground_display=background_sampler,
         model=model,
-        criterion=criterion,
         whiten_model=whiten_model,
         psds=psds,
         iteration=iteration,
         device=device
     )
-
+    logging.info("")
 
     if iteration % 5 ==0:
 
@@ -180,7 +182,7 @@ def Tachyon(
             signal_sampler=signal_sampler,
             batch_size=batch_size,
             steps_per_epoch=steps_per_epoch,
-            iteration = iteration, 
+            iteration = None, 
             sample_factor=1/2,
             noise_glitch_dist = noise_glitch_dist,
             signal_glitch_dist = signal_glitch_dist,

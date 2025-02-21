@@ -1,5 +1,21 @@
 import h5py
 
+
+def slice_generator(method):
+
+    if isinstance(method, int):
+
+        return slice(method)
+
+    if isinstance(method, (tuple, list)):
+    
+        if len(method) != 3:
+
+            print("Warning: Slice argument len may be wrong!")
+
+        return slice(method[0], method[1], method[2])
+
+
 class h5_thang():
     
     """
@@ -64,8 +80,8 @@ class h5_thang():
     def h5_data(
         self,
         items: list=None, 
-        verbose: bool=False, 
-        n_data=None
+        data_slice: list=None,
+        verbose: bool=False,
     )->dict:
 
         """
@@ -82,11 +98,19 @@ class h5_thang():
                 print(item)
                 
         data_dict = {}
+
         with h5py.File(self.file , 'r', locking=False) as h1:
+            
             for item in items:
-                if n_data is not None:
-                    data_dict[item] = h1[item][:n_data, ...]
+
+                if data_slice is not None:
+
+                    slice = slice_generator(data_slice)
+
+                    data_dict[item] = h1[item][slice]
+
+                else:    
                     
-                data_dict[item] = h1[item][:]
+                    data_dict[item] = h1[item][:]
                     
         return data_dict

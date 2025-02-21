@@ -146,13 +146,13 @@ if __name__ == "__main__":
     ana_segs = get_conincident_segs(
         ifos=ccsnet_args["ifos"],
         start=ccsnet_args["train_start"],
-        stop=ccsnet_args["train_end"],
+        stop=ccsnet_args["test_end"],
         state_flag=ccsnet_args["state_flag"]
     )
 
     bash_files = []
     
-    for start, end in ana_segs:
+    for seg_count, (start, end) in enumerate(ana_segs):
 
         print(start, end)
 
@@ -163,7 +163,7 @@ if __name__ == "__main__":
                 frametype=f"{ifo}_{frametype}",
                 start_time=start,
                 end_time=end,
-                output_dir=ccsnet_args["omicron_dir"],
+                output_dir=ccsnet_args["omicron_dir"] / f"Segs_{seg_count:02d}",
                 urltype="file"
             )
 
@@ -171,7 +171,7 @@ if __name__ == "__main__":
             ifos=ccsnet_args["ifos"],
             start_time=start,
             end_time=end,
-            project_dir=ccsnet_args["omicron_dir"],
+            project_dir=ccsnet_args["omicron_dir"] / f"Segs_{seg_count:02d}",
             
             q_range=ccsnet_args["q_range"],
             frequency_range=ccsnet_args["frequency_range"],
@@ -190,7 +190,9 @@ if __name__ == "__main__":
             bash_files.append(bash_script)
     
 
-    with ThreadPoolExecutor(max_workers=2) as e:
+    # for bash_file in bash_files:
+    #     print(bash_file)
+    with ThreadPoolExecutor(max_workers=8) as e:
     
         for bash_file in bash_files:
             e.submit(run_bash, bash_file)

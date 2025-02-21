@@ -47,14 +47,17 @@ class Test_BackGroundDisplay:
         
         if seg_counts < test_seg:
             sys.exit(f"Assinged segmnet segment{test_seg:02d} is too large.")
-        segs_dur = np.zeros(seg_counts)
+
+        # segs_dur = np.zeros(seg_counts)
         
-        for i in range(seg_counts):
+        # for i in range(seg_counts):
 
-            segs_dur[i] = attrs[f"segments{i:02d}/start"] - attrs[f"segments{i:02d}/end"]
+        #     segs_dur[i] = attrs[f"segments{i:02d}/start"] - attrs[f"segments{i:02d}/end"]
 
-        seg = f"segments{np.argsort(segs_dur)[test_seg - 1]:02}"
+        # seg = f"segments{np.argsort(segs_dur)[test_seg - 1]:02}"
 
+        seg = f"segments{test_seg:02}"
+        
         start = attrs[f"{seg}/start"]
         end = attrs[f"{seg}/end"]
         

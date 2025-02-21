@@ -64,36 +64,42 @@ def plot_active_segments(
     # print("Train End", train_end)
     flags = flags.intersection()
     # print(flags.active.to_table())
-    flags.name = "H1&L1"
+    flags.name = ""
     coin_seg["H1&L1:ANALYSIS_READY_C01"] = flags
     
     plt = coin_seg.plot(
         "name", 
-        figsize=(10, 1), 
-        xlabel="GPSTime (s)", 
-        title="Coincident Active segments"
+        figsize=(20, 1), 
+        xlabel="", 
+        title="",
     )
     
-    ax = plt.gca()
+
     
+
+    ax = plt.gca()
+    # ax.set_title("Coincident Active segments", fontsize=30)
+    # ax.set_xlabel("GPSTime (s)", fontsize=30)
+    # # ax.set_ticklabels(fontsize=40)
+    # ax.set_ylabel("H1&L1", fontsize=30)
     if glitch_start != None:
         
         ax.axvline(glitch_start, color="black", lw=linewidth, ls="-")
         ax.axvline(train_end, color="black", lw=linewidth, ls="-")
     
-    ax.axvline(train_start, color="blue", lw=linewidth, ls="-")
-    ax.axvline(train_end, color="blue", lw=linewidth, ls="-")
+    ax.axvline(train_start + 1250, color="#0000e7", lw=linewidth, ls="-")
+    ax.axvline(train_end - 1250, color="#0000e7", lw=linewidth, ls="-")
     # ax.axvspan(train_start, train_end, hatch='x', edgecolor="blue", fill=False, linewidth=linewidth)
 
     for start, end in test_segs:
 
-        ax.axvline(start, color="#ee33ff", lw=linewidth, ls="-")
-        ax.axvline(end, color="#ee33ff", lw=linewidth, ls="-")
+        ax.axvline(start + 1250, color="indigo", lw=linewidth, ls="-")
+        ax.axvline(end - 1250, color="indigo", lw=linewidth, ls="-")
         # ax.axvspan(start, end, hatch='x', edgecolor="#ff8b0f", fill=False, linewidth=linewidth)
     
     ax.get_axisbelow()
     ax.ticklabel_format(
-        axis='x', 
+        axis="x", 
         useOffset=False, 
         style="plain"
     )
@@ -121,6 +127,11 @@ if __name__ == "__main__":
         (1262688611, 1262705801),
         (1262746233, 1262762284),
         (1262919719, 1262944254),
+        (1262947448, 1262972491),
+        (1263012448, 1263049216),
+        (1263084917, 1263141237),
+        (1263184089, 1263229176),
+        (1263272009, 1263287036),
     ]
 
     plot_active_segments(
@@ -131,6 +142,6 @@ if __name__ == "__main__":
         ifos=ccsnet_args["ifos"],
         ifo_state_flags=ccsnet_args["state_flag"],
         out_dir=Path(ccsnet_args["data_dir"]) / "Louvre",
-        figname="CCSNet_Active_segments.png",
+        figname="CCSNet_Active_segments_skinny.png",
         transparent=False
     )

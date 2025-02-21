@@ -17,6 +17,46 @@ from ml4gw.utils.slicing import sample_kernels
 from ml4gw.distributions import PowerLaw, Cosine, Uniform
 from ml4gw import gw
 
+class SignalInverter(torch.nn.Module):
+    """
+    Takes a tensor of timeseries of arbitrary dimension
+    and randomly inverts (i.e. h(t) -> -h(t))
+    each timeseries with probability `prob`.
+
+    Args:
+        prob:
+            Probability that a timeseries is inverted
+    """
+
+    def __init__(self, prob: float = 0.5):
+        super().__init__()
+        self.prob = prob
+
+    def forward(self, X):
+        mask = torch.rand(size=X.shape[:-1]) < self.prob
+        X[mask] *= -1
+        return X
+
+
+class SignalReverser(torch.nn.Module):
+    """
+    Takes a tensor of timeseries of arbitrary dimension
+    and randomly reverses (i.e. h(t) -> h(-t))
+    each timeseries with probability `prob`.
+
+    Args:
+        prob:
+            Probability that a kernel is reversed
+    """
+
+    def __init__(self, prob: float = 0.5):
+        super().__init__()
+        self.prob = prob
+
+    def forward(self, X):
+        mask = torch.rand(size=X.shape[:-1]) < self.prob
+        X[mask] = X[mask].flip(-1)
+        return X
 
 class BackGroundDisplay:
     
@@ -39,7 +79,7 @@ class BackGroundDisplay:
         
 
         self.bgh5 = h5_thang(background_file)
-        background = torch.Tensor(self.bgh5.h5_data()[f"{segment}/strain"])
+        background = torch.Tensor(self.bgh5.h5_data([f"{segment}/strain"])[f"{segment}/strain"])
         bg_attrs = self.bgh5.h5_attrs()
         bg_dur = bg_attrs[f"{segment}/end"] - bg_attrs[f"{segment}/start"]
         self.train_dur = int(bg_dur * training_portion)
@@ -178,6 +218,7 @@ class BackGroundDisplay:
 
             with h5py.File(self.outdir / "background.h5", "a") as g:
                 
+                print(f"Eatting popcornes! At {data_name}")
                 g.create_dataset(data_name, data=X.numpy())
         
         return X, targets
@@ -196,6 +237,7 @@ class Injector:
         fftlength,
         overlap, 
         outdir,
+        signal_chopping:float=None, # Lable in second
         batch_size = 32,
         steps_per_epoch = 20,
         buffer_duration = 4,
@@ -206,8 +248,15 @@ class Injector:
         self.tensors, self.vertices = gw.get_ifo_geometry(*ifos)
         
         self.signals = signals_dict
-        self.ccsn_list = list(signals_dict.keys())
+        self.ccsn_list = list(self.signals.keys())
         
+        if signal_chopping is not None:
+            
+            for key in self.ccsn_list:
+                end = int((signal_chopping - self.signals[key][0][0]) * sample_rate)
+                self.signals[key][0] = self.signals[key][0][:end]
+                self.signals[key][1] = self.signals[key][1][:end]
+            
         self.sample_rate = sample_rate
         self.sample_duration = sample_duration
         self.buffer_duration = buffer_duration

@@ -2,6 +2,8 @@ import os
 import sys
 import shutil
 import typing
+import logging
+
 import argparse
 import toml
 from dotenv import dotenv_values
@@ -76,6 +78,7 @@ def args_control(
             
             test_seg_data_dir = test_data_dir / Path(test_segment).parents[0]
         ccsnet_args["sampled_background"] = test_seg_data_dir / ccsnet_args["sampled_background"]
+        ccsnet_args["test_psd_seg"] = test_seg_data_dir / ccsnet_args["saved_psd"] # ccsnet_args["saved_psd"]
         
     ccsnet_args["test_model"] = result_dir / ccsnet_args["test_model"]
 
@@ -100,5 +103,18 @@ def args_control(
             sys.exit("Please provide run number!")
 
         args_saving(ccsnet_args_file, result_dir.parents[0])
+        
+        
+    import sys
+    logging.basicConfig(
+        filename= ccsnet_args["test_result_dir"] / "test.log",
+        filemode="a",
+        format="%(asctime)s %(name)s %(levelname)s:\t%(message)s",
+        datefmt="%H:%M:%S",
+        level=logging.NOTSET
+    )
 
+    logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+    
+    logging.info(f"Using argument file at {ccsnet_args_file}")
     return ccsnet_args
