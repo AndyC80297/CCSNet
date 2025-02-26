@@ -1,3 +1,0 @@
-SyntaxError in file /home/andy/anti_gravity/CCSNet/apps/tests/tests.smk, line 12:
-invalid syntax
-  File "/home/andy/anti_gravity/CCSNet/Snakefile", line 1, in <module>
