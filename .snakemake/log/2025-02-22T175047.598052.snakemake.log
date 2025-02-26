@@ -1,0 +1,30 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job            count
+-----------  -------
+test_ccsnet        1
+total              1
+
+Select jobs to execute...
+
+[Sat Feb 22 17:50:47 2025]
+rule test_ccsnet:
+    output: /home/andy/sm.txt
+    jobid: 0
+    reason: Forced execution
+    resources: tmpdir=/tmp
+
+[Sat Feb 22 17:50:47 2025]
+Error in rule test_ccsnet:
+    jobid: 0
+    output: /home/andy/sm.txt
+    shell:
+        set -x; touch /home/andy/sm.txt -s 1 5 12 13 16 18 22 27 29 30 41 42 46 47 49 50 55 58 61 62 63 65 67 71 75 81 82 83 84 85 92 94 101 105
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2025-02-22T175047.598052.snakemake.log

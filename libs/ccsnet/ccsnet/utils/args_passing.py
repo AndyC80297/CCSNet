@@ -78,7 +78,7 @@ def args_control(
             
             test_seg_data_dir = test_data_dir / Path(test_segment).parents[0]
         ccsnet_args["sampled_background"] = test_seg_data_dir / ccsnet_args["sampled_background"]
-        ccsnet_args["test_psd_seg"] = test_seg_data_dir / ccsnet_args["saved_psd"] # ccsnet_args["saved_psd"]
+        ccsnet_args["test_psd_seg"] = test_seg_data_dir / ccsnet_args["test_psd_seg"] # ccsnet_args["saved_psd"]
         
     ccsnet_args["test_model"] = result_dir / ccsnet_args["test_model"]
 

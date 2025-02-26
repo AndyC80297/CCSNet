@@ -1,0 +1,1 @@
+include: "apps/tests/tests.smk"

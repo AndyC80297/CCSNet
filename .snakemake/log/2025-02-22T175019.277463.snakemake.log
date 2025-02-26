@@ -1,0 +1,8 @@
+Building DAG of jobs...
+InputFunctionException in rule test_ccsnet in file /home/andy/anti_gravity/CCSNet/apps/tests/tests.smk, line 18:
+Error:
+  NameError: name 'CLI' is not defined
+Wildcards:
+
+Traceback:
+  File "/home/andy/anti_gravity/CCSNet/apps/tests/tests.smk", line 22, in <lambda>

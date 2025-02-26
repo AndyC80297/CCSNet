@@ -1,0 +1,22 @@
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Job stats:
+job            count
+-----------  -------
+test_ccsnet        1
+total              1
+
+Select jobs to execute...
+
+[Sat Feb 22 17:57:00 2025]
+rule test_ccsnet:
+    output: /home/andy/sm.txt
+    jobid: 0
+    reason: Forced execution
+    resources: tmpdir=/tmp
+
+RuleException in rule test_ccsnet in file /home/andy/anti_gravity/CCSNet/apps/tests/tests.smk, line 22:
+NameError: The name 'test_segments' is unknown in this context. Please make sure that you defined that variable. Also note that braces not used for variable access have to be escaped by repeating them, i.e. {{print $1}}, when formatting the following:
+set -x; touch /home/andy/sm.txt; echo {test_segments}

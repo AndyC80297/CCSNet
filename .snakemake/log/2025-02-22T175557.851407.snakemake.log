@@ -1,0 +1,4 @@
+TypeError in file /home/andy/anti_gravity/CCSNet/apps/tests/tests.smk, line 12:
+sequence item 0: expected str instance, int found
+  File "/home/andy/anti_gravity/CCSNet/Snakefile", line 2, in <module>
+  File "/home/andy/anti_gravity/CCSNet/apps/tests/tests.smk", line 12, in <module>
