@@ -1,6 +1,33 @@
 import torch
 
 
+
+def replace(x, coh_ifo):
+
+    if coh_ifo=="H1":
+
+        x [:,1,:] = x [:,0,:]
+
+    if coh_ifo=="L1":
+
+        x [:,0,:] = x [:,1,:]
+
+    return x
+
+def remove(x, coh_ifo):
+
+    if coh_ifo=="H1":
+
+        x = x[:, 0, :]
+
+    if coh_ifo=="L1":
+
+        x = x[:, 1, :]
+
+    x = x.reshape((-1, 1, 4096))
+
+    return x 
+
 def forged_dataloader(
     inputs: list,
     targets: list,

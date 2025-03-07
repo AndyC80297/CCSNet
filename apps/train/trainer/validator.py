@@ -15,6 +15,7 @@ from ml4gw.distributions import PowerLaw, Cosine, Uniform
 
 from orchestrator import forged_dataloader
 from ccsnet.utils import h5_thang
+from ccsnet.train import remove, replace
 from ccsnet.waveform import CCSNe_Dataset
 from ccsnet.waveform import get_hp_hc_from_q2ij, padding
 
@@ -58,6 +59,8 @@ class Validator:
         sample_duration, 
         max_iteration: int, 
         output_dir: Path,
+        coh_ifo:str,
+        coh_mode:str,
         signal_chopping:float=None, # Lable in second
         device: str ="cpu"
     ):
@@ -79,6 +82,8 @@ class Validator:
         
         self.kernel_length = sample_rate * sample_duration
         self.output_dir = output_dir
+        self.coh_ifo = coh_ifo
+        self.coh_mode = coh_mode
 
         dec_distro = Cosine()
         psi_distro = Uniform(0, np.pi)
@@ -315,11 +320,27 @@ class Validator:
                     for noise_data in noise_loader:
 
                         X = whiten_model(noise_data[0], psds)
+                        if self.coh_mode == "replace":
+
+                            X = replace(X, self.coh_ifo)
+
+                        if self.coh_mode == "remove":
+
+                            X = remove(X, self.coh_ifo)
+
                         noise_output = model(X)
                         
                         for siganl, _ in siganl_loader:
 
                             X = whiten_model(torch.add(noise_data[0], siganl[0]), psds)
+                            if self.coh_mode == "replace":
+
+                                X = replace(X, self.coh_ifo)
+
+                            if self.coh_mode == "remove":
+
+                                X = remove(X, self.coh_ifo)
+                            
                             signal_output = model(X)
                             
                             inject_preds.append(signal_output)

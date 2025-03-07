@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Callable, Iterable, Optional, Tuple
 
 from ccsnet.arch import WaveNet
-from ccsnet.train import train_time_sampling
+from ccsnet.train import train_time_sampling, remove, replace
 from ml4gw.transforms import SnrRescaler
 
 
@@ -31,6 +31,8 @@ def one_loop_training(
     steps_per_epoch,
     max_iteration,
     outdir,
+    coh_mode,
+    coh_ifo,
     device
 ):
     model.train()
@@ -47,7 +49,13 @@ def one_loop_training(
             x, 
             psds
         )
+        if coh_mode == "replace":
 
+            x = replace(x, coh_ifo)
+
+        if coh_mode == "remove":
+
+            x = remove(x, coh_ifo)
         with torch.autocast("cuda", enabled=scaler is not None):
             predictions = model(x)
             loss = criterion(predictions, y)
@@ -120,6 +128,8 @@ def Tachyon(
     steps_per_epoch,
     max_iteration,
     num_ifo,
+    coh_mode,
+    coh_ifo,
     pretrained_model = None,
     weight_decay = 1e-5,
     learning_rate = 0.01,
@@ -219,7 +229,9 @@ def Tachyon(
             steps_per_epoch=steps_per_epoch,
             max_iteration=max_iteration,
             outdir=outdir,
-            device=device
+            device=device,
+            coh_mode=coh_mode,
+            coh_ifo=coh_ifo,
         )
         
 

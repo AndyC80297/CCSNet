@@ -23,10 +23,14 @@ from ml4gw.transforms.transform import FittableSpectralTransform
 
 parser = ArgumentParser()
 parser.add_argument("-e", "--env", help="The env setting")
+parser.add_argument("-a", "--agrs_file", help="The argument setting")
+parser.add_argument("-c", "--ccsn_file", help="The ccsn setting")
 args = parser.parse_args()
 
 ccsnet_arguments = args_control(
     args.env,
+    args.agrs_file,
+    args.ccsn_file,
     saving=True
 )
 
@@ -53,13 +57,15 @@ def main(
     ifos = ccsnet_arguments["ifos"], 
     fftlength = ccsnet_arguments["fftlength"], 
     overlap = ccsnet_arguments["overlap"],
+    coh_ifo = ccsnet_arguments["coh_ifo"],
+    coh_mode = ccsnet_arguments["coh_mode"],
     highpass = ccsnet_arguments["highpass"], 
     model=WaveNet, 
     pretrained_model=None, 
     weight_decay=ccsnet_arguments["weight_decay"], 
     learning_rate=ccsnet_arguments["learning_rate"], 
     outdir: Path=ccsnet_arguments["result_dir"], 
-    signal_chopping=ccsnet_arguments["signal_chopping"],
+    signal_chopping=ccsnet_arguments.get("signal_chopping"),
     val_count=ccsnet_arguments["val_count"],
     val_batch=ccsnet_arguments["val_batch"],
     device: str="cuda", 
@@ -124,9 +130,16 @@ def main(
         batch_size=val_batch,
         sample_duration=sample_duration, 
         max_iteration=max_iteration,
-        output_dir=outdir
+        output_dir=outdir,
+        coh_ifo=coh_ifo,
+        coh_mode=coh_mode,
     )
 
+    num_ifo = 2
+    if coh_mode == "remove":
+        num_ifo = 1
+
+    
     Tachyon(
         architecture=model, 
         background_sampler=background_sampler, 
@@ -139,7 +152,9 @@ def main(
         batch_size=batch_size,
         steps_per_epoch=steps_per_epoch,
         max_iteration=max_iteration,
-        num_ifo=len(ifos),
+        num_ifo=num_ifo,
+        coh_ifo=coh_ifo,
+        coh_mode=coh_mode,
         pretrained_model=pretrained_model,
         weight_decay=weight_decay,
         learning_rate=learning_rate,

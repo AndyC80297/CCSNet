@@ -1,0 +1,62 @@
+# Basic Settings
+# start = 1262632990
+train_start = 1262653854
+train_end = 1262686622 # 1262688492
+test_start = 1262688611 # 1262919719
+test_end = 1263293411 # 1262944254
+ifos = ["H1", "L1"]
+frame_type = ["HOFT_C01", "HOFT_C01"]
+state_flag = ["DCS-ANALYSIS_READY_C01:1", "DCS-ANALYSIS_READY_C01:1"]
+channels = ["DCS-CALIB_STRAIN_CLEAN_C01", "DCS-CALIB_STRAIN_CLEAN_C01"]
+sample_rate = 4096
+fftlength=2
+overlap=1
+
+coh_ifo = "H1"
+coh_mode = "remove"
+
+# Omicron INI file
+q_range = [3.3166, 108.0]
+frequency_range = [32.0, 2048.0]
+cluster_dt = 0.5
+chunk_duration = 124
+segment_duration = 64
+overlap_duration = 4
+mismatch_max = 0.2
+snr_threshold = 5.0
+
+# Training & Validation
+backgrounds = "background.h5"
+signals_dir = "CCSNe/Resampled"
+omicron_dir = "Omicron"
+
+# Test
+test_backgrounds = "test_background.h5"
+test_siganl_parameter = "signal_parameter.h5"
+sampled_background = "sampled_background.h5"
+psds = "psds.h5"
+
+# Training phase
+sample_duration = 3
+off_set=0.15
+model_parameter = {c_depth = 8, n_chann = 64, l1 = 1024, l2 = 128}
+# noise_glitch_dist = [0, 0.375, 0.375, 0.25]
+# signal_chopping = 0.1
+batch_size = 512
+steps_per_epoch = 200
+max_iteration = 200
+max_lr = 4e-3
+lr_ramp_epochs = 75 
+weight_decay = 1e-5
+highpass = 32
+learning_rate = 0.004
+val_count = 256
+val_batch = 256
+
+# Test
+test_count = 20000
+test_batch_size = 1024
+test_model = "final_model.pt"
+snr_distro = [2, 4, 8, 10, 12, 15, 20, 25, 30, 35, 40]
+# coh_det = "H1"
+
