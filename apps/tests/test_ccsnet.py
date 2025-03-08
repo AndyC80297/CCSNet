@@ -16,18 +16,20 @@ from ccsnet.arch import WaveNet
 from ccsnet.utils import h5_thang, args_control
 from ccsnet.waveform import load_h5_as_dict, Waveform_Projector
 
-from model_streamer import Streamer, test_data_loader, replacement
+from model_streamer import Streamer, test_data_loader, strain_state
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 parser = ArgumentParser()
 parser.add_argument("-e", "--env", help="The env setting")
+parser.add_argument("-a", "--agrs_file", help="The argument setting")
 parser.add_argument("-s", "--seg", type=int, help="Testing segment") ## Segments/Runs_XX
 parser.add_argument("-r", "--run", help="Running count")
 args = parser.parse_args()
 
 ccsnet_args = args_control(
     envs_file=args.env,
+    agrs_file=args.agrs_file,
     test_segment=f"Seg{args.seg:03d}/{args.run}",
     saving=False
 )
@@ -35,15 +37,23 @@ ccsnet_args = args_control(
 
 logging.info(f"Running Seg{args.seg:03d}")
 
+
+num_ifos = len(ccsnet_args["ifos"])
+
+if ccsnet_args.get("coh_mode") == "remove": 
+    
+    num_ifos = 1 
+
 ccsnet_streamer = Streamer(
-    num_ifos=len(ccsnet_args["ifos"]),
+    num_ifos=num_ifos,
     sample_rate=ccsnet_args["sample_rate"],
     architecture=WaveNet,
     model_weights=ccsnet_args["test_model"],
     fftlength=ccsnet_args["fftlength"],
     highpass=ccsnet_args["highpass"],
     test_psd_seg=ccsnet_args["test_psd_seg"],
-    coh_det=ccsnet_args.get("coh_det"),
+    coh_ifo=ccsnet_args.get("coh_ifo"),
+    coh_mode=ccsnet_args.get("coh_mode"),
     map_device="cpu",
     device=device
 )
@@ -80,7 +90,7 @@ with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as 
     with torch.no_grad():
         logging.info("")
         logging.info(f"= - = - = - = - =")
-        logging.info(f"Coherency key activate on {ccsnet_args.get('coh_det')}")
+        logging.info(f"Coherency key activate on {ccsnet_args.get('coh_ifo')}")
         for mode, raw_bg in sampled_background.items():
 
             noise_loader = test_data_loader(
@@ -92,12 +102,6 @@ with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as 
             preds = []
             
             for noise_data, _ in noise_loader:
-                
-                if ccsnet_args.get("coh_det") is not None:
-                    noise_data = replacement(
-                        data=noise_data,
-                        coh_det=ccsnet_args.get("coh_det")
-                    )
                     
                 pred = ccsnet_streamer.stream(
                     noise_data, 
@@ -157,12 +161,6 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
                         factor = (snr/4)
                         X = background[0] + siganl[0] * factor
         
-                        if ccsnet_args.get("coh_det") is not None:
-                            noise_data = replacement(
-                                data=X,
-                                coh_det=ccsnet_args.get("coh_det")
-                            )
-        
                         pred = ccsnet_streamer.stream(
                             X, 
                             psd=None
@@ -186,12 +184,6 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
                         
                         scale_back_ht = torch.einsum('li, lik->lik', siganl[1], siganl[0]) / dis
                         X = background[0] + scale_back_ht
-                        
-                        if ccsnet_args.get("coh_det") is not None:
-                            noise_data = replacement(
-                                data=X,
-                                coh_det=ccsnet_args.get("coh_det")
-                            )
                             
                         pred = ccsnet_streamer.stream(
                             X, 

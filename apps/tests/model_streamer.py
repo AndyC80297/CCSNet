@@ -18,40 +18,75 @@ from ccsnet.arch import WaveNet
 from ccsnet.utils import h5_thang, args_control
 from ccsnet.waveform import CCSNe_Dataset
 
-def replacement(
+def strain_state(
     data,
-    coh_det,
+    coh_ifo=None,
+    coh_mode=None,
     roll:int=0,
 ):
 
+    if coh_mode is None:
+        
+        return data
+    
     ndim = len(data.shape)
 
-    if ndim == 2:
-        
-        if coh_det == "H1":
-            data[1,:] = torch.roll(data[0,:], roll, dims=-1)
-        
-        elif coh_det == "L1":
-            data[0,:] = torch.roll(data[1,:], roll, dims=-1)
+    if coh_mode == "replace":
+        # breakpoint()
+        if ndim == 2:
             
-        else:
-            logging.info("Unknow ifo specifed!")
+            if coh_ifo == "H1":
+                data[1,:] = torch.roll(data[0,:], roll, dims=-1)
             
-    elif ndim == 3:
+            elif coh_ifo == "L1":
+                data[0,:] = torch.roll(data[1,:], roll, dims=-1)
+                
+            else:
+                logging.info("Unknow ifo specifed!")
+                
+        elif ndim == 3:
 
-        if coh_det == "H1":
-            data[:,1,:] = torch.roll(data[:,0,:], roll, dims=-1)
-        
-        elif coh_det == "L1":
-            data[:,0,:] = torch.roll(data[:,1,:], roll, dims=-1)
+            if coh_ifo == "H1":
+                data[:,1,:] = torch.roll(data[:,0,:], roll, dims=-1)
             
-        else:
-            logging.info("Unknow ifo specifed!")
+            elif coh_ifo == "L1":
+                data[:,0,:] = torch.roll(data[:,1,:], roll, dims=-1)
+                
+            else:
+                logging.info("Unknow ifo specifed!")
 
-    else:
-        logging.info("Dimension of input unclear.")
-        
-    return data
+        else:
+            logging.info("Dimension of input unclear.")
+            
+        return data
+
+    if coh_mode == "remove":
+        # breakpoint()
+        if ndim == 2:
+            # PSD no need of remove
+            if coh_ifo == "H1":
+                data[1,:] = data[0,:]
+            
+            elif coh_ifo == "L1":
+                data[0,:] = data[1,:]
+                
+            else:
+                logging.info("Unknow ifo specifed!")
+                
+        elif ndim == 3:
+            kernel_size = data.size(-1)
+            if coh_ifo == "H1":
+
+                data = torch.roll(data[:,0,:], roll, dims=-1)
+
+            elif coh_ifo == "L1":
+                data = torch.roll(data[:,1,:], roll, dims=-1)
+                
+            else:
+                logging.info("Unknow ifo specifed!")
+            data = data.reshape((-1, 1, kernel_size))
+        return data
+                
 
 def model_loader(
     num_ifos: int,
@@ -110,7 +145,8 @@ class Streamer:
         fftlength,
         highpass,
         test_psd_seg,
-        coh_det=None,
+        coh_ifo=None,
+        coh_mode=None,
         map_device="cpu",
         device ="cpu"
     ):
@@ -134,12 +170,9 @@ class Streamer:
             with h5py.File(test_psd_seg, "r") as h1:
                 psds = torch.tensor(h1["psd"][:]).double()
                 
-        if coh_det is not None:
-            psds = replacement(
-                data=psds,
-                coh_det=coh_det,
-            )
-
+        self.coh_ifo = coh_ifo
+        self.coh_mode = coh_mode  
+        
         self.psds = psds.to(device)
         self.device = device
         
@@ -156,7 +189,13 @@ class Streamer:
                     signal,
                     self.psds
                 )
-                
+
+                signal = strain_state(
+                    data=signal,
+                    coh_ifo=self.coh_ifo,
+                    coh_mode=self.coh_mode
+                )
+                breakpoint()
                 pred = self.nn_model(signal)
                 
                 yield pred, index
@@ -173,6 +212,11 @@ class Streamer:
             psds = self.psds
             
         X = self.whiten_model(X, psds)
+        X = strain_state(
+            data=X,
+            coh_ifo=self.coh_ifo,
+            coh_mode=self.coh_mode
+        )
         X = self.nn_model(X)
         
         return X

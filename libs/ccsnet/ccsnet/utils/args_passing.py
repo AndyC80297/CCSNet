@@ -24,7 +24,7 @@ def args_saving(
 
 def args_control(
     envs_file,
-    arg_name="arguments.toml",
+    agrs_file="arguments.toml",
     ccsn_toml="ccsn.toml",
     project=project,
     test_segment=None,
@@ -45,9 +45,9 @@ def args_control(
 
     # Argument control
     if test_segment is not None:
-        ccsnet_args_file = result_dir.parents[0] / "arguments.toml"
+        ccsnet_args_file = result_dir.parents[0] / f"{agrs_file}"
     else:
-        ccsnet_args_file = code_base / f"apps/{arg_name}"
+        ccsnet_args_file = code_base / f"apps/{agrs_file}"
     
     ccsnet_args = toml.load(ccsnet_args_file)
     
@@ -106,17 +106,19 @@ def args_control(
 
         args_saving(ccsnet_args_file, result_dir.parents[0])
         
+    if test_segment is not None: 
         
-    # import sys
-    # logging.basicConfig(
-    #     filename= ccsnet_args["test_result_dir"] / "test.log",
-    #     filemode="a",
-    #     format="%(asctime)s %(name)s %(levelname)s:\t%(message)s",
-    #     datefmt="%H:%M:%S",
-    #     level=logging.NOTSET
-    # )
+        import sys
+        logging.basicConfig(
+            filename= ccsnet_args["test_result_dir"] / "test.log",
+            filemode="a",
+            format="%(asctime)s %(name)s %(levelname)s:\t%(message)s",
+            datefmt="%H:%M:%S",
+            level=logging.NOTSET
+        )
 
-    # logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
-    
-    # logging.info(f"Using argument file at {ccsnet_args_file}")
+        logging.getLogger().addHandler(logging.StreamHandler(sys.stdout))
+        
+        logging.info(f"Using argument file at {ccsnet_args_file}")
+        
     return ccsnet_args
