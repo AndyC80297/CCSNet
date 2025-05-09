@@ -92,7 +92,8 @@ with h5py.File(ccsnet_args["test_result_dir"] / "background_result.h5", "w") as 
         logging.info(f"= - = - = - = - =")
         logging.info(f"Coherency key activate on {ccsnet_args.get('coh_ifo')}")
         for mode, raw_bg in sampled_background.items():
-
+            if mode in ["H1_Glitch", "L1_Glitch"]:
+                continue
             noise_loader = test_data_loader(
                 torch.Tensor(raw_bg[:count, :,:]),
                 batch_size=ccsnet_args["test_batch_size"],
@@ -144,6 +145,8 @@ with h5py.File(ccsnet_args["test_result_dir"] / "injection_result.h5", "w") as g
             )
 
             for mode, raw_bg in tqdm(sampled_background.items()):
+                if mode in ["H1_Glitch", "L1_Glitch"]:
+                    continue
                 logging.info(f"Mode: {mode}")
                 g2 = g1.create_group(mode)
 
